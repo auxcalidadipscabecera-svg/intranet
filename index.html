@@ -73,6 +73,18 @@ svg.i{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-widt
 .iconbtn{width:44px;height:44px;display:grid;place-items:center;border-radius:10px;border:1px solid var(--line);background:var(--card);cursor:pointer}
 .badge{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:99px;font-size:13px;font-weight:600;background:var(--pri-soft);color:var(--pri);white-space:nowrap}
 .badge.ok{background:var(--ok-s);color:var(--ok)}.badge.warn{background:var(--warn-s);color:var(--warn)}.badge.bad{background:var(--bad-s);color:var(--bad)}.badge.neu{background:color-mix(in srgb,var(--mute) 14%,transparent);color:var(--mute)}
+.vw-a{display:flex;gap:8px;align-items:center;flex:none}.vw-b.sel{user-select:text;-webkit-user-select:text}
+.vw-doc{width:min(816px,96vw);padding:56px 64px;color:#1b1b1b;font:11pt/1.45 Calibri,Carlito,'Segoe UI',Arial,sans-serif;text-align:left;overflow-wrap:anywhere}
+.vw-doc p{margin:0 0 6pt}.vw-doc h1,.vw-doc h2,.vw-doc h3,.vw-doc h4{margin:12pt 0 6pt;color:#1F3864;line-height:1.25}.vw-doc h1{font-size:20pt}.vw-doc h2{font-size:15pt}.vw-doc h3{font-size:13pt}.vw-doc h4,.vw-doc h5,.vw-doc h6{font-size:11.5pt}
+.vw-doc img{max-width:100%;height:auto}.vw-doc a{color:#0563C1}.dtab{display:inline-block;width:2.5em}.dli{position:relative}.dli::before{content:'•';position:absolute;left:-14px}
+.dtbl-w{overflow-x:auto;margin:6pt 0;padding-bottom:1px}.dtbl{border-collapse:collapse;width:100%}.dtbl td{border:1px solid #9aa0ab;padding:4px 6px;vertical-align:top}.dtbl td p{margin:0 0 2pt}
+.vw-xl{width:min(1200px,96vw);max-height:calc(100vh - 100px);overflow:auto;background:#fff}
+.xtabs{display:flex;gap:4px;padding:8px;background:#F4F6FB;border-bottom:1px solid #D9DDE8;flex-wrap:wrap;position:sticky;top:0;left:0;z-index:3}
+.xtab{border:1px solid #CFD5E3;background:#fff;border-radius:8px;padding:5px 12px;font:600 13px Inter,sans-serif;color:#333;cursor:pointer}.xtab.on{background:#0C0C90;border-color:#0C0C90;color:#fff}
+.xtbl{border-collapse:collapse;font:13px/1.35 Inter,'Segoe UI',sans-serif;color:#1b1b1b}.xtbl th{background:#F1F3F9;color:#5a6275;font-weight:600;font-size:12px;border:1px solid #D9DDE8;padding:3px 7px;position:sticky;top:0;z-index:1}
+.xtabs~.xsheet .xtbl thead th{top:47px}.xtbl tbody th{position:sticky;left:0;text-align:right;z-index:2}.xtbl td{border:1px solid #E3E6EE;padding:3px 8px;white-space:nowrap;max-width:420px;overflow:hidden;text-overflow:ellipsis;background:#fff}.xtbl td.n{text-align:right}
+.vw-pre{white-space:pre-wrap;font:13px/1.5 ui-monospace,Consolas,monospace;margin:0}
+@media(max-width:640px){.vw-doc{padding:24px 18px}.vw-h .vw-a .btn{padding:6px 10px}}
 .hmsec{display:grid;gap:8px;border-top:1px solid var(--line);padding-top:14px}.hmsec h3{font-size:16px}
 .hmsec-h{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
 .hmrow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 14px;align-items:center;padding:8px 0;border-bottom:1px dashed var(--line);font-size:14px}
@@ -291,7 +303,7 @@ const RCAT=[['apr','Aprovechables','np'],['noa','No aprovechables','np'],['org',
 const RCOL={apr:'#8DB4DE',noa:'#5B87B8',org:'#2E5F94',bio:'#D9534A',cor:'#B42318',ana:'#E8875A',qui:'#F2B65E'};
 const PAQ=[['Detectar, prevenir y reducir infecciones asociadas a la atención en salud','Higiene de manos, aislamientos y prevención de infecciones asociadas a dispositivos.'],['Mejorar la seguridad en la utilización de medicamentos','Prescripción, dispensación y administración segura; medicamentos de alto riesgo y LASA.'],['Procesos para la prevención y reducción de la frecuencia de caídas','Valoración del riesgo, medidas de prevención y seguimiento.'],['Prevenir úlceras por presión','Valoración con escala de riesgo, cambios de posición y cuidado de la piel.'],['Asegurar la correcta identificación del paciente en los procesos asistenciales','Manilla con dos identificadores y verificación en cada procedimiento.'],['Evaluación de la frecuencia con la cual ocurren los eventos adversos','Reporte, análisis y gestión de incidentes y eventos adversos.']];
 
-const T={users:'perfiles',docs:'documentos',planes:'planes',pamec:'pamec',hab:'habilitacion',ind:'indicadores',vals:'indicador_valores',rondas:'rondas',riesgos:'riesgos',eventos:'eventos',rh1:'rh1',limpieza:'limpieza',obs:'observaciones',peligros:'peligros',brigada:'brigada',comites:'comites',miembros:'comite_miembros',reuniones:'comite_reuniones',trainings:'capacitaciones',claves:'capacitacion_claves',att:'intentos',asis:'asistencias',evid:'plan_evidencias',acc:'accidentes',procs:'procesos',tdoc:'tipos_doc',nov:'novedades',hm:'higiene_manos'};
+const T={users:'perfiles',docs:'documentos',planes:'planes',pamec:'pamec',hab:'habilitacion',ind:'indicadores',vals:'indicador_valores',rondas:'rondas',riesgos:'riesgos',eventos:'eventos',rh1:'rh1',limpieza:'limpieza',obs:'observaciones',peligros:'peligros',brigada:'brigada',comites:'comites',miembros:'comite_miembros',reuniones:'comite_reuniones',trainings:'capacitaciones',claves:'capacitacion_claves',att:'intentos',asis:'asistencias',evid:'plan_evidencias',acc:'accidentes',procs:'procesos',tdoc:'tipos_doc',nov:'novedades',hm:'higiene_manos',dver:'documento_versiones'};
 let DB=Object.fromEntries(Object.keys(T).map(k=>[k,[]]));
 const S={year:new Date().getFullYear(),side:(()=>{try{return localStorage.getItem('ipsc-side')!=='0'}catch(e){return true}})(),novOpen:false,novPrev:null,user:null,phase:'boot',msg:'',mod:'inicio',sec:null,sub:null,nav:false,tab:'copasst',ctab:'pend',fclas:'',fres:'',repo:null,draft:null,wstep:1,last:null,recovery:false};
 
@@ -440,20 +452,24 @@ function docRepo(base,opt={}){
   <label class="fld fq"><span>Buscar</span><input type="search" data-flt="q" placeholder="Código o nombre del documento"></label>
   ${opt.showMod?`<label class="fld"><span>Área</span><select data-flt="proc"><option value="">Todos</option>${procsOrd().map(p=>`<option value="${esc(p.nombre)}">${esc((p.sigla?p.sigla+' – ':'')+p.nombre)}</option>`).join('')}</select></label>`:''}
   <label class="fld"><span>Tipo</span><select data-flt="tipo"><option value="">Todos</option>${tdocOrd().map(t=>`<option value="${esc(t.sigla)}">${esc(t.sigla+' – '+t.nombre)}</option>`).join('')}</select></label>
-  <label class="fld"><span>Vigencia</span><select data-flt="vig"><option value="">Todos</option><option>Vigente</option><option>Por vencer</option><option>Vencido</option><option>Obsoleto</option></select></label>
+  <label class="fld"><span>Vigencia</span><select data-flt="vig"><option value="">Todos</option><option>Vigente</option><option>Por vencer</option><option>Vencido</option>${canDoc()?'<option value="Obsoleto">Obsoletos (archivo)</option>':''}</select></label>
  </div><div id="repo-alert"></div><div id="repo-body"></div></section>`;}
 function updateDocs(){const el=document.getElementById('repo-body');if(!el||!S.repo)return;const R=S.repo,q=R.q.toLowerCase();
- const rows=DB.docs.filter(R.base).filter(d=>(!q||(d.cod+' '+d.nom).toLowerCase().includes(q))&&(!R.tipo||d.tipo_sigla===R.tipo)&&(!R.vig||estDoc(d)===R.vig)&&(!R.proc||(d.area||d.proceso)===R.proc)).sort((a,b)=>String(a.cod).localeCompare(String(b.cod)));
+ const rows=DB.docs.filter(R.base).filter(d=>(!q||(d.cod+' '+d.nom).toLowerCase().includes(q))&&(!R.tipo||d.tipo_sigla===R.tipo)&&(R.vig?estDoc(d)===R.vig:estDoc(d)!=='Obsoleto')&&(!R.proc||(d.area||d.proceso)===R.proc)).sort((a,b)=>String(a.cod).localeCompare(String(b.cod)));
  const ed0=canDoc(),edr=d=>ed0&&(isAdmin()||d.mod==='sst');
  const al=document.getElementById('repo-alert');if(al){const mine=DB.docs.filter(R.base).filter(d=>isAdmin()||(isSST()&&d.mod==='sst')),A=docAlerts(mine);
   al.innerHTML=(isAdmin()||isSST())&&(A.venc.length||A.pronto.length)?`<div class="alertbox">${ico('alert')}<div>${A.venc.length?`<b>${A.venc.length} documento${A.venc.length===1?' vencido':'s vencidos'}:</b> ${A.venc.slice(0,6).map(d=>esc(d.cod)).join(', ')}${A.venc.length>6?'…':''}. Actualícelos o archívelos.`:''}${A.pronto.length?`<div${A.venc.length?' style="margin-top:4px"':''}><b>${A.pronto.length} por vencer</b> en los próximos 30 días: ${A.pronto.slice(0,6).map(d=>esc(d.cod)).join(', ')}${A.pronto.length>6?'…':''}.</div>`:''}</div><div class="acts">${A.venc.length?'<button class="btn sm" data-act="flt-vig" data-id="Vencido">Ver vencidos</button>':''}${A.pronto.length?'<button class="btn sm ghost" data-act="flt-vig" data-id="Por vencer">Ver por vencer</button>':''}</div></div>`:''}
- el.innerHTML=`<p class="muted small" style="margin-bottom:10px">${rows.length} documento${rows.length===1?'':'s'}</p>`+tbl(['Código','Nombre del documento','Tipo','Fechas','Vigencia','Acciones'],rows.map(d=>{const st=estDoc(d),h=vigHasta(d);return `<tr>
+ const nObs=canDoc()&&R.vig!=='Obsoleto'?DB.docs.filter(R.base).filter(d=>d.est==='Obsoleto').length:0;
+ el.innerHTML=(R.vig==='Obsoleto'?`<p class="note">Archivo de documentos obsoletos: no aparecen en el listado ni los ven los colaboradores. Puede reactivarlos si vuelven a estar vigentes.</p>`:'')+`<p class="muted small" style="margin-bottom:10px">${rows.length} documento${rows.length===1?'':'s'}${R.vig==='Obsoleto'?' obsoleto'+(rows.length===1?'':'s'):''}${nObs?` · <button class="linkbtn" data-act="flt-vig" data-id="Obsoleto">${nObs} en el archivo de obsoletos</button>`:''}${R.vig==='Obsoleto'?' · <button class="linkbtn" data-act="flt-vig" data-id="">Volver al listado</button>':''}</p>`+tbl(['Código','Nombre del documento','Tipo','Fechas','Vigencia','Acciones'],rows.map(d=>{const st=estDoc(d),h=vigHasta(d);return `<tr>
   <td><span class="code">${esc(d.cod)}</span>${d.ver?`<div class="muted small">Versión ${esc(d.ver)}</div>`:''}</td>
   <td><b>${esc(d.nom)}</b>${d.descarga===false?`<span class="chip lock">${ico('lock')}Solo consulta</span>`:''}<div class="muted small">Área: ${esc(d.area||d.proceso||modBy(d.mod)?.nom||'')}${d.resp?' · '+esc(d.resp):''}</div></td>
   <td>${esc(d.tipo)}</td>
   <td class="small" style="white-space:nowrap">Creación ${fd(d.f_creacion||d.apr)}<br><span class="muted">Actualización ${fd(d.f_actualizacion||d.apr)}</span></td>
   <td>${badge(st)}${h&&st!=='Obsoleto'?`<div class="muted small" style="margin-top:4px;white-space:nowrap">Hasta ${fd(h)}</div>`:''}</td>
-  <td class="ra"><div class="rowacts"><button class="btn sm ghost ic" data-act="doc-view" data-id="${d.id}" title="Ver" aria-label="Ver">${ico('eye')}</button>${d.archivo&&canDL(d)?`<button class="btn sm ghost ic" data-act="doc-dl" data-id="${d.id}" title="Descargar" aria-label="Descargar">${ico('dl')}</button>`:''}${edr(d)?`<button class="btn sm ghost ic" data-act="doc-edit" data-id="${d.id}" title="Editar" aria-label="Editar">${ico('edit')}</button>${d.est!=='Obsoleto'?`<button class="btn sm ghost ic" data-act="doc-arch" data-id="${d.id}" title="Archivar" aria-label="Archivar">${ico('archive')}</button>`:''}`:''}</div></td></tr>`}),'stack',DB.docs.some(R.base)?'No hay documentos con esos filtros.':(canDoc()?'Aún no hay documentos. Use "Nuevo documento" para agregar el primero.':'Aún no hay documentos publicados en esta sección.'));}
+  <td class="ra"><div class="rowacts"><button class="btn sm ghost ic" data-act="doc-view" data-id="${d.id}" title="Ver" aria-label="Ver">${ico('eye')}</button>${d.archivo&&canDL(d)?`<button class="btn sm ghost ic" data-act="doc-dl" data-id="${d.id}" title="Descargar PDF de consulta" aria-label="Descargar">${ico('dl')}</button>`:''}${edr(d)&&d.archivo_edit?`<button class="btn sm ghost ic" data-act="doc-edl" data-id="${d.id}" title="Descargar el Word o Excel editable" aria-label="Descargar archivo editable">${ico('file')}</button>`:''}${edr(d)&&DB.dver.some(x=>x.doc_id===d.id)?`<button class="btn sm ghost ic" data-act="doc-hist" data-id="${d.id}" title="Versiones anteriores" aria-label="Versiones anteriores">${ico('clock')}</button>`:''}${edr(d)?`<button class="btn sm ghost ic" data-act="doc-edit" data-id="${d.id}" title="Editar" aria-label="Editar">${ico('edit')}</button>${d.est!=='Obsoleto'?`<button class="btn sm ghost ic" data-act="doc-arch" data-id="${d.id}" title="Marcar como obsoleto y archivar" aria-label="Archivar">${ico('archive')}</button>`:`<button class="btn sm ghost ic" data-act="doc-unarch" data-id="${d.id}" title="Reactivar" aria-label="Reactivar">${ico('check')}</button>`}`:''}</div></td></tr>`}),'stack',DB.docs.some(R.base)?'No hay documentos con esos filtros.':(canDoc()?'Aún no hay documentos. Use "Nuevo documento" para agregar el primero.':'Aún no hay documentos publicados en esta sección.'));}
+function docHist(id){const d=DB.docs.find(x=>x.id===id);if(!d)return;const L=DB.dver.filter(x=>x.doc_id===id).sort((a,b)=>(Number(b.ver)||0)-(Number(a.ver)||0)||String(b.archivado).localeCompare(String(a.archivado)));
+ const list=L.map(x=>`<div class="li"><div><h3>Versión ${esc(x.ver??'—')} <span class="badge bad" style="margin-left:6px">Obsoleta</span></h3><div class="meta">Actualizada el ${fd(x.f_actualizacion)}${x.archivado?` · reemplazada el ${fd(String(x.archivado).slice(0,10))}`:''}${userBy(x.archivado_por)?' por '+esc(userBy(x.archivado_por).nombre):''}</div></div><div class="acts">${x.archivo?`<button type="button" class="btn sm" data-act="dver-view" data-id="${x.id}">${ico('eye')}Ver</button>`:''}${x.archivo_edit?`<button type="button" class="btn sm ghost" data-act="dver-edl" data-id="${x.id}">${ico('file')}Editable</button>`:''}</div></div>`).join('');
+ openForm(`Versiones anteriores · ${d.cod}`,[['html',`<p class="small"><b>${esc(d.nom)}</b> · versión vigente: <b>${esc(d.ver||1)}</b></p><p class="muted small" style="margin-top:4px">Solo usted las ve. Los colaboradores consultan únicamente la versión vigente.</p><div class="list" style="margin-top:12px">${list||'<p class="muted">Sin versiones anteriores.</p>'}</div>`,'html']],{},async()=>true,'Cerrar')}
 const PERMF=['descarga','Permiso para los colaboradores','select',[['true','Pueden descargar e imprimir'],['false','Solo consulta (no pueden descargar ni imprimir)']]];
 function updCodPrev(){const f=document.getElementById('mform'),box=document.getElementById('cod-prev');if(!f||!box||!f.elements.proc)return;
  const p=f.elements.proc.value,t=f.elements.tsig.value,n=Number(f.elements.consecutivo.value);
@@ -465,14 +481,15 @@ async function docForm(id){const d=id?DB.docs.find(x=>x.id===id):null;
  const procOpts=procsOrd().filter(p=>isAdmin()||p.sigla==='SS').map(p=>p.sigla?[p.sigla,`${p.sigla} – ${p.nombre}`]:['',`${p.nombre} (sin sigla: asígnela en Codificación)`,true]);
  const tOpts=tdocOrd().map(t=>[t.sigla,`${t.sigla} – ${t.nombre}`]);
  const areaOpts=[['','Seleccione…'],...procsOrd().map(p=>[p.nombre,(p.sigla?p.sigla+' – ':'')+p.nombre])];
- const archF=d&&d.archivo?['archivo','Reemplazar archivo (si sube una nueva versión)','file']:['archivo','Archivo (PDF, Word, Excel…)','file'];
+ const archF=d&&d.archivo?['archivo','Nueva versión para consulta (PDF recomendado)','file']:['archivo','Archivo para consulta (PDF recomendado: es el que ven los colaboradores)','file'];
+ const editF=['archivo_edit',d&&d.archivo_edit?'Reemplazar archivo editable (Word o Excel)':'Archivo editable (Word o Excel) · solo lo pueden descargar los administradores','file',null,OPT];
  const fields=d?[
   ['html',`<div class="codebox"><span class="muted small">Código</span><div class="codebig">${esc(d.cod)}</div><span class="muted small">${esc(d.proceso||'')} · ${esc(d.tipo)} · Creado el ${fd(d.f_creacion||d.apr)} (la fecha de creación no se modifica)</span></div>`,'html'],
   ['nom','Nombre del documento','text'],['area','Área a la que corresponde','select',areaOpts],['f_actualizacion','Fecha de actualización','date'],['ver','Versión','number'],PERMF,['ubic','Sección de la intranet donde se muestra','select',secs],['resp','Responsable','text',null,OPT],
-  ['info','Si sube un archivo nuevo, la fecha de actualización y la versión se ajustan solas (puede cambiarlas). Para "Solo consulta" el archivo debe ser PDF.','info'],['url','Enlace al documento','url'],archF]
+  ['info','Si sube una nueva versión para consulta, la anterior pasa a «Versiones anteriores» y la fecha de actualización y la versión se ajustan solas (puede cambiarlas). Para "Solo consulta" el archivo de consulta debe ser PDF.','info'],['url','Enlace al documento','url'],archF,editF]
  :[['html','<div class="codebox" id="cod-prev"></div>','html'],['proc','Proceso / área','select',[['','Seleccione…'],...procOpts]],['tsig','Tipo de documento','select',[['','Seleccione…'],...tOpts]],['consecutivo','Consecutivo (3 números)','number'],
   ['nom','Nombre del documento','text'],['area','Área a la que corresponde','select',areaOpts],['f_creacion','Fecha de creación','date'],['f_actualizacion','Fecha de actualización','date'],PERMF,['ubic','Sección de la intranet donde se muestra','select',secs],['resp','Responsable','text',null,OPT],['ver','Versión','number'],
-  ['info','Agregue un enlace (por ejemplo de Google Drive) o suba el archivo. Tamaño máximo: 50 MB. Para "Solo consulta" el archivo debe ser PDF.','info'],['url','Enlace al documento','url'],archF];
+  ['info','Suba el PDF que verán los colaboradores y, si quiere, el Word o Excel editable para usted (los colaboradores no lo ven). Tamaño máximo: 50 MB por archivo. Para "Solo consulta" el archivo de consulta debe ser PDF.','info'],['url','Enlace al documento','url'],archF,editF];
  const vals=d?Object.assign({},d,{area:d.area||d.proceso||'',ubic:d.mod+'|'+d.sec,descarga:String(d.descarga!==false),f_actualizacion:d.f_actualizacion||d.apr}):{ubic:S.repo?.def||secs[0][0],ver:1,f_creacion:today(),f_actualizacion:today(),descarga:'true',proc:isAdmin()?'':'SS'};
  openForm(d?'Editar documento':'Nuevo documento',fields,vals,async v=>{
   const [mod,sec]=String(v.ubic).split('|');delete v.ubic;v.mod=mod;v.sec=sec;
@@ -483,7 +500,9 @@ async function docForm(id){const d=id?DB.docs.find(x=>x.id===id):null;
    const c=`${p}-${t}-${pad3(n)}`;if(codTaken(c)){toast(`El código ${c} ya está asignado. Cambie el consecutivo.`,'bad');return false}
    const pr=DB.procs.find(x=>x.sigla===p),td=tdBy(t);Object.assign(v,{cod:c,consecutivo:n,proceso:pr?.nombre||p,tipo_sigla:t,tipo:td?.nombre||t,est:'Vigente',apr:v.f_creacion});}
   if(d&&!v.area)v.area=d.area||d.proceso||null;
-  const file=v.archivo;delete v.archivo;v.descarga=v.descarga!=='false';
+  const file=v.archivo,efile=v.archivo_edit;delete v.archivo;delete v.archivo_edit;v.descarga=v.descarga!=='false';
+  if(efile instanceof File&&!/\.(docx?|xlsx?|xlsm|csv|pptx?|odt|ods)$/i.test(efile.name)){toast('El archivo editable debe ser Word o Excel (.docx, .doc, .xlsx, .xls).','bad');return false}
+  if(efile instanceof File&&efile.size>50*1024*1024){toast('El archivo editable supera 50 MB.','bad');return false}
   if(!v.descarga){const fn=file instanceof File?file.name:(d&&d.archivo||'');
    if(fn&&!isPdf(fn)){toast('Para "Solo consulta" el archivo debe estar en PDF. Guárdelo como PDF y vuelva a subirlo.','bad');return false}
    if(!fn&&v.url)toast('Es un enlace: configure también en Google Drive que los lectores no puedan descargar ni imprimir.');}
@@ -492,7 +511,11 @@ async function docForm(id){const d=id?DB.docs.find(x=>x.id===id):null;
    const path=`${mod}/${Date.now()}-${file.name.normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^\w.\-]+/g,'_')}`;
    toast('Subiendo archivo…');const {error}=await sb.storage.from('documentos').upload(path,file,{upsert:false});
    if(error){toast('No se pudo subir el archivo: '+errMsg(error),'bad');return false}v.archivo=path;}
-  const ok=await dbSave('docs',v,d?.id);if(ok){toast(d?'Documento actualizado.':`Documento ${v.cod} creado.`);render()}return ok});
+  if(efile instanceof File){const ep=`${mod}/${Date.now()}-${efile.name.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^\w.\-]+/g,'_')}`;
+   const {error}=await sb.storage.from('fuentes').upload(ep,efile,{upsert:false});if(error){toast('No se pudo subir el archivo editable: '+errMsg(error),'bad');return false}v.archivo_edit=ep}
+  if(d&&v.archivo&&d.archivo){const {error}=await sb.from('documento_versiones').insert({doc_id:d.id,ver:d.ver,archivo:d.archivo,archivo_edit:d.archivo_edit||null,url:d.url||null,f_actualizacion:d.f_actualizacion||d.apr||null});
+   if(error){toast('No se pudo guardar la versión anterior: '+errMsg(error),'bad');return false}}
+  const ok=await dbSave('docs',v,d?.id);if(ok&&d&&v.archivo)await reload('dver');if(ok){toast(d?'Documento actualizado.':`Documento ${v.cod} creado.`);render()}return ok});
  if(!d){const f=document.getElementById('mform');let areaTouched=false;f.elements.area.addEventListener('change',()=>{areaTouched=true});
   const sug=()=>{const p=f.elements.proc.value,t=f.elements.tsig.value;if(p&&!areaTouched){const pr=DB.procs.find(x=>x.sigla===p);if(pr)f.elements.area.value=pr.nombre}if(p&&t)f.elements.consecutivo.value=nextCons(p,t);updCodPrev()};
   f.elements.proc.addEventListener('change',sug);f.elements.tsig.addEventListener('change',sug);f.elements.consecutivo.addEventListener('input',updCodPrev);f.elements.consecutivo.setAttribute('max','999');f.elements.consecutivo.setAttribute('min','1');updCodPrev()}}
@@ -501,30 +524,140 @@ const canDL=d=>d.descarga!==false||isAdmin()||(isSST()&&d.mod==='sst');
 async function openDoc(id,download=false){const d=DB.docs.find(x=>x.id===id);if(!d)return;
  if(!d.archivo&&!d.url){toast('Este documento todavía no tiene archivo ni enlace.','bad');return}
  if(!canDL(d)){if(download){toast('Este documento es de solo consulta: no se puede descargar.','bad');return}
-  if(d.archivo){if(!isPdf(d.archivo)){toast('Este documento de solo consulta no está en PDF. Pida a Calidad que lo cargue en PDF.','bad');return}return viewPdf(d)}
+  if(d.archivo)return viewFile({bucket:'documentos',path:d.archivo,name:d.archivo,title:`${d.cod} · ${d.nom}`,ro:true});
   window.open(d.url,'_blank','noopener');return}
+ if(!download&&d.archivo)return viewFile({bucket:'documentos',path:d.archivo,name:d.archivo,title:`${d.cod} · ${d.nom}`,dl:()=>openDoc(id,true)});
  if(d.url&&(!d.archivo||!download)){window.open(d.url,'_blank','noopener');return}
  const w=window.open('','_blank');
- const {data,error}=await sb.storage.from('documentos').createSignedUrl(d.archivo,600,download?{download:true}:undefined);
+ const {data,error}=await sb.storage.from('documentos').createSignedUrl(d.archivo,600,download?{download:`${d.cod} ${d.nom}.${fext(d.archivo)||'pdf'}`.replace(/[\\/:*?"<>|]+/g,'-')}:undefined);
  if(error||!data){if(w)w.close();toast('No se pudo abrir el archivo: '+errMsg(error),'bad');return}
  if(w)w.location.href=data.signedUrl;else location.href=data.signedUrl;}
-function closeViewer(){const v=document.getElementById('viewer');if(v)v.innerHTML='';document.body.classList.remove('noprint')}
-async function viewPdf(d){
- const v=document.getElementById('viewer');document.body.classList.add('noprint');
- v.innerHTML=`<div class="vw" role="dialog" aria-modal="true" aria-label="${esc(d.nom)}"><div class="vw-h"><div class="vw-t"><b>${esc(d.cod)} · ${esc(d.nom)}</b><span class="vw-tag">${ico('lock')}Solo consulta</span></div><button class="iconbtn" data-act="vw-close" aria-label="Cerrar">${ico('x')}</button></div><div class="vw-b" id="vw-b"><p class="vw-msg">Cargando documento…</p></div></div>`;
- try{const {data,error}=await sb.storage.from('documentos').createSignedUrl(d.archivo,300);if(error||!data)throw error||new Error('Sin acceso');
-  const pdfjs=await import('./lib/pdfjs/pdf.min.mjs');pdfjs.GlobalWorkerOptions.workerSrc='lib/pdfjs/pdf.worker.min.mjs';
-  const base=new URL('lib/pdfjs/',location.href).href;
-  const doc=await pdfjs.getDocument({url:data.signedUrl,cMapUrl:base+'cmaps/',cMapPacked:true,standardFontDataUrl:base+'standard_fonts/',wasmUrl:base+'wasm/',iccUrl:base+'iccs/',useSystemFonts:true}).promise;let box=document.getElementById('vw-b');if(!box)return;box.innerHTML='';
-  const wm=`${S.user.nombre} · ${fdr(today())} · Uso interno · No imprimir`,dpr=Math.min(window.devicePixelRatio||1,2),W=Math.max(280,Math.min(box.clientWidth-24,900));
-  for(let i=1;i<=doc.numPages;i++){box=document.getElementById('vw-b');if(!box)return;
-   const page=await doc.getPage(i),v1=page.getViewport({scale:1}),sc=W/v1.width,vp=page.getViewport({scale:sc*dpr});
-   const wrap=document.createElement('div');wrap.className='vw-p';wrap.style.width=W+'px';
-   const c=document.createElement('canvas');c.width=Math.floor(vp.width);c.height=Math.floor(vp.height);c.style.width=W+'px';c.style.height=Math.floor(vp.height/dpr)+'px';
-   const m=document.createElement('div');m.className='vw-wm';m.textContent=(wm+'     ').repeat(220);
-   wrap.append(c,m);box.appendChild(wrap);
-   await page.render({canvas:c,canvasContext:c.getContext('2d'),viewport:vp}).promise}
- }catch(e){const box=document.getElementById('vw-b');if(box)box.innerHTML=`<p class="vw-msg">No se pudo mostrar el documento. ${esc(errMsg(e))}</p>`}}
+/* ===== Visor de archivos (PDF, Word, Excel, CSV, imágenes) sin descargar ===== */
+const fext=n=>(String(n||'').split('?')[0].match(/\.([a-z0-9]+)$/i)||[])[1]?.toLowerCase()||'';
+const fbase=p=>String(p||'').split('/').pop().replace(/^\d{10,}-/,'');
+async function dlFile(bucket,path,name){const {data,error}=await sb.storage.from(bucket).createSignedUrl(path,300,{download:name||fbase(path)});
+ if(error||!data){toast('No se pudo descargar: '+errMsg(error),'bad');return}const a=document.createElement('a');a.href=data.signedUrl;a.rel='noopener';document.body.appendChild(a);a.click();a.remove()}
+let _jszip=null;
+function loadJSZip(){if(window.JSZip)return Promise.resolve(window.JSZip);if(_jszip)return _jszip;
+ _jszip=new Promise((ok,ko)=>{const s=document.createElement('script');s.src='lib/jszip.min.js';s.onload=()=>ok(window.JSZip);s.onerror=()=>{_jszip=null;ko(new Error('No se pudo cargar el lector de archivos'))};document.head.appendChild(s)});return _jszip}
+const xdoc=t=>new DOMParser().parseFromString(t,'application/xml');
+const kids=(el,n)=>el?[...el.children].filter(c=>!n||c.localName===n):[];
+const kid=(el,n)=>kids(el,n)[0]||null;
+const wa=(el,a)=>el?(el.getAttribute('w:'+a)??el.getAttribute(a)):null;
+const desc=(el,n)=>el?[...el.getElementsByTagName('*')].filter(c=>c.localName===n):[];
+const VW={urls:[],dl:null};
+function vwClear(){VW.urls.forEach(u=>URL.revokeObjectURL(u));VW.urls=[];VW.dl=null}
+async function viewFile(o){
+ const v=document.getElementById('viewer');vwClear();VW.dl=o.dl||null;if(o.ro)document.body.classList.add('noprint');
+ v.innerHTML=`<div class="vw" role="dialog" aria-modal="true" aria-label="${esc(o.title||o.name)}"><div class="vw-h"><div class="vw-t"><b>${esc(o.title||o.name)}</b>${o.ro?`<span class="vw-tag">${ico('lock')}Solo consulta</span>`:''}</div><div class="vw-a">${o.dl?`<button class="btn sm" data-act="vw-dl">${ico('dl')}Descargar</button>`:''}<button class="iconbtn" data-act="vw-close" aria-label="Cerrar">${ico('x')}</button></div></div><div class="vw-b${o.ro?'':' sel'}" id="vw-b"><p class="vw-msg">Cargando archivo…</p></div></div>`;
+ const ext=fext(o.name||o.path),wm=o.ro?`${S.user.nombre} · ${fdr(today())} · Uso interno · No imprimir`:'';
+ const msg=t=>{const b=document.getElementById('vw-b');if(b)b.innerHTML=`<div class="vw-msg">${t}${o.dl?`<p style="margin-top:14px"><button class="btn" data-act="vw-dl">${ico('dl')}Descargar el archivo</button></p>`:''}</div>`};
+ const KNOWN=['pdf','png','jpg','jpeg','gif','webp','docx','docm','xlsx','xlsm','csv','txt'];
+ if(!KNOWN.includes(ext)){const tip={doc:'Word 97-2003 (.doc)',xls:'Excel 97-2003 (.xls)',ppt:'PowerPoint (.ppt)',pptx:'PowerPoint (.pptx)'}[ext]||(ext?'.'+ext:'este tipo');
+  msg(`Los archivos ${esc(tip)} no se pueden previsualizar.${ext==='doc'||ext==='xls'?` Si lo abre en Office y lo guarda como ${ext==='doc'?'Word (.docx)':'Excel (.xlsx)'} o PDF, se podrá ver aquí.`:''}${o.ro?' Pida a Calidad que lo cargue en PDF o Word (.docx).':''}`);return}
+ try{const {data,error}=await sb.storage.from(o.bucket).createSignedUrl(o.path,300);if(error||!data)throw error||new Error('Sin acceso');
+  const r=await fetch(data.signedUrl);if(!r.ok)throw new Error('No se pudo leer el archivo');const buf=await r.arrayBuffer();
+  let box=document.getElementById('vw-b');if(!box)return;
+  if(ext==='pdf')return await renderPdf(buf,wm);
+  if(['png','jpg','jpeg','gif','webp'].includes(ext)){const u=URL.createObjectURL(new Blob([buf],{type:'image/'+(ext==='jpg'?'jpeg':ext)}));VW.urls.push(u);
+   box.innerHTML=`<div class="vw-p"><img src="${u}" alt="${esc(o.name)}" style="display:block;max-width:min(1000px,92vw);height:auto">${wm?`<div class="vw-wm">${esc((wm+'     ').repeat(80))}</div>`:''}</div>`;return}
+  if(ext==='csv'||ext==='txt'){let t=new TextDecoder('utf-8').decode(buf);if(t.includes('\uFFFD'))t=new TextDecoder('windows-1252').decode(buf);
+   box.innerHTML=ext==='txt'?page(`<pre class="vw-pre">${esc(t)}</pre>`,wm):sheetsUI([{name:o.name,rows:parseCsv(t),merges:[]}],wm);bindTabs();return}
+  const JSZip=await loadJSZip(),zip=await JSZip.loadAsync(buf);box=document.getElementById('vw-b');if(!box)return;
+  if(ext.startsWith('doc'))box.innerHTML=page(await renderDocx(zip),wm,'doc');
+  else{box.innerHTML=sheetsUI(await readXlsx(zip),wm);bindTabs()}
+ }catch(e){msg(`No se pudo mostrar el archivo. ${esc(errMsg(e))}`)}}
+const page=(html,wm,cls='')=>`<div class="vw-p vw-doc ${cls}">${html}${wm?`<div class="vw-wm">${esc((wm+'     ').repeat(600))}</div>`:''}</div>`;
+async function renderPdf(buf,wm){const pdfjs=await import('./lib/pdfjs/pdf.min.mjs');pdfjs.GlobalWorkerOptions.workerSrc='lib/pdfjs/pdf.worker.min.mjs';
+ const base=new URL('lib/pdfjs/',location.href).href;
+ const doc=await pdfjs.getDocument({data:new Uint8Array(buf),cMapUrl:base+'cmaps/',cMapPacked:true,standardFontDataUrl:base+'standard_fonts/',wasmUrl:base+'wasm/',iccUrl:base+'iccs/',useSystemFonts:true}).promise;let box=document.getElementById('vw-b');if(!box)return;box.innerHTML='';
+ const dpr=Math.min(window.devicePixelRatio||1,2),W=Math.max(280,Math.min(box.clientWidth-24,900));
+ for(let i=1;i<=doc.numPages;i++){box=document.getElementById('vw-b');if(!box)return;
+  const pg=await doc.getPage(i),v1=pg.getViewport({scale:1}),sc=W/v1.width,vp=pg.getViewport({scale:sc*dpr});
+  const wrap=document.createElement('div');wrap.className='vw-p';wrap.style.width=W+'px';
+  const c=document.createElement('canvas');c.width=Math.floor(vp.width);c.height=Math.floor(vp.height);c.style.width=W+'px';c.style.height=Math.floor(vp.height/dpr)+'px';wrap.append(c);
+  if(wm){const m=document.createElement('div');m.className='vw-wm';m.textContent=(wm+'     ').repeat(220);wrap.append(m)}
+  box.appendChild(wrap);await pg.render({canvas:c,canvasContext:c.getContext('2d'),viewport:vp}).promise}}
+/* Word (.docx) */
+async function renderDocx(zip){const rd=async p=>{const f=zip.file(p);return f?await f.async('string'):null};
+ const docx=await rd('word/document.xml');if(!docx)throw new Error('El archivo no es un documento de Word válido');
+ const rels={},rx=await rd('word/_rels/document.xml.rels');if(rx)kids(xdoc(rx).documentElement,'Relationship').forEach(r=>{rels[r.getAttribute('Id')]={t:r.getAttribute('Target'),m:r.getAttribute('TargetMode')}});
+ const sty={},sx=await rd('word/styles.xml');if(sx)kids(xdoc(sx).documentElement,'style').forEach(s=>{sty[wa(s,'styleId')]=(wa(kid(s,'name'),'val')||'').toLowerCase()});
+ const imgs={};for(const id in rels){const t=rels[id].t||'';if(/^media\//.test(t)||/\/media\//.test(t)){const p='word/'+t.replace(/^\.?\//,'').replace(/^\.\.\/word\//,'');const f=zip.file(p);if(f){const e=fext(p),u=URL.createObjectURL(new Blob([await f.async('uint8array')],{type:e==='svg'?'image/svg+xml':'image/'+(e==='jpg'?'jpeg':e)}));VW.urls.push(u);imgs[id]=u}}}
+ const body=kid(xdoc(docx).documentElement,'body');
+ const run=r=>{const p=kid(r,'rPr');let css='',open='',close='';
+  if(p){const on=n=>{const e=kid(p,n);return e&&!['0','false'].includes(wa(e,'val'))};
+   if(on('b')){open+='<b>';close='</b>'+close}if(on('i')){open+='<i>';close='</i>'+close}
+   const u=kid(p,'u');if(u&&wa(u,'val')!=='none'){open+='<u>';close='</u>'+close}if(on('strike')){open+='<s>';close='</s>'+close}
+   const va=wa(kid(p,'vertAlign'),'val');if(va==='superscript'){open+='<sup>';close='</sup>'+close}else if(va==='subscript'){open+='<sub>';close='</sub>'+close}
+   const c=wa(kid(p,'color'),'val');if(c&&/^[0-9a-f]{6}$/i.test(c)&&c.toLowerCase()!=='000000')css+=`color:#${c};`;
+   const sz=Number(wa(kid(p,'sz'),'val'));if(sz)css+=`font-size:${Math.max(7,Math.min(40,sz/2))}pt;`;
+   const hl=wa(kid(p,'highlight'),'val');if(hl&&hl!=='none')css+=`background:${hl==='yellow'?'#fff59d':hl};`;
+   const sh=wa(kid(p,'shd'),'fill');if(sh&&/^[0-9a-f]{6}$/i.test(sh))css+=`background:#${sh};`;
+   if(on('caps'))css+='text-transform:uppercase;'}
+  let h='';for(const c of r.children){const n=c.localName;
+   if(n==='t')h+=esc(c.textContent);else if(n==='tab')h+='<span class="dtab"></span>';else if(n==='br'||n==='cr')h+='<br>';
+   else if(n==='drawing'||n==='pict'){const b=desc(c,'blip')[0],im=desc(c,'imagedata')[0],id=b?(b.getAttribute('r:embed')||b.getAttribute('embed')):im?(im.getAttribute('r:id')||im.getAttribute('id')):null;
+    const ext=desc(c,'extent')[0],w=ext?Math.round(Number(ext.getAttribute('cx'))/9525):0;if(id&&imgs[id])h+=`<img src="${imgs[id]}" alt=""${w?` style="width:${w}px"`:''}>`}
+   else if(n==='sym')h+='•'}
+  return h?(css?`<span style="${css}">`:'')+open+h+close+(css?'</span>':''):''};
+ const inl=el=>{let h='';for(const c of el.children){const n=c.localName;
+  if(n==='r')h+=run(c);else if(n==='hyperlink'){const rel=rels[c.getAttribute('r:id')];const inner=inl(c);h+=rel&&rel.m==='External'&&/^https?:/i.test(rel.t)?`<a href="${esc(rel.t)}" target="_blank" rel="noopener">${inner}</a>`:inner}
+  else if(['ins','smartTag','fldSimple','sdt','sdtContent','customXml','moveTo'].includes(n))h+=inl(c)}return h};
+ const para=p=>{const pp=kid(p,'pPr'),sid=wa(kid(pp,'pStyle'),'val'),sn=sty[sid]||String(sid||'').toLowerCase(),jc=wa(kid(pp,'jc'),'val');
+  const num=kid(pp,'numPr'),lvl=num?Number(wa(kid(num,'ilvl'),'val')||0):0,ind=kid(pp,'ind'),left=ind?Number(wa(ind,'left')||wa(ind,'start')||0):0;
+  let css='';if(jc==='center')css+='text-align:center;';else if(jc==='right'||jc==='end')css+='text-align:right;';else if(jc==='both'||jc==='distribute')css+='text-align:justify;';
+  if(left&&!num)css+=`margin-left:${Math.min(300,Math.round(left/15))}px;`;
+  const sh=wa(kid(pp,'shd'),'fill');if(sh&&/^[0-9a-f]{6}$/i.test(sh))css+=`background:#${sh};`;
+  const c=inl(p);const hm=sn.match(/^(heading|t[ií]tulo|titulo)\s*(\d)/)||(sn==='title'||sn==='título'||sn==='titulo'?[0,0,'1']:null);
+  const tag=hm?'h'+Math.min(6,Number(hm[2])+1):'p';
+  if(num)return `<p class="dli" style="${css}margin-left:${18+lvl*22}px">${c||'&nbsp;'}</p>`;
+  return `<${tag}${css?` style="${css}"`:''}>${c||(tag==='p'?'&nbsp;':'')}</${tag}>`};
+ const table=t=>{const rows=kids(t,'tr');let h='<div class="dtbl-w"><table class="dtbl">';
+  rows.forEach(tr=>{h+='<tr>';kids(tr,'tc').forEach(tc=>{const pr=kid(tc,'tcPr'),span=Number(wa(kid(pr,'gridSpan'),'val')||1),vm=kid(pr,'vMerge'),cont=vm&&wa(vm,'val')!=='restart';
+   const sh=wa(kid(pr,'shd'),'fill');h+=`<td${span>1?` colspan="${span}"`:''} style="${sh&&/^[0-9a-f]{6}$/i.test(sh)?`background:#${sh};`:''}${cont?'border-top-color:transparent;':''}">${cont?'':blocks(tc)}</td>`});h+='</tr>'});
+  return h+'</table></div>'};
+ const blocks=el=>{let h='';for(const c of el.children){const n=c.localName;
+  if(n==='p')h+=para(c);else if(n==='tbl')h+=table(c);else if(n==='sdt')h+=blocks(kid(c,'sdtContent')||c);else if(n==='customXml'||n==='sdtContent')h+=blocks(c)}return h};
+ return blocks(body)}
+/* Excel (.xlsx) */
+const colN=s=>{let n=0;for(const ch of s)n=n*26+ch.charCodeAt(0)-64;return n-1};
+const colL=n=>{let s='';n++;while(n){const m=(n-1)%26;s=String.fromCharCode(65+m)+s;n=Math.floor((n-1)/26)}return s};
+const refRC=r=>{const m=/^([A-Z]+)(\d+)$/.exec(r);return m?[Number(m[2])-1,colN(m[1])]:[0,0]};
+async function readXlsx(zip){const rd=async p=>{const f=zip.file(p);return f?await f.async('string'):null};
+ const wb=await rd('xl/workbook.xml');if(!wb)throw new Error('El archivo no es un libro de Excel válido');
+ const rels={},rx=await rd('xl/_rels/workbook.xml.rels');if(rx)kids(xdoc(rx).documentElement,'Relationship').forEach(r=>{rels[r.getAttribute('Id')]=r.getAttribute('Target')});
+ const ss=[],sx=await rd('xl/sharedStrings.xml');if(sx)kids(xdoc(sx).documentElement,'si').forEach(si=>ss.push(desc(si,'t').filter(t=>t.parentElement.localName!=='rPh').map(t=>t.textContent).join('')));
+ const fmt=[],nf={},stx=await rd('xl/styles.xml');if(stx){const d=xdoc(stx).documentElement;kids(kid(d,'numFmts'),'numFmt').forEach(f=>{nf[f.getAttribute('numFmtId')]=f.getAttribute('formatCode')});kids(kid(d,'cellXfs'),'xf').forEach(x=>fmt.push(Number(x.getAttribute('numFmtId')||0)))}
+ const kind=s=>{const id=fmt[Number(s)||0]||0,code=(nf[id]||'').replace(/\[[^\]]*\]|"[^"]*"/g,'');if((id>=14&&id<=22)||(id>=45&&id<=47)||/[dy]/i.test(code)||(/m/i.test(code)&&/[dhsy]/i.test(code)))return 'date';if(id===9||id===10||code.includes('%'))return 'pct';return ''};
+ const num=(v,s)=>{const n=Number(v);if(!isFinite(n))return v;const k=kind(s);
+  if(k==='date'&&n>0&&n<2958466){const d=new Date(Date.UTC(1899,11,30)+Math.round(n*864e5)),hh=d.getUTCHours(),mm=d.getUTCMinutes();return `${pad(d.getUTCDate())}/${pad(d.getUTCMonth()+1)}/${d.getUTCFullYear()}${hh||mm?` ${pad(hh)}:${pad(mm)}`:''}`}
+  if(k==='pct')return (Math.round(n*10000)/100).toLocaleString('es-CO')+'%';return (Math.round(n*10000)/10000).toLocaleString('es-CO')};
+ const out=[];for(const sh of kids(kid(xdoc(wb).documentElement,'sheets'),'sheet')){if(sh.getAttribute('state')==='hidden'||sh.getAttribute('state')==='veryHidden')continue;
+  let t=rels[sh.getAttribute('r:id')]||'';t=t.startsWith('/')?t.slice(1):'xl/'+t.replace(/^\.\//,'');const x=await rd(t);if(!x)continue;
+  const d=xdoc(x).documentElement,rows=[];let over=false;
+  kids(kid(d,'sheetData'),'row').forEach((row,ri)=>{const r=Number(row.getAttribute('r')||ri+1)-1;if(r>=1500){over=true;return}
+   kids(row,'c').forEach((c,ci)=>{const ref=c.getAttribute('r'),[,cc]=ref?refRC(ref):[r,ci];if(cc>=80){over=true;return}
+    const tp=c.getAttribute('t'),vv=kid(c,'v')?.textContent;let val='';
+    if(tp==='s')val=ss[Number(vv)]??'';else if(tp==='inlineStr')val=desc(c,'t').map(e=>e.textContent).join('');else if(tp==='b')val=vv==='1'?'VERDADERO':'FALSO';else if(tp==='str'||tp==='e')val=vv??'';else if(vv!=null&&vv!=='')val=num(vv,c.getAttribute('s'));
+    if(val!==''){(rows[r]||(rows[r]=[]))[cc]={v:String(val),n:!tp||tp==='n'}}})});
+  const merges=kids(kid(d,'mergeCells'),'mergeCell').map(m=>{const [a,b]=m.getAttribute('ref').split(':');const [r1,c1]=refRC(a),[r2,c2]=refRC(b||a);return {r1,c1,r2,c2}}).filter(m=>m.r1<1500&&m.c1<80);
+  out.push({name:sh.getAttribute('name'),rows,merges,over})}
+ return out}
+function parseCsv(t){const sep=(t.split('\n')[0].match(/;/g)||[]).length>(t.split('\n')[0].match(/,/g)||[]).length?';':',';const rows=[];let row=[],cur='',q=false;
+ for(let i=0;i<t.length;i++){const ch=t[i];if(q){if(ch==='"'){if(t[i+1]==='"'){cur+='"';i++}else q=false}else cur+=ch}
+  else if(ch==='"')q=true;else if(ch===sep){row.push(cur);cur=''}else if(ch==='\n'||ch==='\r'){if(ch==='\r'&&t[i+1]==='\n')i++;row.push(cur);rows.push(row);row=[];cur='';if(rows.length>=1500)break}else cur+=ch}
+ if(cur||row.length){row.push(cur);rows.push(row)}return rows.map(r=>r.map(v=>v===''?undefined:{v,n:/^-?[\d.,]+$/.test(v)}))}
+function sheetsUI(sheets,wm){if(!sheets.length)return '<p class="vw-msg">El libro no tiene hojas visibles.</p>';
+ const grid=s=>{const nr=s.rows.length,nc=Math.max(1,...s.rows.map(r=>r?r.length:0));if(!nr)return '<p class="muted" style="padding:16px">Esta hoja está vacía.</p>';
+  const skip=new Set(),span={};s.merges.forEach(m=>{span[m.r1+','+m.c1]=m;for(let r=m.r1;r<=m.r2;r++)for(let c=m.c1;c<=m.c2;c++)if(r!==m.r1||c!==m.c1)skip.add(r+','+c)});
+  let h=`<table class="xtbl"><thead><tr><th></th>${Array.from({length:nc},(_,c)=>`<th>${colL(c)}</th>`).join('')}</tr></thead><tbody>`;
+  for(let r=0;r<nr;r++){h+=`<tr><th>${r+1}</th>`;for(let c=0;c<nc;c++){const k=r+','+c;if(skip.has(k))continue;const m=span[k],x=s.rows[r]&&s.rows[r][c];
+   h+=`<td${m?`${m.c2>m.c1?` colspan="${Math.min(m.c2,nc-1)-m.c1+1}"`:''}${m.r2>m.r1?` rowspan="${Math.min(m.r2,nr-1)-m.r1+1}"`:''}`:''}${x&&x.n?' class="n"':''}>${x?esc(x.v):''}</td>`}h+='</tr>'}
+  return h+'</tbody></table>'+(s.over?'<p class="muted small" style="padding:8px 12px">Se muestran las primeras 1.500 filas y 80 columnas. Para ver todo, descargue el archivo.</p>':'')};
+ return `<div class="vw-p vw-xl">${sheets.length>1?`<div class="xtabs" role="tablist">${sheets.map((s,i)=>`<button type="button" role="tab" class="xtab${i?'':' on'}" data-xt="${i}" aria-selected="${i?'false':'true'}">${esc(s.name)}</button>`).join('')}</div>`:''}${sheets.map((s,i)=>`<div class="xsheet" data-xs="${i}"${i?' hidden':''}>${grid(s)}</div>`).join('')}${wm?`<div class="vw-wm">${esc((wm+'     ').repeat(400))}</div>`:''}</div>`}
+function bindTabs(){document.querySelectorAll('#vw-b .xtab').forEach(b=>b.addEventListener('click',()=>{const i=b.dataset.xt;document.querySelectorAll('#vw-b .xtab').forEach(x=>{x.classList.toggle('on',x===b);x.setAttribute('aria-selected',x===b?'true':'false')});document.querySelectorAll('#vw-b .xsheet').forEach(x=>{x.hidden=x.dataset.xs!==i})}))}
+function closeViewer(){const v=document.getElementById('viewer');if(v)v.innerHTML='';vwClear();document.body.classList.remove('noprint')}
 
 /* ===== Views ===== */
 function vInicio(){const u=S.user,first=(u.nombre||'').split(' ')[0];let mid='';
@@ -559,7 +692,7 @@ function vPlanes(){const r=[...DB.planes].sort(byDate('limite')).reverse(),ven=r
  `<div class="tiles"><div class="tile pri"><div class="v">${r.length}</div><div class="l">Planes registrados</div></div><div class="tile warn"><div class="v">${r.filter(p=>p.estado!=='Cerrado').length}</div><div class="l">Abiertos o en ejecución</div></div><div class="tile ${ven?'bad':'ok'}"><div class="v">${ven}</div><div class="l">Vencidos</div></div><div class="tile"><div class="v">${r.length?Math.round(r.reduce((s,p)=>s+Number(p.avance||0),0)/r.length)+'%':'—'}</div><div class="l">Avance promedio</div></div></div>`+entTable('planes',r)+(isAdmin()?docRepo(d=>d.sec==='planes',{def:'calidad|planes',title:'Soportes de planes de mejora'}):'')}
 function evidModal(id){const p=DB.planes.find(x=>x.id===id);if(!p)return;const ev=DB.evid.filter(e=>e.plan_id===id).sort(byDate('creado'));
  const canAdd=isAdmin()||((isJefe()||isSST())&&p.estado!=='Cerrado');
- const list=`<div class="list">${ev.length?ev.map(e=>`<div class="li"><div><h3>${esc(e.descr||'Evidencia')}</h3><div class="meta">${fd(String(e.creado).slice(0,10))}${userBy(e.subido_por)?' · '+esc(userBy(e.subido_por).nombre):''}</div></div>${e.archivo||e.url?`<button class="btn sm" type="button" data-act="evid-open" data-id="${esc(e.id)}">${ico('eye')}Abrir</button>`:''}</div>`).join(''):'<p class="muted">Aún no hay evidencias cargadas.</p>'}</div>`;
+ const list=`<div class="list">${ev.length?ev.map(e=>`<div class="li"><div><h3>${esc(e.descr||'Evidencia')}</h3><div class="meta">${fd(String(e.creado).slice(0,10))}${userBy(e.subido_por)?' · '+esc(userBy(e.subido_por).nombre):''}</div></div>${e.archivo||e.url?`<div class="acts"><button class="btn sm" type="button" data-act="evid-open" data-id="${esc(e.id)}">${ico(e.archivo?'eye':'link')}${e.archivo?'Ver':'Abrir enlace'}</button>${e.archivo?`<button class="btn sm ghost" type="button" data-act="evid-dl" data-id="${esc(e.id)}">${ico('dl')}Descargar</button>`:''}</div>`:''}</div>`).join(''):'<p class="muted">Aún no hay evidencias cargadas.</p>'}</div>`;
  const head=`<p class="small"><b>${esc(p.hallazgo)}</b></p><p class="muted small" style="margin:4px 0 12px">${esc(p.accion)}</p>`+list+(canAdd?'<h3 style="margin-top:16px">Agregar evidencia</h3>':'');
  const fields=[['html',head,'html'],...(canAdd?[['descr','Descripción de la evidencia (ej. acta de socialización, registro fotográfico)','textarea'],['url','Enlace (opcional)','url'],['archivo','Archivo (PDF, foto, Word, Excel)','file']]:[])];
  openForm('Evidencias del plan',fields,{},async v=>{if(!canAdd)return true;
@@ -570,9 +703,8 @@ function evidModal(id){const p=DB.planes.find(x=>x.id===id);if(!p)return;const e
   else if(!row.url){toast('Adjunte un archivo o pegue un enlace.','bad');return false}
   const {error}=await sb.from('plan_evidencias').insert(row);if(error){toast(errMsg(error),'bad');return false}
   await reload('evid');toast('Evidencia agregada.');render();return true},canAdd?'Guardar evidencia':'Cerrar');}
-async function openEvid(id){const e=DB.evid.find(x=>x.id===id);if(!e)return;if(!e.archivo){window.open(e.url,'_blank','noopener');return}
- const w=window.open('','_blank');const {data,error}=await sb.storage.from('evidencias').createSignedUrl(e.archivo,600);
- if(error||!data){if(w)w.close();toast('No se pudo abrir: '+errMsg(error),'bad');return}if(w)w.location.href=data.signedUrl;else location.href=data.signedUrl}
+async function openEvid(id,dl){const e=DB.evid.find(x=>x.id===id);if(!e)return;if(!e.archivo){window.open(e.url,'_blank','noopener');return}
+ if(dl)return dlFile('evidencias',e.archivo);closeModal();viewFile({bucket:'evidencias',path:e.archivo,name:fbase(e.archivo),title:e.descr||'Evidencia',dl:()=>dlFile('evidencias',e.archivo)})}
 function vPamec(){const st=[...DB.pamec].sort((a,b)=>a.orden-b.orden);
  return pageHead('PAMEC','Programa de Auditoría para el Mejoramiento de la Calidad: ruta crítica.')+
  `<section class="card" style="display:grid;gap:14px"><h2>Ruta crítica</h2><div class="steps">${st.map(p=>`<div class="step ${p.est==='Completado'?'ok':p.est==='En curso'?'warn':''}"><span class="n">${p.est==='Completado'?ico('check'):esc(p.orden)}</span><div><h3>${esc(p.nom)}</h3>${p.detalle?`<p>${esc(p.detalle)}</p>`:''}<div style="margin-top:6px;display:flex;gap:6px;align-items:center;flex-wrap:wrap">${badge(p.est)}${can('edit')?`<button class="btn sm ghost" data-act="ent-edit" data-e="pamec" data-id="${p.id}">${ico('edit')}Editar</button>`:''}</div></div></div>`).join('')}</div></section>`+docRepo(d=>d.sec==='pamec',{def:'calidad|pamec',title:'Documentos del PAMEC'})}
@@ -683,12 +815,10 @@ function vIndFicha(id){const i=DB.ind.find(x=>x.id===id);if(!i){S.sub=null;retur
  (me.length?`<section class="card"><div class="fig" data-ind="${i.id}"${frec(i)==='Anual'?' data-wide="1"':''} style="min-height:220px"><svg role="img" aria-label="Resultados de ${S.year}"></svg></div><div class="legend"><span><i></i>Resultado ${esc(frec(i).toLowerCase())}</span><span><i class="g"></i>Meta</span></div></section>`:'')+
  tbl(['Periodo','#Numerador','#Denominador','#Resultado','Estado','Observaciones','Soportes','Plan de mejora','Acciones'],rows,'stack')}
 function sopModal(vid){const v=DB.vals.find(x=>x.id===vid);if(!v)return;const i=DB.ind.find(x=>x.id===v.ind_id);
- const list=(v.soportes||[]).map((x,k)=>`<div class="li"><div><h3>${esc(x.n||'Soporte')}</h3><div class="meta">${fd(x.f)}${userBy(x.u)?' · '+esc(userBy(x.u).nombre):''}</div></div><div class="acts"><button type="button" class="btn sm" data-act="sop-open" data-id="${esc(vid)}" data-k="${k}">${ico(x.url?'link':/\.(xlsx?|csv|docx?)$/i.test(x.n||'')?'dl':'eye')}${x.url?'Abrir enlace':/\.(xlsx?|csv|docx?)$/i.test(x.n||'')?'Descargar':'Abrir'}</button>${isAdmin()?`<button type="button" class="btn sm ghost" data-act="sop-del" data-id="${esc(vid)}" data-k="${k}">${ico('x')}Quitar</button>`:''}</div></div>`).join('');
+ const list=(v.soportes||[]).map((x,k)=>`<div class="li"><div><h3>${esc(x.n||'Soporte')}</h3><div class="meta">${fd(x.f)}${userBy(x.u)?' · '+esc(userBy(x.u).nombre):''}</div></div><div class="acts"><button type="button" class="btn sm" data-act="sop-open" data-id="${esc(vid)}" data-k="${k}">${ico(x.url?'link':'eye')}${x.url?'Abrir enlace':'Ver'}</button>${x.url?'':`<button type="button" class="btn sm ghost" data-act="sop-dl" data-id="${esc(vid)}" data-k="${k}">${ico('dl')}Descargar</button>`}${isAdmin()?`<button type="button" class="btn sm ghost" data-act="sop-del" data-id="${esc(vid)}" data-k="${k}">${ico('x')}Quitar</button>`:''}</div></div>`).join('');
  openForm(`Soportes · ${perLabel(i,v.periodo)}`,[['html',`<p class="small"><b>${esc(i?.nom||'')}</b></p><div class="list" style="margin-top:10px">${list||'<p class="muted">Sin soportes.</p>'}</div>`,'html']],{},async()=>true,'Cerrar')}
-async function openSop(vid,k){const v=DB.vals.find(x=>x.id===vid),x=v&&(v.soportes||[])[k];if(!x)return;if(x.url){window.open(x.url,'_blank','noopener');return}
- const dl=/\.(xlsx?|csv|docx?)$/i.test(x.n||''),w=dl?null:window.open('','_blank');
- const {data,error}=await sb.storage.from('soportes').createSignedUrl(x.p,600,dl?{download:x.n}:undefined);
- if(error||!data){if(w)w.close();toast('No se pudo abrir: '+errMsg(error),'bad');return}if(w)w.location.href=data.signedUrl;else location.href=data.signedUrl}
+async function openSop(vid,k,dl){const v=DB.vals.find(x=>x.id===vid),x=v&&(v.soportes||[])[k];if(!x)return;if(x.url){window.open(x.url,'_blank','noopener');return}
+ if(dl)return dlFile('soportes',x.p,x.n);closeModal();viewFile({bucket:'soportes',path:x.p,name:x.n,dl:()=>dlFile('soportes',x.p,x.n)})}
 async function delSop(vid,k){const v=DB.vals.find(x=>x.id===vid);if(!v)return;const x=(v.soportes||[])[k];const rest=(v.soportes||[]).filter((_,j)=>j!==Number(k));
  const {error}=await sb.from('indicador_valores').update({soportes:rest}).eq('id',vid);if(error){toast(errMsg(error),'bad');return}
  if(x&&x.p)await sb.storage.from('soportes').remove([x.p]);await reload('vals');toast('Soporte retirado.');closeModal();render();sopModal(vid)}
@@ -1119,12 +1249,18 @@ document.addEventListener('click',async e=>{if(S.novOpen&&!e.target.closest('.no
  case 'confirm-yes':{const f=MF?.onYes;closeModal();if(f)f();break}
  case 'doc-new':if(canDoc())docForm();break;
  case 'doc-edit':if(canDoc())docForm(id);break;
- case 'doc-arch':if(canDoc()){const d=DB.docs.find(x=>x.id===id);openConfirm('Archivar documento',`"${d.cod} ${d.nom}" pasará a estado Obsoleto. Seguirá en el listado como registro histórico.`,async()=>{if(await dbSave('docs',{est:'Obsoleto'},d.id)){toast('Documento archivado.');render()}},'Archivar')}break;
+ case 'doc-arch':if(canDoc()){const d=DB.docs.find(x=>x.id===id);openConfirm('Marcar como obsoleto',`"${d.cod} ${d.nom}" quedará como Obsoleto y pasará al archivo de obsoletos: ya no aparecerá en el listado ni lo podrán consultar los colaboradores. Puede reactivarlo desde el archivo.`,async()=>{if(await dbSave('docs',{est:'Obsoleto'},d.id)){toast('Documento archivado como obsoleto.');render()}},'Archivar')}break;
+ case 'doc-unarch':if(canDoc()){const d=DB.docs.find(x=>x.id===id);openConfirm('Reactivar documento',`"${d.cod} ${d.nom}" volverá al listado como Vigente.`,async()=>{if(await dbSave('docs',{est:'Vigente'},d.id)){toast('Documento reactivado.');render()}},'Reactivar')}break;
+ case 'doc-edl':{const d=DB.docs.find(x=>x.id===id);if(d&&d.archivo_edit)dlFile('fuentes',d.archivo_edit,`${d.cod} ${d.nom} v${d.ver||1}.${fext(d.archivo_edit)}`.replace(/[\\/:*?"<>|]+/g,'-'));break}
+ case 'doc-hist':docHist(id);break;
+ case 'dver-view':{const x=DB.dver.find(v=>v.id===id),d=x&&DB.docs.find(y=>y.id===x.doc_id);if(x&&x.archivo){closeModal();viewFile({bucket:'documentos',path:x.archivo,name:x.archivo,title:`${d?.cod||''} · versión ${x.ver||''} (obsoleta)`,dl:()=>dlFile('documentos',x.archivo)})}break}
+ case 'dver-edl':{const x=DB.dver.find(v=>v.id===id);if(x&&x.archivo_edit)dlFile('fuentes',x.archivo_edit);break}
  case 'doc-view':openDoc(id,false);break;
  case 'doc-dl':openDoc(id,true);break;
  case 'ent-new':if(can('create'))entForm(b.dataset.e,null,Object.assign({},b.dataset.c?{comite:b.dataset.c}:{},b.dataset.mod?{mod:b.dataset.mod}:{}));break;
  case 'evid':evidModal(id);break;
  case 'evid-open':openEvid(id);break;
+ case 'evid-dl':openEvid(id,true);break;
  case 'acc-new':accForm();break;
  case 'ent-edit':if(can('edit'))entForm(b.dataset.e,id);break;
  case 'ind-upd':valForm(id);break;
@@ -1132,6 +1268,8 @@ document.addEventListener('click',async e=>{if(S.novOpen&&!e.target.closest('.no
  case 'ind-ficha':{const it=DB.ind.find(x=>x.id===id);if(it){if(S.mod!=='indicadores'||S.sec!==(it.mod||'calidad')){S.mod='indicadores';S.sec=it.mod||'calidad';S.nav=false}S.sub='i:'+id;render();window.scrollTo(0,0)}break}
  case 'sop':sopModal(id);break;
  case 'sop-open':openSop(id,Number(b.dataset.k));break;
+ case 'sop-dl':openSop(id,Number(b.dataset.k),true);break;
+ case 'vw-dl':if(VW.dl)VW.dl();break;
  case 'sop-del':openConfirm('Quitar soporte','El archivo se eliminará de forma permanente.',()=>delSop(id,b.dataset.k),'Quitar');break;
  case 'hm-new':hmForm();break;
  case 'hm-edit':hmForm(id);break;
@@ -1206,7 +1344,7 @@ document.addEventListener('submit',async e=>{e.preventDefault();const f=e.target
   if(error){btn.disabled=false;err.textContent=errMsg(error);err.hidden=false;return}
   await reload('att');S.last={tid:t.id,nota:data.nota,ok:data.ok};render();window.scrollTo(0,0);}});
 document.addEventListener('keydown',e=>{const vw=document.getElementById('viewer');
- if(vw&&vw.innerHTML){if(e.key==='Escape'){closeViewer();return}if((e.ctrlKey||e.metaKey)&&['p','s'].includes(e.key.toLowerCase())){e.preventDefault();toast('Este documento es de solo consulta: no se puede imprimir ni descargar.','bad');return}}
+ if(vw&&vw.innerHTML){if(e.key==='Escape'){closeViewer();return}if(document.body.classList.contains('noprint')&&(e.ctrlKey||e.metaKey)&&['p','s'].includes(e.key.toLowerCase())){e.preventDefault();toast('Este documento es de solo consulta: no se puede imprimir ni descargar.','bad');return}}
  if(e.key==='Escape'&&document.getElementById('modal').innerHTML)closeModal()});
 document.addEventListener('contextmenu',e=>{if(e.target.closest&&e.target.closest('#viewer'))e.preventDefault()});
 
