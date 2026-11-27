@@ -575,9 +575,28 @@ const indSt=(i,v)=>indOk(i,v)?'ok':'bad';
 const indMeta=i=>`${i.sen==='mayor'?'≥':'≤'} ${indF(i,i.meta)}${i.u==='x1000'?' por 1.000':i.u==='x100'?' por 100':''}`;
 const curYear=()=>new Date().getFullYear();
 const prevMonth=()=>{const d=new Date();d.setDate(1);d.setMonth(d.getMonth()-1);return `${d.getFullYear()}-${pad(d.getMonth()+1)}`};
-const yearVals=(i,y=S.year)=>{const out=Array(12).fill(null);DB.vals.filter(v=>v.ind_id===i.id&&String(v.periodo).startsWith(y+'-')).forEach(v=>{out[Number(String(v.periodo).slice(5,7))-1]=v});return out};
+const FRECS=['Mensual','Semanal','Trimestral','Anual'],FW={Mensual:['mes','meses'],Semanal:['semana','semanas'],Trimestral:['trimestre','trimestres'],Anual:['año','años']};
+const frec=i=>FRECS.includes(i&&i.frec)?i.frec:'Mensual',fw=(i,n)=>FW[frec(i)][n===1?0:1],fwC=i=>{const w=fw(i,2);return w[0].toUpperCase()+w.slice(1)};
+const uD=k=>new Date(String(k).slice(0,10)+'T00:00:00Z'),uK=d=>`${d.getUTCFullYear()}-${pad(d.getUTCMonth()+1)}-${pad(d.getUTCDate())}`,addD=(k,n)=>{const d=uD(k);d.setUTCDate(d.getUTCDate()+n);return uK(d)};
+const monday=k=>{const d=uD(k);return addD(k,-((d.getUTCDay()+6)%7))},firstMon=y=>{const k=`${y}-01-01`,w=(uD(k).getUTCDay()+6)%7;return w?addD(k,7-w):k};
+const ROM=['I','II','III','IV'];
+function perOf(i,k){k=String(k).slice(0,10);if(k.length===7)k+='-01';const y=k.slice(0,4),m=Number(k.slice(5,7)),f=frec(i);
+ return f==='Anual'?`${y}-01-01`:f==='Trimestral'?`${y}-${pad(Math.floor((m-1)/3)*3+1)}-01`:f==='Semanal'?monday(k):`${y}-${pad(m)}-01`}
+const curPer=i=>perOf(i,today()),prevPer=i=>perOf(i,addD(curPer(i),-1));
+function perLabel(i,k,short){k=String(k||'').slice(0,10);if(!k)return '—';const y=k.slice(0,4),m=Number(k.slice(5,7)),f=frec(i);
+ if(f==='Anual')return short?y:`Año ${y}`;
+ if(f==='Trimestral'){const q=Math.floor((m-1)/3);return short?`T${q+1}`:`Trimestre ${ROM[q]} ${y} (${MN[q*3].toLowerCase()}–${MN[q*3+2].toLowerCase()})`}
+ if(f==='Semanal'){const n=Math.round((uD(k)-uD(firstMon(Number(y))))/6048e5)+1,e=uD(addD(k,6)),d=uD(k);return short?`S${n}`:`Semana ${n} · ${d.getUTCDate()} ${MN[d.getUTCMonth()].toLowerCase()} – ${e.getUTCDate()} ${MN[e.getUTCMonth()].toLowerCase()} ${y}`}
+ return short?MN[m-1]:`${ML[m-1]} ${y}`}
+function periods(i,y=S.year,wide){const f=frec(i);
+ if(f==='Anual')return wide?[4,3,2,1,0].map(d=>`${y-d}-01-01`):[`${y}-01-01`];
+ if(f==='Trimestral')return [1,4,7,10].map(m=>`${y}-${pad(m)}-01`);
+ if(f==='Semanal'){const out=[];for(let k=firstMon(y);k.startsWith(y+'-');k=addD(k,7))out.push(k);return out}
+ return Array.from({length:12},(_,k)=>`${y}-${pad(k+1)}-01`)}
+const valOf=(i,k)=>DB.vals.find(v=>v.ind_id===i.id&&String(v.periodo).slice(0,10)===k)||null;
+const yearVals=(i,y=S.year,wide)=>periods(i,y,wide).map(k=>valOf(i,k));
 const measured=yv=>yv.filter(v=>v&&v.valor!=null);
-const pendPrev=yv=>{const m=new Date().getMonth();return S.year===curYear()&&m>0&&!(yv[m-1]&&yv[m-1].valor!=null)};
+const pendPrev=i=>{const p=prevPer(i),v=valOf(i,p);return (Number(p.slice(0,4))===S.year||(frec(i)==='Anual'&&S.year===curYear()))&&!(v&&v.valor!=null)};
 const canReg=i=>isAdmin()||(isSST()&&i.mod==='sst')||(isJefe()&&(i.resp_ids||[]).includes(S.user.id));
 const canMan=i=>isAdmin()||(isSST()&&i.mod==='sst');
 const indYears=()=>{const ys=new Set([curYear()]);DB.vals.forEach(v=>{const y=Number(String(v.periodo).slice(0,4));if(y)ys.add(y)});return [...ys].sort((a,b)=>b-a)};
@@ -587,40 +606,40 @@ const yearSel=(extra='')=>`<div class="filters"><label class="fld" style="flex:0
 function vIndResumen(){const cats=Object.keys(IND_T);let tM=0,tO=0,tN=0,tLO=0,tL=0,tP=0;const inc=[];
  const R=cats.map(c=>{const L=DB.ind.filter(i=>(i.mod||'calidad')===c);let m=0,o=0,lo=0,ln=0,p=0;
   L.forEach(i=>{const yv=yearVals(i),me=measured(yv),last=me[me.length-1];m+=me.length;o+=me.filter(v=>indOk(i,v.valor)).length;
-   if(last){ln++;if(indOk(i,last.valor))lo++;else inc.push({i,last})}if(pendPrev(yv))p++});
+   if(last){ln++;if(indOk(i,last.valor))lo++;else inc.push({i,last})}if(pendPrev(i))p++});
   tM+=m;tO+=o;tN+=L.length;tLO+=lo;tL+=ln;tP+=p;return {c,n:L.length,m,o,lo,ln,p}});
  const g=pc(tO,tM);
  return pageHead('Indicadores de Gestión','Resumen de cumplimiento de todas las carpetas de indicadores.')+yearSel()+
  `<div class="tiles"><div class="tile ${tM?pcls(g):''}"><div class="v">${tM?g+'%':'—'}</div><div class="l">Mediciones que cumplen la meta en ${S.year}</div></div>
  <div class="tile ${tL&&tLO===tL?'ok':'warn'}"><div class="v">${tLO} / ${tL}</div><div class="l">Indicadores que cumplen en su último resultado</div></div>
  <div class="tile ${inc.length?'bad':'ok'}"><div class="v">${inc.length}</div><div class="l">Indicadores en incumplimiento</div></div>
- <div class="tile ${tP?'warn':'ok'}"><div class="v">${tP}</div><div class="l">Pendientes de reporte del mes anterior</div></div></div>
+ <div class="tile ${tP?'warn':'ok'}"><div class="v">${tP}</div><div class="l">Pendientes de reporte del periodo anterior</div></div></div>
  <div class="grid">${R.map(r=>{const v=pc(r.o,r.m);return `<button class="card mod" data-act="nav" data-m="indicadores" data-s="${r.c}"><span class="ic">${ico('indicadores')}</span><h3>${esc(IND_T[r.c])}</h3>${r.m?prog(v,pcls(v)):'<span class="muted small">Sin mediciones en '+S.year+'</span>'}<p class="small">${r.n} indicador${r.n===1?'':'es'} · ${r.lo} de ${r.ln} cumplen en su último resultado${r.p?` · <b style="color:var(--warn)">${r.p} pendiente${r.p===1?'':'s'}</b>`:''}</p><small>Abrir →</small></button>`}).join('')}</div>
  <div class="sec-h"><h2>Cumplimiento por tipo de indicador</h2></div>`+
  tbl(['Tipo','#Indicadores','#Mediciones','#Cumplen','Cumplimiento'],[...ITIPOS,''].map(t=>{const L=DB.ind.filter(i=>(i.tipo||'')===t);if(!L.length&&!t)return '';let m=0,o=0;L.forEach(i=>{const me=measured(yearVals(i));m+=me.length;o+=me.filter(v=>indOk(i,v.valor)).length});const v=pc(o,m);
   return `<tr><td><b>${esc(t||'Sin tipo definido')}</b></td><td class="num">${L.length}</td><td class="num">${m}</td><td class="num">${o}</td><td style="min-width:160px">${m?prog(v,pcls(v)):'<span class="muted small">Sin mediciones</span>'}</td></tr>`}).filter(Boolean),'stack')+
  `<div class="sec-h"><h2>Indicadores en incumplimiento</h2></div>`+
- tbl(['Indicador','Carpeta','Tipo','Último resultado','Meta','Mes','Plan de mejora'],inc.map(({i,last})=>{const pl=DB.planes.find(x=>x.id===last.plan_id);return `<tr><td><button class="linkbtn" style="font-size:15px;text-align:left" data-act="ind-ficha" data-id="${i.id}" data-c="${esc(i.mod)}">${esc(i.nom)}</button></td><td>${esc(IND_T[i.mod]||'')}</td><td>${esc(i.tipo||'—')}</td><td><b style="color:var(--bad)">${esc(indF(i,last.valor))}</b></td><td>${esc(indMeta(i))}</td><td>${esc(mesL(last.periodo))}</td><td>${pl?badge(estPlan(pl)):last.plan_id?'Registrado':badge('Sin plan')}</td></tr>`}),'stack','Ningún indicador está en incumplimiento en su último resultado.')}
-function indCard(i){const yv=yearVals(i),me=measured(yv),ok=me.filter(v=>indOk(i,v.valor)).length,last=me[me.length-1],st=last?indSt(i,last.valor):'';
+ tbl(['Indicador','Carpeta','Tipo','Último resultado','Meta','Periodo','Plan de mejora'],inc.map(({i,last})=>{const pl=DB.planes.find(x=>x.id===last.plan_id);return `<tr><td><button class="linkbtn" style="font-size:15px;text-align:left" data-act="ind-ficha" data-id="${i.id}" data-c="${esc(i.mod)}">${esc(i.nom)}</button></td><td>${esc(IND_T[i.mod]||'')}</td><td>${esc(i.tipo||'—')}</td><td><b style="color:var(--bad)">${esc(indF(i,last.valor))}</b></td><td>${esc(indMeta(i))}</td><td>${esc(perLabel(i,last.periodo))}</td><td>${pl?badge(estPlan(pl)):last.plan_id?'Registrado':badge('Sin plan')}</td></tr>`}),'stack','Ningún indicador está en incumplimiento en su último resultado.')}
+function indCard(i){const yv=yearVals(i,S.year,frec(i)==='Anual'),me=measured(yv),ok=me.filter(v=>indOk(i,v.valor)).length,last=me[me.length-1],st=last?indSt(i,last.valor):'';
  return `<article class="card ind"><div class="ind-h"><h3>${esc(i.nom)}${tipoChip(i)}</h3>${canReg(i)?`<button class="btn sm pri" data-act="ind-upd" data-id="${i.id}">${ico('plus')}Registrar</button>`:''}</div>
  ${i.formula?`<p class="muted small">${esc(i.formula)}</p>`:''}
- <div class="ind-v">${last?`<span class="big ${st}">${esc(indF(i,last.valor))}</span><span class="trend ${st}">${st==='ok'?'Cumple':'No cumple'} · ${esc(mesL(last.periodo))}</span>`:`<span class="muted">Sin resultados en ${S.year}</span>`}</div>
- <div class="ind-m"><span class="dot ${st}"></span>Meta ${esc(indMeta(i))}${me.length?` · ${ok} de ${me.length} meses cumplen`:''}</div>
- ${pendPrev(yv)?`<p class="note" style="padding:6px 10px">Falta el dato de ${esc(mesL(prevMonth()+'-01').toLowerCase())}</p>`:''}
- ${me.length?`<div class="fig" data-ind="${i.id}"><svg role="img" aria-label="Resultados mensuales de ${S.year}"></svg></div><div class="legend"><span><i></i>Resultado mensual</span><span><i class="g"></i>Meta</span></div>`:''}
+ <div class="ind-v">${last?`<span class="big ${st}">${esc(indF(i,last.valor))}</span><span class="trend ${st}">${st==='ok'?'Cumple':'No cumple'} · ${esc(perLabel(i,last.periodo))}</span>`:`<span class="muted">Sin resultados ${frec(i)==='Anual'?'en los últimos 5 años':'en '+S.year}</span>`}</div>
+ <div class="ind-m"><span class="dot ${st}"></span>Meta ${esc(indMeta(i))} · ${esc(frec(i))}${me.length?` · ${ok} de ${me.length} ${fw(i,me.length)} cumplen`:''}</div>
+ ${pendPrev(i)?`<p class="note" style="padding:6px 10px">Falta el dato de: ${esc(perLabel(i,prevPer(i)))}</p>`:''}
+ ${me.length?`<div class="fig" data-ind="${i.id}"${frec(i)==='Anual'?' data-wide="1"':''}><svg role="img" aria-label="Resultados de ${S.year}"></svg></div><div class="legend"><span><i></i>Resultado ${esc(frec(i).toLowerCase())}</span><span><i class="g"></i>Meta</span></div>`:''}
  <div><button class="btn sm ghost" data-act="ind-ficha" data-id="${i.id}">${ico('eye')}Ver ficha y datos del año</button></div></article>`}
 function vIndicadores(cat){if(S.sub&&S.sub.startsWith('i:'))return vIndFicha(S.sub.slice(2));
  const all=DB.ind.filter(i=>(i.mod||'calidad')===cat).sort((a,b)=>(a.orden||0)-(b.orden||0)),L=all.filter(i=>!S.ftipo||i.tipo===S.ftipo);
  const tsel=`<label class="fld" style="flex:0 0 190px"><span>Tipo de indicador</span><select data-ftipo><option value="">Todos</option>${ITIPOS.map(t=>`<option${S.ftipo===t?' selected':''}>${t}</option>`).join('')}</select></label>`;
  const nb=(isAdmin()||(isSST()&&cat==='sst'))?`<button class="btn pri" data-act="ind-new" data-id="${cat}">${ico('plus')}Nuevo indicador</button>`:'';
- return pageHead(IND_T[cat]||'Indicadores','Resultados mensuales frente a la meta. Abra la ficha de un indicador para ver y registrar sus datos.',nb)+yearSel(tsel)+
+ return pageHead(IND_T[cat]||'Indicadores','Resultados frente a la meta. Abra la ficha de un indicador para ver y registrar sus datos.',nb)+yearSel(tsel)+
  (L.length?`<div class="grid w">${L.map(indCard).join('')}</div>`:all.length?`<div class="card empty">No hay indicadores de tipo ${esc(S.ftipo)} en esta carpeta.</div>`:`<div class="card empty">Aún no hay indicadores en esta carpeta.${nb?' Use "Nuevo indicador" para crear el primero.':''}</div>`)}
 function vIndFicha(id){const i=DB.ind.find(x=>x.id===id);if(!i){S.sub=null;return vIndicadores(S.sec)}
- const yv=yearVals(i),reg=canReg(i),man=canMan(i),nowP=`${curYear()}-${pad(new Date().getMonth()+1)}`;
+ const PK=periods(i,S.year,true),yv=PK.map(k=>valOf(i,k)),reg=canReg(i),man=canMan(i),nowP=curPer(i);
  const resp=(i.resp_ids||[]).map(u=>userBy(u)?.nombre).filter(Boolean);
- const rows=yv.map((v,k)=>{const p=`${S.year}-${pad(k+1)}`,fut=p>nowP,pl=v&&v.plan_id?DB.planes.find(x=>x.id===v.plan_id):null;
+ const rows=yv.map((v,k)=>{const p=PK[k],fut=p>nowP;if(fut&&frec(i)==='Semanal')return '';const pl=v&&v.plan_id?DB.planes.find(x=>x.id===v.plan_id):null;
   const est=!v?(fut?'':'Sin datos'):v.valor==null?'Incompleto':(indOk(i,v.valor)?'Cumple':'No cumple');
-  return `<tr><td><b>${esc(ML[k])}</b></td><td class="num">${v&&v.num!=null?esc(nfmt(v.num)):'—'}</td><td class="num">${v&&v.den!=null?esc(nfmt(v.den)):'—'}</td><td class="num"><b>${v&&v.valor!=null?esc(indF(i,v.valor)):'—'}</b></td><td>${est?badge(est):''}</td><td>${esc(v?.obs||'')}</td><td>${v&&(v.soportes||[]).length?`<button class="btn sm ghost" data-act="sop" data-id="${esc(v.id)}">${ico('file')}${(v.soportes||[]).length}</button>`:''}</td><td>${pl?`<button class="linkbtn" style="font-size:14px;text-align:left" data-act="evid" data-id="${pl.id}">${esc(String(pl.accion||pl.hallazgo||'Plan').slice(0,60))}</button> ${badge(estPlan(pl))}`:v&&v.plan_id?'Registrado':''}</td><td class="ra">${reg&&!fut?`<button class="btn sm ghost" data-act="ind-val" data-id="${i.id}" data-p="${p}">${ico(v?'edit':'plus')}${v?'Editar':'Registrar'}</button>`:''}</td></tr>`});
+  return `<tr><td><b>${esc(perLabel(i,p))}</b></td><td class="num">${v&&v.num!=null?esc(nfmt(v.num)):'—'}</td><td class="num">${v&&v.den!=null?esc(nfmt(v.den)):'—'}</td><td class="num"><b>${v&&v.valor!=null?esc(indF(i,v.valor)):'—'}</b></td><td>${est?badge(est):''}</td><td>${esc(v?.obs||'')}</td><td>${v&&(v.soportes||[]).length?`<button class="btn sm ghost" data-act="sop" data-id="${esc(v.id)}">${ico('file')}${(v.soportes||[]).length}</button>`:''}</td><td>${pl?`<button class="linkbtn" style="font-size:14px;text-align:left" data-act="evid" data-id="${pl.id}">${esc(String(pl.accion||pl.hallazgo||'Plan').slice(0,60))}</button> ${badge(estPlan(pl))}`:v&&v.plan_id?'Registrado':''}</td><td class="ra">${reg&&!fut?`<button class="btn sm ghost" data-act="ind-val" data-id="${i.id}" data-p="${p}">${ico(v?'edit':'plus')}${v?'Editar':'Registrar'}</button>`:''}</td></tr>`}).filter(Boolean);if(frec(i)==='Semanal')rows.reverse();
  const me=measured(yv),ok=me.filter(v=>indOk(i,v.valor)).length;
  return `<div><button class="btn ghost sm" data-act="ind-back">${ico('back')}Volver a ${esc(IND_T[i.mod]||'indicadores')}</button></div>`+
  pageHead(i.nom,IND_T[i.mod]||'',man?`<button class="btn" data-act="ind-edit" data-id="${i.id}">${ico('edit')}Editar ficha</button><button class="btn ghost" data-act="ind-del" data-id="${i.id}">${ico('archive')}Eliminar</button>`:'')+
@@ -628,17 +647,18 @@ function vIndFicha(id){const i=DB.ind.find(x=>x.id===id);if(!i){S.sub=null;retur
   <div><dt>Tipo de indicador</dt><dd>${esc(i.tipo||'Sin definir')}</dd></div>
   <div><dt>Fórmula</dt><dd>${esc(i.formula||'—')}</dd></div>
   <div><dt>Meta</dt><dd>${esc(indMeta(i))}</dd></div>
+  <div><dt>Periodicidad de medición</dt><dd>${esc(frec(i))}</dd></div>
   <div><dt>Unidad</dt><dd>${esc((UNITS.find(x=>x[0]===i.u)||[])[1]||'—')}</dd></div>
   <div><dt>Cumple cuando el resultado es</dt><dd>${i.sen==='mayor'?'Mayor o igual a la meta':'Menor o igual a la meta'}</dd></div>
   <div><dt>Registro del numerador</dt><dd>${resp.length?esc(resp.join(', '))+' y Calidad':'Solo Calidad'}</dd></div>
   <div><dt>Observaciones</dt><dd>${esc(i.obs||'—')}</dd></div></dl></section>`+
  yearSel()+
- `<div class="tiles"><div class="tile ${me.length?pcls(pc(ok,me.length)):''}"><div class="v">${me.length?pc(ok,me.length)+'%':'—'}</div><div class="l">Meses que cumplen en ${S.year} (${ok} de ${me.length})</div></div><div class="tile ${me.length-ok?'bad':'ok'}"><div class="v">${me.length-ok}</div><div class="l">Meses en incumplimiento</div></div></div>`+
- (me.length?`<section class="card"><div class="fig" data-ind="${i.id}" style="min-height:220px"><svg role="img" aria-label="Resultados mensuales de ${S.year}"></svg></div><div class="legend"><span><i></i>Resultado mensual</span><span><i class="g"></i>Meta</span></div></section>`:'')+
- tbl(['Mes','#Numerador','#Denominador','#Resultado','Estado','Observaciones','Soportes','Plan de mejora','Acciones'],rows,'stack')}
+ `<div class="tiles"><div class="tile ${me.length?pcls(pc(ok,me.length)):''}"><div class="v">${me.length?pc(ok,me.length)+'%':'—'}</div><div class="l">${esc(fwC(i))} que cumplen${frec(i)==='Anual'?' (últimos 5 años)':' en '+S.year} (${ok} de ${me.length})</div></div><div class="tile ${me.length-ok?'bad':'ok'}"><div class="v">${me.length-ok}</div><div class="l">${esc(fwC(i))} en incumplimiento</div></div></div>`+
+ (me.length?`<section class="card"><div class="fig" data-ind="${i.id}"${frec(i)==='Anual'?' data-wide="1"':''} style="min-height:220px"><svg role="img" aria-label="Resultados de ${S.year}"></svg></div><div class="legend"><span><i></i>Resultado ${esc(frec(i).toLowerCase())}</span><span><i class="g"></i>Meta</span></div></section>`:'')+
+ tbl(['Periodo','#Numerador','#Denominador','#Resultado','Estado','Observaciones','Soportes','Plan de mejora','Acciones'],rows,'stack')}
 function sopModal(vid){const v=DB.vals.find(x=>x.id===vid);if(!v)return;const i=DB.ind.find(x=>x.id===v.ind_id);
  const list=(v.soportes||[]).map((x,k)=>`<div class="li"><div><h3>${esc(x.n||'Soporte')}</h3><div class="meta">${fd(x.f)}${userBy(x.u)?' · '+esc(userBy(x.u).nombre):''}</div></div><div class="acts"><button type="button" class="btn sm" data-act="sop-open" data-id="${esc(vid)}" data-k="${k}">${ico(x.url?'link':/\.(xlsx?|csv|docx?)$/i.test(x.n||'')?'dl':'eye')}${x.url?'Abrir enlace':/\.(xlsx?|csv|docx?)$/i.test(x.n||'')?'Descargar':'Abrir'}</button>${isAdmin()?`<button type="button" class="btn sm ghost" data-act="sop-del" data-id="${esc(vid)}" data-k="${k}">${ico('x')}Quitar</button>`:''}</div></div>`).join('');
- openForm(`Soportes · ${mesL(v.periodo)}`,[['html',`<p class="small"><b>${esc(i?.nom||'')}</b></p><div class="list" style="margin-top:10px">${list||'<p class="muted">Sin soportes.</p>'}</div>`,'html']],{},async()=>true,'Cerrar')}
+ openForm(`Soportes · ${perLabel(i,v.periodo)}`,[['html',`<p class="small"><b>${esc(i?.nom||'')}</b></p><div class="list" style="margin-top:10px">${list||'<p class="muted">Sin soportes.</p>'}</div>`,'html']],{},async()=>true,'Cerrar')}
 async function openSop(vid,k){const v=DB.vals.find(x=>x.id===vid),x=v&&(v.soportes||[])[k];if(!x)return;if(x.url){window.open(x.url,'_blank','noopener');return}
  const dl=/\.(xlsx?|csv|docx?)$/i.test(x.n||''),w=dl?null:window.open('','_blank');
  const {data,error}=await sb.storage.from('soportes').createSignedUrl(x.p,600,dl?{download:x.n}:undefined);
@@ -647,48 +667,51 @@ async function delSop(vid,k){const v=DB.vals.find(x=>x.id===vid);if(!v)return;co
  const {error}=await sb.from('indicador_valores').update({soportes:rest}).eq('id',vid);if(error){toast(errMsg(error),'bad');return}
  if(x&&x.p)await sb.storage.from('soportes').remove([x.p]);await reload('vals');toast('Soporte retirado.');closeModal();render();sopModal(vid)}
 function drawInd(fig){const i=DB.ind.find(x=>x.id===fig.dataset.ind);const svg=fig.querySelector('svg');if(!i||!svg)return;
- const yv=yearVals(i).map(v=>v&&v.valor!=null?Number(v.valor):null),pts=yv.filter(v=>v!=null);if(!pts.length)return;
+ const PK=periods(i,S.year,!!fig.dataset.wide),yv=PK.map(k=>{const v=valOf(i,k);return v&&v.valor!=null?Number(v.valor):null}),pts=yv.filter(v=>v!=null);if(!pts.length)return;const N=PK.length;
  const W=fig.clientWidth,H=fig.clientHeight;if(!W||!H)return;const nar=W<420;
  const L=40,R=12,T=10,B=22,all=[...pts,Number(i.meta)];let lo=Math.min(...all),hi=Math.max(...all);const pd=(hi-lo)*0.18||1;lo-=pd;hi+=pd;
- const x=k=>L+(W-L-R)*k/11,y=v=>T+(H-T-B)*(1-(v-lo)/(hi-lo));
+ const x=k=>N<2?(L+W-R)/2:L+(W-L-R)*k/(N-1),y=v=>T+(H-T-B)*(1-(v-lo)/(hi-lo));
  let g=[lo+(hi-lo)*0.15,(lo+hi)/2,hi-(hi-lo)*0.15].map(t=>`<line class="gl" x1="${L}" x2="${W-R}" y1="${y(t)}" y2="${y(t)}"/><text class="tk" x="${L-6}" y="${y(t)+4}" text-anchor="end">${nfmt(Math.round(t*10)/10)}</text>`).join('');
  g+=`<line class="goal" x1="${L}" x2="${W-R}" y1="${y(i.meta)}" y2="${y(i.meta)}"/>`;
  let d='',pen=false;yv.forEach((v,k)=>{if(v==null){pen=false;return}d+=(pen?'L':'M')+x(k)+' '+y(v)+' ';pen=true});
  g+=`<path class="ln" d="${d}"/>`+yv.map((v,k)=>v==null?'':`<circle class="pt ${indSt(i,v)}" cx="${x(k)}" cy="${y(v)}" r="4"/>`).join('');
- g+=MN.map((m,k)=>nar&&k%2?'':`<text class="tk" x="${x(k)}" y="${H-5}" text-anchor="${k===0?'start':k===11?'end':'middle'}">${m}</text>`).join('');
+ const stp=N>26?(nar?8:4):nar&&N>=12?2:1;g+=PK.map((p,k)=>k%stp?'':`<text class="tk" x="${x(k)}" y="${H-5}" text-anchor="${N<2?'middle':k===0?'start':k===N-1?'end':'middle'}">${esc(perLabel(i,p,true))}</text>`).join('');
  svg.innerHTML=g;}
 function indFicha(id,cat){const i=id?DB.ind.find(x=>x.id===id):null;const jefes=DB.users.filter(u=>u.rol==='jefe'&&u.estado==='Activo');
- const fields=[...(isAdmin()?[['mod','Carpeta','select',Object.entries(IND_T)]]:[]),['nom','Nombre del indicador','text'],['tipo','Tipo de indicador','select',[['','Seleccione…'],...ITIPOS.map(t=>[t,t])]],
+ const fields=[...(isAdmin()?[['mod','Carpeta','select',Object.entries(IND_T)]]:[]),['nom','Nombre del indicador','text'],['tipo','Tipo de indicador','select',[['','Seleccione…'],...ITIPOS.map(t=>[t,t])]],['frec','Periodicidad de medición','select',FRECS.map(t=>[t,t])],
   ['html','<p class="muted small" style="margin-top:-4px"><b>Estructura:</b> recursos con que se cuenta (talento humano, infraestructura, dotación). <b>Proceso:</b> cómo se hacen las actividades (adherencia, oportunidad). <b>Resultado:</b> efecto inmediato en el paciente o el servicio. <b>Impacto:</b> efecto a largo plazo en la salud de la población o la institución.</p>','html'],['formula','Fórmula (numerador / denominador)','textarea'],['meta','Meta','number'],
   ['sen','La meta se cumple cuando el resultado es','select',[['mayor','Mayor o igual a la meta'],['menor','Menor o igual a la meta']]],['u','Unidad','select',UNITS.map(x=>[x[0],x[1]])],
   jefes.length?['resp_ids','Jefes de área que pueden registrar el numerador','checks',jefes.map(u=>[u.id,u.nombre+(u.area?' · '+u.area:'')])]:['info','Para dar permiso de registro a un jefe de área, primero asígnele el rol "Jefe o coordinador" en Usuarios.','info'],
   ['obs','Observaciones de la ficha','textarea',null,OPT],['orden','Orden en la carpeta','number',null,OPT]];
- openForm(i?'Editar ficha del indicador':'Nuevo indicador',fields,i?Object.assign({},i):{mod:cat,sen:'mayor',u:'%',resp_ids:[]},async v=>{
+ openForm(i?'Editar ficha del indicador':'Nuevo indicador',fields,i?Object.assign({frec:'Mensual'},i):{mod:cat,sen:'mayor',u:'%',frec:'Mensual',resp_ids:[]},async v=>{
   if(!v.tipo){toast('Seleccione el tipo de indicador: Estructura, Proceso, Resultado o Impacto.','bad');return false}
+  if(i&&frec(i)!==v.frec&&DB.vals.some(x=>x.ind_id===i.id)){toast(`No se puede cambiar la periodicidad: este indicador ya tiene resultados registrados como ${frec(i).toLowerCase()}.`,'bad');return false}
   const un=UNITS.find(x=>x[0]===v.u);v.factor=un?un[2]:1;if(!isAdmin())v.mod=i?i.mod:cat;if(!v.resp_ids)v.resp_ids=i?.resp_ids||[];if(v.orden==null)delete v.orden;
   const ok=await dbSave('ind',v,i?.id);if(ok){await reload('vals');toast(i?'Ficha actualizada.':'Indicador creado.');render()}return ok},'Guardar')}
-function valForm(id,p){const i=DB.ind.find(x=>x.id===id);if(!i)return;p=(p||prevMonth()).slice(0,7);
- const ex=DB.vals.find(v=>v.ind_id===id&&String(v.periodo).slice(0,7)===p),jefe=isJefe();
+function valForm(id,p){const i=DB.ind.find(x=>x.id===id);if(!i)return;p=p?perOf(i,p):([prevPer(i),curPer(i)].find(k=>!valOf(i,k))||curPer(i));
+ const ex=valOf(i,p),jefe=isJefe(),cy=curYear(),cp=curPer(i);
+ const popts=[...new Set([...periods(i,cy),...periods(i,cy-1),...periods(i,Number(p.slice(0,4))),p])].filter(k=>k<=cp).sort().reverse().map(k=>[k,perLabel(i,k)+(valOf(i,k)?' (ya registrado)':'')]);
  const planOpts=[['','Seleccione…'],['nuevo','Crear un plan de mejora nuevo'],...DB.planes.filter(x=>x.estado!=='Cerrado').map(x=>[x.id,`${x.origen||'Plan'}: ${String(x.hallazgo||'').slice(0,70)}`])];
- const fields=[['info',`${i.nom} · Meta ${indMeta(i)}`,'info'],...(i.formula?[['html',`<p class="muted small">Fórmula: ${esc(i.formula)}</p>`,'html']]:[]),['periodo','Mes','month'],
+ const fields=[['info',`${i.nom} · Meta ${indMeta(i)}`,'info'],...(i.formula?[['html',`<p class="muted small">Fórmula: ${esc(i.formula)}</p>`,'html']]:[]),...(ex?[['periodo','Periodo','select',[[p,perLabel(i,p)]]]]:[['periodo',`Periodo (${frec(i).toLowerCase()})`,'select',popts]]),
   ['num','Numerador','number',null,OPT],...(jefe?[['html',`<p class="small">Denominador: <b>${ex&&ex.den!=null?esc(nfmt(ex.den)):'pendiente (lo registra Calidad)'}</b></p>`,'html']]:[['den','Denominador','number',null,OPT]]),
   ['html','<div id="val-prev" class="codebox"></div>','html'],['obs','Observaciones / análisis del resultado','textarea',null,OPT],
   ...(ex&&(ex.soportes||[]).length?[['html',`<p class="small">Soportes ya cargados: <b>${(ex.soportes||[]).length}</b> (puede agregar más)</p>`,'html']]:[]),['sop_files','Soportes o evidencias (Excel, PDF, fotos)','files'],['sop_url','O enlace al soporte (Drive, OneDrive…)','url'],
   ['plan_sel','Plan de mejora (obligatorio cuando no se cumple la meta)','select',planOpts],['plan_accion','Acción de mejora','textarea',null,OPT],['plan_resp','Responsable del plan','text',null,OPT],['plan_limite','Fecha límite del plan','date',null,OPT]];
- openForm(ex?'Editar resultado del mes':'Registrar resultado del mes',fields,{periodo:p,num:ex?.num??'',den:ex?.den??'',obs:ex?.obs||'',plan_sel:ex?.plan_id||''},async v=>{
-  const per=v.periodo,n=v.num,d=jefe?(ex&&ex.den!=null?Number(ex.den):null):v.den;
+ openForm(ex?'Editar resultado':'Registrar resultado',fields,{periodo:p,num:ex?.num??'',den:ex?.den??'',obs:ex?.obs||'',plan_sel:ex?.plan_id||''},async v=>{
+  const per=v.periodo;if(!ex&&valOf(i,per)){toast(`Ya existe un resultado para ${perLabel(i,per).toLowerCase()}. Ábralo desde la ficha con «Editar».`,'bad');return false}
+  const n=v.num,d=jefe?(ex&&ex.den!=null?Number(ex.den):null):v.den;
   if(n==null&&(jefe||d==null)){toast(jefe?'Registre el numerador.':'Registre el numerador o el denominador.','bad');return false}
   if(d===0){toast('El denominador no puede ser cero.','bad');return false}
   let plan_id=v.plan_sel&&v.plan_sel!=='nuevo'?v.plan_sel:null;
   if(n!=null&&d!=null){const r=n/d*Number(i.factor||1);if(!indOk(i,r)){
    if(!v.plan_sel){toast('El resultado no cumple la meta: seleccione o cree un plan de mejora.','bad');return false}
    if(v.plan_sel==='nuevo'){if(!v.plan_accion||!v.plan_limite){toast('Escriba la acción de mejora y la fecha límite del plan.','bad');return false}
-    const {data:pl,error:pe}=await sb.from('planes').insert(Object.assign({origen:'Indicador',hallazgo:`${i.nom}: resultado ${indF(i,Math.round(r*100)/100)} en ${mesL(per).toLowerCase()} (meta ${indMeta(i)})`,accion:v.plan_accion,resp:v.plan_resp||S.user.nombre,limite:v.plan_limite,avance:0,estado:'Abierto'},isAdmin()&&(i.resp_ids||[]).length?{resp_id:i.resp_ids[0]}:{})).select('id').single();
+    const {data:pl,error:pe}=await sb.from('planes').insert(Object.assign({origen:'Indicador',hallazgo:`${i.nom}: resultado ${indF(i,Math.round(r*100)/100)} en ${perLabel(i,per).toLowerCase()} (meta ${indMeta(i)})`,accion:v.plan_accion,resp:v.plan_resp||S.user.nombre,limite:v.plan_limite,avance:0,estado:'Abierto'},isAdmin()&&(i.resp_ids||[]).length?{resp_id:i.resp_ids[0]}:{})).select('id').single();
     if(pe){toast(errMsg(pe),'bad');return false}plan_id=pl.id;await reload('planes')}}}
   const sops=[...(ex?.soportes||[])],files=v.sop_files||[];
   for(const fl of files){if(fl.size>50*1024*1024){toast(`"${fl.name}" supera 50 MB. Súbalo a Drive y pegue el enlace.`,'bad');return false}}
   if(files.length)toast(`Subiendo ${files.length} archivo${files.length===1?'':'s'}…`);
-  for(const fl of files){const path=`${i.id}/${per.slice(0,7)}/${Date.now()}-${fl.name.normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^\w.\-]+/g,'_')}`;
+  for(const fl of files){const path=`${i.id}/${per}/${Date.now()}-${fl.name.normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^\w.\-]+/g,'_')}`;
    const {error:ue}=await sb.storage.from('soportes').upload(path,fl,{upsert:false});if(ue){toast(`No se pudo subir "${fl.name}": ${errMsg(ue)}`,'bad');return false}
    sops.push({n:fl.name,p:path,f:today(),u:S.user.id})}
   if(v.sop_url)sops.push({n:'Enlace al soporte',url:v.sop_url,f:today(),u:S.user.id});
