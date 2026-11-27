@@ -385,6 +385,7 @@ function fieldHTML(f,v){const [k,l,t,o,opt]=f;let val=v??'';
  if(t==='textarea')return `<label class="fld full"><span>${esc(l)}${opt?' <small>(opcional)</small>':''}</span><textarea name="${k}" rows="3"${opt?'':' required'}>${esc(val)}</textarea></label>`;
  if(t==='check')return `<label class="chk full"><input type="checkbox" name="${k}"${val?' checked':''}><span>${esc(l)}</span></label>`;
  if(t==='file')return `<label class="fld full"><span>${esc(l)}</span><input type="file" name="${k}" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.png,.jpg,.jpeg"></label>`;
+ if(t==='files')return `<label class="fld full"><span>${esc(l)} <small>(opcional, puede elegir varios)</small></span><input type="file" name="${k}" multiple accept=".pdf,.xls,.xlsx,.csv,.doc,.docx,.png,.jpg,.jpeg"></label>`;
  if(t==='note')return `<p class="note full">${esc(l)}</p>`;
  if(t==='html')return `<div class="full">${l}</div>`;
  if(t==='checks')return `<div class="fld full"><span>${esc(l)}</span><div class="cargos">${o.map(([a,b2])=>`<label class="chk"><input type="checkbox" name="${k}" value="${esc(a)}"${(Array.isArray(val)?val:[]).includes(a)?' checked':''}><span>${esc(b2)}</span></label>`).join('')}</div></div>`;
@@ -612,7 +613,7 @@ function vIndFicha(id){const i=DB.ind.find(x=>x.id===id);if(!i){S.sub=null;retur
  const resp=(i.resp_ids||[]).map(u=>userBy(u)?.nombre).filter(Boolean);
  const rows=yv.map((v,k)=>{const p=`${S.year}-${pad(k+1)}`,fut=p>nowP,pl=v&&v.plan_id?DB.planes.find(x=>x.id===v.plan_id):null;
   const est=!v?(fut?'':'Sin datos'):v.valor==null?'Incompleto':(indOk(i,v.valor)?'Cumple':'No cumple');
-  return `<tr><td><b>${esc(ML[k])}</b></td><td class="num">${v&&v.num!=null?esc(nfmt(v.num)):'—'}</td><td class="num">${v&&v.den!=null?esc(nfmt(v.den)):'—'}</td><td class="num"><b>${v&&v.valor!=null?esc(indF(i,v.valor)):'—'}</b></td><td>${est?badge(est):''}</td><td>${esc(v?.obs||'')}</td><td>${pl?`<button class="linkbtn" style="font-size:14px;text-align:left" data-act="evid" data-id="${pl.id}">${esc(String(pl.accion||pl.hallazgo||'Plan').slice(0,60))}</button> ${badge(estPlan(pl))}`:v&&v.plan_id?'Registrado':''}</td><td class="ra">${reg&&!fut?`<button class="btn sm ghost" data-act="ind-val" data-id="${i.id}" data-p="${p}">${ico(v?'edit':'plus')}${v?'Editar':'Registrar'}</button>`:''}</td></tr>`});
+  return `<tr><td><b>${esc(ML[k])}</b></td><td class="num">${v&&v.num!=null?esc(nfmt(v.num)):'—'}</td><td class="num">${v&&v.den!=null?esc(nfmt(v.den)):'—'}</td><td class="num"><b>${v&&v.valor!=null?esc(indF(i,v.valor)):'—'}</b></td><td>${est?badge(est):''}</td><td>${esc(v?.obs||'')}</td><td>${v&&(v.soportes||[]).length?`<button class="btn sm ghost" data-act="sop" data-id="${esc(v.id)}">${ico('file')}${(v.soportes||[]).length}</button>`:''}</td><td>${pl?`<button class="linkbtn" style="font-size:14px;text-align:left" data-act="evid" data-id="${pl.id}">${esc(String(pl.accion||pl.hallazgo||'Plan').slice(0,60))}</button> ${badge(estPlan(pl))}`:v&&v.plan_id?'Registrado':''}</td><td class="ra">${reg&&!fut?`<button class="btn sm ghost" data-act="ind-val" data-id="${i.id}" data-p="${p}">${ico(v?'edit':'plus')}${v?'Editar':'Registrar'}</button>`:''}</td></tr>`});
  const me=measured(yv),ok=me.filter(v=>indOk(i,v.valor)).length;
  return `<div><button class="btn ghost sm" data-act="ind-back">${ico('back')}Volver a ${esc(IND_T[i.mod]||'indicadores')}</button></div>`+
  pageHead(i.nom,IND_T[i.mod]||'',man?`<button class="btn" data-act="ind-edit" data-id="${i.id}">${ico('edit')}Editar ficha</button><button class="btn ghost" data-act="ind-del" data-id="${i.id}">${ico('archive')}Eliminar</button>`:'')+
@@ -626,7 +627,17 @@ function vIndFicha(id){const i=DB.ind.find(x=>x.id===id);if(!i){S.sub=null;retur
  yearSel()+
  `<div class="tiles"><div class="tile ${me.length?pcls(pc(ok,me.length)):''}"><div class="v">${me.length?pc(ok,me.length)+'%':'—'}</div><div class="l">Meses que cumplen en ${S.year} (${ok} de ${me.length})</div></div><div class="tile ${me.length-ok?'bad':'ok'}"><div class="v">${me.length-ok}</div><div class="l">Meses en incumplimiento</div></div></div>`+
  (me.length?`<section class="card"><div class="fig" data-ind="${i.id}" style="min-height:220px"><svg role="img" aria-label="Resultados mensuales de ${S.year}"></svg></div><div class="legend"><span><i></i>Resultado mensual</span><span><i class="g"></i>Meta</span></div></section>`:'')+
- tbl(['Mes','#Numerador','#Denominador','#Resultado','Estado','Observaciones','Plan de mejora','Acciones'],rows,'stack')}
+ tbl(['Mes','#Numerador','#Denominador','#Resultado','Estado','Observaciones','Soportes','Plan de mejora','Acciones'],rows,'stack')}
+function sopModal(vid){const v=DB.vals.find(x=>x.id===vid);if(!v)return;const i=DB.ind.find(x=>x.id===v.ind_id);
+ const list=(v.soportes||[]).map((x,k)=>`<div class="li"><div><h3>${esc(x.n||'Soporte')}</h3><div class="meta">${fd(x.f)}${userBy(x.u)?' · '+esc(userBy(x.u).nombre):''}</div></div><div class="acts"><button type="button" class="btn sm" data-act="sop-open" data-id="${esc(vid)}" data-k="${k}">${ico(x.url?'link':/\.(xlsx?|csv|docx?)$/i.test(x.n||'')?'dl':'eye')}${x.url?'Abrir enlace':/\.(xlsx?|csv|docx?)$/i.test(x.n||'')?'Descargar':'Abrir'}</button>${isAdmin()?`<button type="button" class="btn sm ghost" data-act="sop-del" data-id="${esc(vid)}" data-k="${k}">${ico('x')}Quitar</button>`:''}</div></div>`).join('');
+ openForm(`Soportes · ${mesL(v.periodo)}`,[['html',`<p class="small"><b>${esc(i?.nom||'')}</b></p><div class="list" style="margin-top:10px">${list||'<p class="muted">Sin soportes.</p>'}</div>`,'html']],{},async()=>true,'Cerrar')}
+async function openSop(vid,k){const v=DB.vals.find(x=>x.id===vid),x=v&&(v.soportes||[])[k];if(!x)return;if(x.url){window.open(x.url,'_blank','noopener');return}
+ const dl=/\.(xlsx?|csv|docx?)$/i.test(x.n||''),w=dl?null:window.open('','_blank');
+ const {data,error}=await sb.storage.from('soportes').createSignedUrl(x.p,600,dl?{download:x.n}:undefined);
+ if(error||!data){if(w)w.close();toast('No se pudo abrir: '+errMsg(error),'bad');return}if(w)w.location.href=data.signedUrl;else location.href=data.signedUrl}
+async function delSop(vid,k){const v=DB.vals.find(x=>x.id===vid);if(!v)return;const x=(v.soportes||[])[k];const rest=(v.soportes||[]).filter((_,j)=>j!==Number(k));
+ const {error}=await sb.from('indicador_valores').update({soportes:rest}).eq('id',vid);if(error){toast(errMsg(error),'bad');return}
+ if(x&&x.p)await sb.storage.from('soportes').remove([x.p]);await reload('vals');toast('Soporte retirado.');closeModal();render();sopModal(vid)}
 function drawInd(fig){const i=DB.ind.find(x=>x.id===fig.dataset.ind);const svg=fig.querySelector('svg');if(!i||!svg)return;
  const yv=yearVals(i).map(v=>v&&v.valor!=null?Number(v.valor):null),pts=yv.filter(v=>v!=null);if(!pts.length)return;
  const W=fig.clientWidth,H=fig.clientHeight;if(!W||!H)return;const nar=W<420;
@@ -652,6 +663,7 @@ function valForm(id,p){const i=DB.ind.find(x=>x.id===id);if(!i)return;p=(p||prev
  const fields=[['info',`${i.nom} · Meta ${indMeta(i)}`,'info'],...(i.formula?[['html',`<p class="muted small">Fórmula: ${esc(i.formula)}</p>`,'html']]:[]),['periodo','Mes','month'],
   ['num','Numerador','number',null,OPT],...(jefe?[['html',`<p class="small">Denominador: <b>${ex&&ex.den!=null?esc(nfmt(ex.den)):'pendiente (lo registra Calidad)'}</b></p>`,'html']]:[['den','Denominador','number',null,OPT]]),
   ['html','<div id="val-prev" class="codebox"></div>','html'],['obs','Observaciones / análisis del resultado','textarea',null,OPT],
+  ...(ex&&(ex.soportes||[]).length?[['html',`<p class="small">Soportes ya cargados: <b>${(ex.soportes||[]).length}</b> (puede agregar más)</p>`,'html']]:[]),['sop_files','Soportes o evidencias (Excel, PDF, fotos)','files'],['sop_url','O enlace al soporte (Drive, OneDrive…)','url'],
   ['plan_sel','Plan de mejora (obligatorio cuando no se cumple la meta)','select',planOpts],['plan_accion','Acción de mejora','textarea',null,OPT],['plan_resp','Responsable del plan','text',null,OPT],['plan_limite','Fecha límite del plan','date',null,OPT]];
  openForm(ex?'Editar resultado del mes':'Registrar resultado del mes',fields,{periodo:p,num:ex?.num??'',den:ex?.den??'',obs:ex?.obs||'',plan_sel:ex?.plan_id||''},async v=>{
   const per=v.periodo,n=v.num,d=jefe?(ex&&ex.den!=null?Number(ex.den):null):v.den;
@@ -663,7 +675,14 @@ function valForm(id,p){const i=DB.ind.find(x=>x.id===id);if(!i)return;p=(p||prev
    if(v.plan_sel==='nuevo'){if(!v.plan_accion||!v.plan_limite){toast('Escriba la acción de mejora y la fecha límite del plan.','bad');return false}
     const {data:pl,error:pe}=await sb.from('planes').insert(Object.assign({origen:'Indicador',hallazgo:`${i.nom}: resultado ${indF(i,Math.round(r*100)/100)} en ${mesL(per).toLowerCase()} (meta ${indMeta(i)})`,accion:v.plan_accion,resp:v.plan_resp||S.user.nombre,limite:v.plan_limite,avance:0,estado:'Abierto'},isAdmin()&&(i.resp_ids||[]).length?{resp_id:i.resp_ids[0]}:{})).select('id').single();
     if(pe){toast(errMsg(pe),'bad');return false}plan_id=pl.id;await reload('planes')}}}
-  const row={ind_id:i.id,periodo:per,num:n,obs:v.obs||null,plan_id};if(!jefe)row.den=d;
+  const sops=[...(ex?.soportes||[])],files=v.sop_files||[];
+  for(const fl of files){if(fl.size>50*1024*1024){toast(`"${fl.name}" supera 50 MB. Súbalo a Drive y pegue el enlace.`,'bad');return false}}
+  if(files.length)toast(`Subiendo ${files.length} archivo${files.length===1?'':'s'}…`);
+  for(const fl of files){const path=`${i.id}/${per.slice(0,7)}/${Date.now()}-${fl.name.normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^\w.\-]+/g,'_')}`;
+   const {error:ue}=await sb.storage.from('soportes').upload(path,fl,{upsert:false});if(ue){toast(`No se pudo subir "${fl.name}": ${errMsg(ue)}`,'bad');return false}
+   sops.push({n:fl.name,p:path,f:today(),u:S.user.id})}
+  if(v.sop_url)sops.push({n:'Enlace al soporte',url:v.sop_url,f:today(),u:S.user.id});
+  const row={ind_id:i.id,periodo:per,num:n,obs:v.obs||null,plan_id,soportes:sops};if(!jefe)row.den=d;
   const {error}=await sb.from('indicador_valores').upsert(row,{onConflict:'ind_id,periodo'});
   if(error){toast(errMsg(error),'bad');return false}
   await reload('vals');toast('Resultado guardado.');render();return true},'Guardar');
@@ -1003,6 +1022,9 @@ document.addEventListener('click',async e=>{if(S.novOpen&&!e.target.closest('.no
  case 'ind-upd':valForm(id);break;
  case 'ind-val':valForm(id,b.dataset.p);break;
  case 'ind-ficha':{const it=DB.ind.find(x=>x.id===id);if(it){if(S.mod!=='indicadores'||S.sec!==(it.mod||'calidad')){S.mod='indicadores';S.sec=it.mod||'calidad';S.nav=false}S.sub='i:'+id;render();window.scrollTo(0,0)}break}
+ case 'sop':sopModal(id);break;
+ case 'sop-open':openSop(id,Number(b.dataset.k));break;
+ case 'sop-del':openConfirm('Quitar soporte','El archivo se eliminará de forma permanente.',()=>delSop(id,b.dataset.k),'Quitar');break;
  case 'ind-back':S.sub=null;render();window.scrollTo(0,0);break;
  case 'ind-new':indFicha(null,id);break;
  case 'ind-edit':indFicha(id);break;
@@ -1051,7 +1073,7 @@ document.addEventListener('submit',async e=>{e.preventDefault();const f=e.target
   await startSession(data.session);if(S.user)toast('Bienvenido(a), '+S.user.nombre+'.');return}
  if(f.id==='mform'&&MF&&MF.fields){const v={};let miss=false;
   for(const [k,,t,,opt] of MF.fields){if(t==='note'||t==='info'||t==='html')continue;if(t==='checks'){v[k]=[...f.querySelectorAll(`input[name="${k}"]:checked`)].map(x=>x.value);continue}const el=f.elements[k];if(!el)continue;
-   if(t==='check')v[k]=el.checked;else if(t==='file'){if(el.files&&el.files[0])v[k]=el.files[0]}
+   if(t==='check')v[k]=el.checked;else if(t==='files'){v[k]=el.files?[...el.files]:[]}else if(t==='file'){if(el.files&&el.files[0])v[k]=el.files[0]}
    else if(t==='number'){if(el.value===''){if(!opt)miss=true;v[k]=null}else v[k]=Number(el.value)}
    else if(t==='month'){if(!el.value)miss=true;v[k]=el.value?el.value+'-01':null}
    else{v[k]=el.value.trim();if(el.required&&!v[k])miss=true;if((t==='date'||t==='url')&&!v[k])v[k]=null}}
