@@ -44,13 +44,21 @@ svg.i{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-widt
 .side-foot{margin-top:auto;padding:16px 18px;font-size:13px;color:var(--nav-mute);border-top:1px solid rgba(255,255,255,.12)}
 .main{display:flex;flex-direction:column;min-height:100%}
 .top{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--card) 92%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;padding:10px clamp(16px,3vw,32px);min-height:64px}
-.crumbs{font-size:14px;color:var(--mute);display:flex;flex-wrap:wrap;gap:6px;align-items:center;flex:1}
+.crumbs{font-size:14px;color:var(--mute);display:flex;flex-wrap:nowrap;gap:6px;align-items:center;flex:1;min-width:0;overflow:hidden;white-space:nowrap}.crumbs>*{flex:none}.crumbs b{overflow:hidden;text-overflow:ellipsis;flex:0 1 auto;min-width:0}
 .crumbs button{background:none;border:0;color:var(--pri);cursor:pointer;padding:2px 0}.crumbs b{color:var(--ink);font-weight:600}
 .who{display:flex;align-items:center;gap:10px}.who-t{text-align:right;line-height:1.25}.who-t b{display:block;font-size:14px}.who-t span{font-size:13px;color:var(--mute)}
 .content{padding:clamp(18px,3vw,36px) clamp(16px,3vw,36px);width:100%;max-width:1240px;margin:0 auto;flex:1;display:grid;gap:22px;align-content:start}
 .foot{padding:18px clamp(16px,3vw,36px);font-size:13px;color:var(--mute);border-top:1px solid var(--line);text-align:center}
 .linkbtn{background:none;border:0;color:var(--pri);cursor:pointer;text-decoration:underline;font-size:13px;padding:0}
-.iconbtn.only-m{display:none}.scrim{display:none}
+.iconbtn.only-m{display:none}
+.layout{transition:grid-template-columns .2s}.layout.noside{grid-template-columns:0 minmax(0,1fr);background:none}.layout.noside .side{visibility:hidden;overflow:hidden}
+.novb{position:relative}.novc{position:absolute;top:-6px;right:-6px;min-width:20px;height:20px;padding:0 5px;border-radius:10px;background:#D92D20;color:#fff;font-size:11px;font-weight:700;display:grid;place-items:center;border:2px solid var(--card)}
+.novp{position:fixed;top:70px;right:clamp(8px,2vw,24px);width:min(420px,calc(100vw - 16px));max-height:min(620px,calc(100vh - 90px));display:flex;flex-direction:column;background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:0 20px 50px rgba(8,10,60,.25);z-index:40;overflow:hidden}
+.novp-h{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--line)}.novp-h h2{font-size:18px}.novp-h .iconbtn{width:36px;height:36px}
+.novp-b{overflow:auto;padding:6px}.novi{display:flex;gap:12px;width:100%;text-align:left;background:none;border:0;border-radius:12px;padding:12px 30px 12px 12px;cursor:pointer;color:var(--ink);position:relative}
+.novi:hover{background:var(--pri-soft)}.novi .ic{width:38px;height:38px;border-radius:10px;background:var(--pri-soft);color:var(--pri);display:grid;place-items:center;flex:none}.novi .tx{display:grid;gap:2px;min-width:0}.novi b{font-size:14px}.novi .sb2{font-size:13px;color:var(--mute);overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}.novi .dt{font-size:12px;color:var(--mute)}
+.novi.new::after{content:"";position:absolute;top:16px;right:12px;width:9px;height:9px;border-radius:50%;background:var(--acc)}
+@media(max-width:1180px){.crumbs>button,.crumbs>span{display:none}.who-t{display:none}}.scrim{display:none}
 .btn.ic{width:36px;padding:0}.rowacts{display:flex;gap:4px;justify-content:flex-end;flex-wrap:nowrap}
 .scroll th{white-space:normal;vertical-align:bottom}.scroll td:first-child{white-space:nowrap}
 /* parts */
@@ -193,6 +201,7 @@ textarea{min-height:88px;resize:vertical}
 .side{position:fixed;left:0;top:0;bottom:0;width:min(300px,86vw);z-index:50;transform:translateX(-105%);transition:transform .2s}
 .side.open{transform:none}.scrim.on{display:block;position:fixed;inset:0;background:rgba(8,20,36,.45);z-index:45}
 .iconbtn.only-m{display:grid}.who-t{display:none}.layout{background:none}
+.layout.noside{grid-template-columns:minmax(0,1fr)}.layout.noside .side{visibility:visible}.novp{top:64px}
 .login{grid-template-columns:minmax(0,1fr)}.l-photo{min-height:250px;height:34vh;border-radius:0 0 28px 28px}.l-curve{display:none}.l-text{right:24px;bottom:22px;gap:10px}.l-text h1{font-size:23px}.l-photo::before{background:linear-gradient(180deg,rgba(12,12,144,0) 0%,rgba(12,12,144,.08) 38%,rgba(10,10,112,.86) 70%,rgba(8,8,92,.97) 100%)}.login-side{justify-content:flex-start;padding-top:28px}.l-stripe{display:none}
 }
 @media(max-width:600px){
@@ -234,6 +243,7 @@ const mesL=p=>{if(!p)return '—';const [y,m]=String(p).split('-');return `${ML[
 const mesC=p=>{if(!p)return '';const [y,m]=String(p).split('-');return `${MN[Number(m)-1]||''} ${String(y).slice(2)}`};
 
 const IC={
+bell:'<path d="M6 8a6 6 0 0 1 12 0c0 7 3 8 3 8H3s3-1 3-8"/><path d="M10 21a2 2 0 0 0 4 0"/>',sidebar:'<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16"/>',
 mail:'<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/>',lock:'<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',eyeoff:'<path d="M3 3l18 18M10.6 5.1A10 10 0 0 1 12 5c6.5 0 10 7 10 7a17 17 0 0 1-3.2 4.1M6.6 6.6C3.7 8.4 2 12 2 12s3.5 7 10 7a9.7 9.7 0 0 0 5.4-1.6M9.9 9.9a3 3 0 0 0 4.2 4.2"/>',
 home:'<path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',
 calidad:'<circle cx="12" cy="12" r="9"/><path d="m8 12.2 2.8 2.8L16.5 9"/>',
@@ -269,9 +279,9 @@ const RCAT=[['apr','Aprovechables','np'],['noa','No aprovechables','np'],['org',
 const RCOL={apr:'#8DB4DE',noa:'#5B87B8',org:'#2E5F94',bio:'#D9534A',cor:'#B42318',ana:'#E8875A',qui:'#F2B65E'};
 const PAQ=[['Detectar, prevenir y reducir infecciones asociadas a la atención en salud','Higiene de manos, aislamientos y prevención de infecciones asociadas a dispositivos.'],['Mejorar la seguridad en la utilización de medicamentos','Prescripción, dispensación y administración segura; medicamentos de alto riesgo y LASA.'],['Procesos para la prevención y reducción de la frecuencia de caídas','Valoración del riesgo, medidas de prevención y seguimiento.'],['Prevenir úlceras por presión','Valoración con escala de riesgo, cambios de posición y cuidado de la piel.'],['Asegurar la correcta identificación del paciente en los procesos asistenciales','Manilla con dos identificadores y verificación en cada procedimiento.'],['Evaluación de la frecuencia con la cual ocurren los eventos adversos','Reporte, análisis y gestión de incidentes y eventos adversos.']];
 
-const T={users:'perfiles',docs:'documentos',planes:'planes',pamec:'pamec',hab:'habilitacion',ind:'indicadores',vals:'indicador_valores',rondas:'rondas',riesgos:'riesgos',eventos:'eventos',rh1:'rh1',limpieza:'limpieza',obs:'observaciones',peligros:'peligros',brigada:'brigada',comites:'comites',miembros:'comite_miembros',reuniones:'comite_reuniones',trainings:'capacitaciones',claves:'capacitacion_claves',att:'intentos',asis:'asistencias',evid:'plan_evidencias',acc:'accidentes',procs:'procesos',tdoc:'tipos_doc'};
+const T={users:'perfiles',docs:'documentos',planes:'planes',pamec:'pamec',hab:'habilitacion',ind:'indicadores',vals:'indicador_valores',rondas:'rondas',riesgos:'riesgos',eventos:'eventos',rh1:'rh1',limpieza:'limpieza',obs:'observaciones',peligros:'peligros',brigada:'brigada',comites:'comites',miembros:'comite_miembros',reuniones:'comite_reuniones',trainings:'capacitaciones',claves:'capacitacion_claves',att:'intentos',asis:'asistencias',evid:'plan_evidencias',acc:'accidentes',procs:'procesos',tdoc:'tipos_doc',nov:'novedades'};
 let DB=Object.fromEntries(Object.keys(T).map(k=>[k,[]]));
-const S={user:null,phase:'boot',msg:'',mod:'inicio',sec:null,sub:null,nav:false,tab:'copasst',ctab:'pend',fclas:'',fres:'',repo:null,draft:null,wstep:1,last:null,recovery:false};
+const S={side:(()=>{try{return localStorage.getItem('ipsc-side')!=='0'}catch(e){return true}})(),novOpen:false,novPrev:null,user:null,phase:'boot',msg:'',mod:'inicio',sec:null,sub:null,nav:false,tab:'copasst',ctab:'pend',fclas:'',fres:'',repo:null,draft:null,wstep:1,last:null,recovery:false};
 
 const ROLES={admin:'Administrador',jefe:'Jefe / Coordinador',aux:'Auxiliar',sst:'SST'};
 const ROLESL=[['aux','Auxiliar'],['jefe','Jefe o coordinador de área'],['sst','Seguridad y Salud en el Trabajo (SST)'],['admin','Administrador (Calidad)']];
@@ -668,6 +678,29 @@ function vAccidentes(){const g=manager(),rows=[...DB.acc].sort(byDate('fecha'));
  (g?`<p class="note">Recuerde: el accidente de trabajo debe reportarse a la ARL (FURAT) dentro de los 2 días hábiles siguientes a su ocurrencia.</p>`:'')+
  `<div class="sec-h"><h2>${g?'Todos los reportes':'Mis reportes'}</h2></div>`+
  tbl(['Fecha','Trabajador','Tipo','Lugar','Descripción',...(g?['Reportado por']:[]),'Estado',...(g?['Acciones']:[])],rows.map(x=>`<tr><td>${fd(x.fecha)}${x.hora?`<div class="muted small">${esc(x.hora)}</div>`:''}</td><td><b>${esc(x.afectado)}</b><div class="muted small">${esc(x.cargo||'')}</div></td><td>${esc(x.tipo)}</td><td>${esc(x.lugar)}</td><td>${esc(x.descr)}${x.lesion?`<div class="muted small">Lesión: ${esc(x.lesion)}</div>`:''}${x.atencion?`<div class="muted small">Atención: ${esc(x.atencion)}</div>`:''}${x.obs_sst?`<div class="small" style="margin-top:4px"><b>Seguimiento SST:</b> ${esc(x.obs_sst)}</div>`:''}</td>${g?`<td>${esc(userBy(x.reportado_por)?.nombre||'—')}</td>`:''}<td>${badge(x.estado)}</td>${g?`<td class="ra"><button class="btn sm ghost" data-act="ent-edit" data-e="acc" data-id="${esc(x.id)}">${ico('edit')}Gestionar</button></td>`:''}</tr>`),'stack',g?'Aún no se han recibido reportes.':'Aún no ha enviado reportes.')}
+/* ===== Novedades ===== */
+function feed(){const items=[],lim=addDays(today(),-45),gt=(a,b)=>String(a)>String(b);
+ DB.nov.filter(n=>!n.hasta||n.hasta>=today()).forEach(n=>items.push({t:n.creado,k:'nov',id:n.id,ic:'bell',tit:n.titulo,sub:n.mensaje}));
+ DB.docs.filter(d=>d.est!=='Obsoleto').forEach(d=>{const c=String(d.creado||''),a=String(d.actualizado||'');
+  if(c.slice(0,10)>=lim)items.push({t:c,k:'doc',id:d.id,ic:'file',tit:`Nuevo documento: ${d.cod}`,sub:d.nom});
+  if(a&&a.slice(0,10)>=lim&&gt(a.slice(0,16),c.slice(0,16)))items.push({t:a,k:'doc',id:d.id,ic:'file',tit:`Documento actualizado: ${d.cod}${d.ver?' (versión '+d.ver+')':''}`,sub:d.nom})});
+ DB.trainings.filter(t=>isAdmin()||(isSST()&&t.modulo==='SST')||assigned(t,S.user)).forEach(t=>{if(String(t.creado||'').slice(0,10)>=lim)items.push({t:t.creado,k:'cap',id:t.id,ic:'capacitaciones',tit:`Nueva capacitación: ${t.titulo}`,sub:t.limite?`Fecha límite ${fdr(t.limite)}`:''})});
+ return items.sort((a,b)=>String(b.t).localeCompare(String(a.t))).slice(0,40)}
+const novSeen=()=>S.user?.novedades_vistas||'';
+function novBtn(){const n=feed().filter(i=>String(i.t)>String(novSeen())).length;
+ return `<button class="iconbtn novb" data-act="nov" aria-label="Novedades${n?': '+n+' nuevas':''}" title="Novedades" aria-expanded="${S.novOpen}">${ico('bell')}${n?`<span class="novc">${n>9?'9+':n}</span>`:''}</button>`}
+function novPanel(){const it=feed(),prev=S.novPrev||'';
+ return `<div class="novp" role="dialog" aria-label="Novedades"><div class="novp-h"><h2>Novedades</h2><div class="acts">${manager()?`<button class="btn sm pri" data-act="nov-new">${ico('plus')}Publicar</button>`:''}<button class="iconbtn" data-act="nov-close" aria-label="Cerrar">${ico('x')}</button></div></div>
+ <div class="novp-b">${it.length?it.map(i=>`<button class="novi ${String(i.t)>String(prev)?'new':''}" data-act="nov-go" data-k="${i.k}" data-id="${esc(i.id)}"><span class="ic">${ico(i.ic)}</span><span class="tx"><b>${esc(i.tit)}</b>${i.sub?`<span class="sb2">${esc(String(i.sub).slice(0,140))}</span>`:''}<span class="dt">${fd(String(i.t).slice(0,10))}</span></span></button>`).join(''):'<p class="empty">No hay novedades por ahora.</p>'}</div></div>`}
+async function toggleNov(){S.novOpen=!S.novOpen;if(S.novOpen){S.novPrev=novSeen();const now=new Date().toISOString();S.user.novedades_vistas=now;sb.rpc('marcar_novedades_vistas').then(()=>{},()=>{})}render()}
+function novGo(k,id){S.novOpen=false;
+ if(k==='doc'){go('calidad','listado');openDoc(id,false);return}
+ if(k==='cap'){S.mod='capacitaciones';S.sec='actividades';S.sub=(isAdmin()?'p:':'t:')+id;S.last=null;render();window.scrollTo(0,0);return}
+ const n=DB.nov.find(x=>x.id===id);render();if(!n)return;
+ openForm(n.titulo,[['html',`<p class="muted small">Publicado el ${fd(String(n.creado).slice(0,10))}${userBy(n.autor)?' por '+esc(userBy(n.autor).nombre):''}</p><div style="white-space:pre-wrap;margin-top:10px">${esc(n.mensaje)}</div>${n.url?`<p style="margin-top:14px"><a class="btn sm" href="${esc(n.url)}" target="_blank" rel="noopener">${ico('link')}Abrir enlace</a></p>`:''}${manager()?`<p style="margin-top:14px"><button type="button" class="btn sm ghost" data-act="nov-del" data-id="${esc(n.id)}">${ico('archive')}Quitar esta novedad</button></p>`:''}`,'html']],{},async()=>true,'Cerrar')}
+function novForm(){S.novOpen=false;render();openForm('Publicar novedad',[['titulo','Título','text'],['mensaje','Mensaje','textarea'],['url','Enlace (opcional)','url'],['hasta','Mostrar hasta','date',null,OPT]],{},async v=>{
+ const {error}=await sb.from('novedades').insert({titulo:v.titulo,mensaje:v.mensaje,url:v.url||null,hasta:v.hasta||null,autor:S.user.id});if(error){toast(errMsg(error),'bad');return false}
+ await reload('nov');S.user.novedades_vistas=new Date().toISOString();sb.rpc('marcar_novedades_vistas').then(()=>{},()=>{});toast('Novedad publicada.');render();return true},'Publicar')}
 /* ===== Capacitaciones ===== */
 const assigned=(t,u)=>u.rol!=='admin'&&u.estado==='Activo'&&((t.cargos||[]).includes('Todos')||(u.cargo&&(t.cargos||[]).includes(u.cargo)));
 function tStatus(t,u){const a=DB.att.filter(x=>x.cap_id===t.id&&x.uid===u.id).sort((x,y)=>x.intento-y.intento),ok=a.some(x=>x.ok),asis=DB.asis.some(x=>x.cap_id===t.id&&x.uid===u.id);
@@ -820,11 +853,11 @@ function vLogin(){return `<div class="login">${artSide()}<section class="login-s
  <div class="l-foot">Clínica IPS Cabecera S.A.S. · Uso interno</div></div><div class="l-stripe"></div></section></div>`}
 function vSimple(title,body){return `<div class="login">${artSide()}<section class="login-side"><div class="l-box"><img class="l-logo" src="img/logo.png" alt="Clínica IPS Cabecera" width="466" height="268"><div class="card" style="display:grid;gap:12px"><h2>${esc(title)}</h2>${body}</div></div><div class="l-stripe"></div></section></div>`}
 function shell(c){const u=S.user;
- return `<div class="layout"><aside class="side ${S.nav?'open':''}" aria-label="Menú principal"><div class="brand">${logo()}<div><b>Clínica IPS Cabecera</b><span>Intranet institucional</span></div></div><nav>${navHTML()}</nav><div class="side-foot">Sistema de Gestión de Calidad</div></aside>
+ return `<div class="layout ${S.side?'':'noside'}"><aside class="side ${S.nav?'open':''}" aria-label="Menú principal"><div class="brand">${logo()}<div><b>Clínica IPS Cabecera</b><span>Intranet institucional</span></div></div><nav>${navHTML()}</nav><div class="side-foot">Sistema de Gestión de Calidad</div></aside>
  <div class="scrim ${S.nav?'on':''}" data-act="menu"></div>
- <div class="main"><header class="top"><button class="iconbtn only-m" data-act="menu" aria-label="Abrir menú">${ico('menu')}</button><nav class="crumbs" aria-label="Ruta">${crumbs()}</nav>
- <div class="who"><div class="who-t"><b>${esc(u.nombre)}</b><span>${esc(u.cargo||'')}</span></div><span class="badge ${u.rol==='admin'?'':'neu'}">${esc(ROLES[u.rol]||u.rol)}</span><button class="btn ghost sm ic" data-act="account" title="Cambiar contraseña" aria-label="Cambiar contraseña">${ico('key')}</button><button class="btn ghost sm" data-act="logout" aria-label="Cerrar sesión">${ico('logout')}<span class="hide-s">Cerrar sesión</span></button></div></header>
- <main class="content" id="content">${c}</main><footer class="foot">Clínica IPS Cabecera S.A.S. – Uso interno</footer></div></div>`}
+ <div class="main"><header class="top"><button class="iconbtn" data-act="menu" aria-label="Mostrar u ocultar el menú" title="Mostrar u ocultar el menú">${ico('menu')}</button><nav class="crumbs" aria-label="Ruta">${crumbs()}</nav>
+ <div class="who">${novBtn()}<div class="who-t"><b>${esc(u.nombre)}</b><span>${esc(u.cargo||'')}</span></div><span class="badge ${u.rol==='admin'?'':'neu'}">${esc(ROLES[u.rol]||u.rol)}</span><button class="btn ghost sm ic" data-act="account" title="Cambiar contraseña" aria-label="Cambiar contraseña">${ico('key')}</button><button class="btn ghost sm" data-act="logout" aria-label="Cerrar sesión">${ico('logout')}<span class="hide-s">Cerrar sesión</span></button></div></header>
+ ${S.novOpen?novPanel():''}<main class="content" id="content">${c}</main><footer class="foot">Clínica IPS Cabecera S.A.S. – Uso interno</footer></div></div>`}
 const RO=new ResizeObserver(es=>es.forEach(e=>drawInd(e.target)));
 function render(){const app=document.getElementById('app');RO.disconnect();
  if(S.phase==='config'){app.innerHTML=vSimple('Falta configurar la conexión','<p>Abra el archivo <b>config.js</b> y pegue la dirección (Project URL) y la llave pública (Publishable key) de su proyecto de Supabase.</p>');return}
@@ -852,11 +885,17 @@ function askNewPassword(fromEmail){openForm(fromEmail?'Cree su nueva contraseña
  toast('Contraseña actualizada.');return true},'Guardar contraseña')}
 
 /* ===== Events ===== */
-document.addEventListener('click',async e=>{const b=e.target.closest('[data-act]');if(!b)return;const a=b.dataset.act,id=b.dataset.id;
+document.addEventListener('click',async e=>{if(S.novOpen&&!e.target.closest('.novp')&&!e.target.closest('[data-act=nov]')&&!e.target.closest('#modal')){S.novOpen=false;render()}
+ const b=e.target.closest('[data-act]');if(!b)return;const a=b.dataset.act,id=b.dataset.id;
  if(a==='mback'){if(e.target===b)closeModal();return}
  switch(a){
  case 'nav':go(b.dataset.m,b.dataset.s);break;
- case 'menu':S.nav=!S.nav;render();break;
+ case 'menu':if(window.innerWidth<=900){S.nav=!S.nav}else{S.side=!S.side;try{localStorage.setItem('ipsc-side',S.side?'1':'0')}catch(x){}}render();break;
+ case 'nov':toggleNov();break;
+ case 'nov-close':S.novOpen=false;render();break;
+ case 'nov-go':novGo(b.dataset.k,id);break;
+ case 'nov-new':novForm();break;
+ case 'nov-del':{const n=DB.nov.find(x=>x.id===id);openConfirm('Quitar novedad',`"${n?.titulo||''}" dejará de mostrarse a todos.`,async()=>{const {error}=await sb.from('novedades').delete().eq('id',id);if(error){toast(errMsg(error),'bad');return}await reload('nov');toast('Novedad retirada.');render()},'Quitar')}break;
  case 'logout':document.getElementById('toasts').innerHTML='';await sb?.auth.signOut();S.user=null;S.phase='ready';S.msg='';S.mod='inicio';S.sec=null;S.sub=null;DB=Object.fromEntries(Object.keys(T).map(k=>[k,[]]));render();break;
  case 'account':askNewPassword(false);break;
  case 'togglepw':{const i=document.getElementById('lg-pass');const show=i.type==='password';i.type=show?'text':'password';b.innerHTML=ico(show?'eyeoff':'eye');b.setAttribute('aria-label',show?'Ocultar contraseña':'Mostrar contraseña');break}
