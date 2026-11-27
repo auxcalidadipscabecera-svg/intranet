@@ -85,6 +85,16 @@ svg.i{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-widt
 .xtabs~.xsheet .xtbl thead th{top:47px}.xtbl tbody th{position:sticky;left:0;text-align:right;z-index:2}.xtbl td{border:1px solid #E3E6EE;padding:3px 8px;white-space:nowrap;max-width:420px;overflow:hidden;text-overflow:ellipsis;background:#fff}.xtbl td.n{text-align:right}
 .vw-pre{white-space:pre-wrap;font:13px/1.5 ui-monospace,Consolas,monospace;margin:0}
 @media(max-width:640px){.vw-doc{padding:24px 18px}.vw-h .vw-a .btn{padding:6px 10px}}
+.crw{overflow-x:auto;margin:0 -4px}.crt{border-collapse:separate;border-spacing:0;width:100%;min-width:980px;font-size:14px}
+.crt th{font-size:12px;font-weight:600;color:var(--mute);text-align:left;padding:8px 6px;border-bottom:1px solid var(--line);white-space:nowrap}
+.crt td{padding:8px 6px;border-bottom:1px solid var(--line);vertical-align:middle}.crt .crc{text-align:center;padding:6px 2px;width:44px}.crt th.crc.now{color:var(--pri)}
+.crt .crn{color:var(--mute);width:28px}.crt .cra{min-width:220px}.crt tfoot td{border-bottom:0;border-top:2px solid var(--line)}
+.crt td:nth-child(2),.crt th:nth-child(2){position:sticky;left:0;background:var(--card);z-index:1}
+.crb{display:inline-grid;place-items:center;width:34px;height:30px;border-radius:8px;border:1px dashed var(--line);background:transparent;font:700 13px Inter,sans-serif;color:var(--mute);cursor:pointer;padding:0}
+span.crb,i.crb{cursor:default}.crb.p{border:2px solid var(--pri);color:var(--pri);background:var(--pri-soft)}.crb.e{border:2px solid var(--ok);background:var(--ok);color:#fff}
+.crb.n{border:2px solid var(--bad);background:var(--bad-s);color:var(--bad)}.crb.x{border:2px solid var(--ok);color:var(--ok);background:transparent}
+button.crb:hover{filter:brightness(.95);border-style:solid}button.crb:focus-visible{outline:2px solid var(--pri);outline-offset:2px}
+.crleg{display:flex;gap:8px 18px;flex-wrap:wrap;align-items:center;font-size:13px}.crleg span{display:inline-flex;gap:6px;align-items:center}.crleg .crb{width:26px;height:22px;font-size:11px;font-style:normal}
 .hmsec{display:grid;gap:8px;border-top:1px solid var(--line);padding-top:14px}.hmsec h3{font-size:16px}
 .hmsec-h{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
 .hmrow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 14px;align-items:center;padding:8px 0;border-bottom:1px dashed var(--line);font-size:14px}
@@ -289,11 +299,11 @@ const logo=()=>`<span class="logo"><img src="img/simbolo.png" alt="" width="36" 
 const MODS=[
 {id:'calidad',nom:'Calidad',d:'Documentos controlados, planes de mejora, PAMEC, habilitación y codificación.',secs:[['listado','Listado Maestro de Documentos'],['planes','Planes de Mejora'],['pamec','PAMEC'],['habilitacion','Habilitación (Res. 3100)'],['codificacion','Codificación documental']]},
 {id:'indicadores',nom:'Indicadores de Gestión',d:'Indicadores de calidad, ambiental, seguridad del paciente, IAAS, SST y talento humano.',secs:[['resumen','Resumen de cumplimiento'],['calidad','Indicadores de Calidad'],['ambiental','Indicadores de Gestión Ambiental'],['seguridad','Indicadores de Seguridad del Paciente'],['iaas','Indicadores IAAS'],['sst','Indicadores SST'],['th','Indicadores de Talento Humano']]},
-{id:'seguridad',nom:'Seguridad del Paciente',d:'Programa, paquetes instruccionales, rondas, matriz de riesgos y reporte de eventos.',secs:[['programa','Programa de Seguridad del Paciente'],['paquetes','Paquetes Instruccionales'],['rondas','Rondas de Seguridad'],['riesgos','Matriz de Riesgos'],['eventos','Reporte de Eventos Adversos']]},
+{id:'seguridad',nom:'Seguridad del Paciente',d:'Programa, paquetes instruccionales, rondas, matriz de riesgos y reporte de eventos.',secs:[['programa','Programa de Seguridad del Paciente'],['cronograma','Cronograma de Actividades'],['paquetes','Paquetes Instruccionales'],['rondas','Rondas de Seguridad'],['riesgos','Matriz de Riesgos'],['eventos','Reporte de Eventos Adversos']]},
 {id:'ambiental',nom:'Ambiental',d:'PGIRHS, registro mensual RH1 y seguimiento de limpieza y desinfección.',secs:[['pgirhs','PGIRHS'],['rh1','Formulario RH1'],['limpieza','Limpieza y Desinfección de Áreas']]},
-{id:'iaas',nom:'IAAS y PROA',d:'Programas IAAS y PROA, protocolos de bioseguridad y adherencia.',secs:[['programa','Plan / Programa IAAS y PROA'],['protocolos','Protocolos de Bioseguridad'],['higiene','Lista de chequeo Higiene de Manos'],['seguimiento','Seguimiento de Adherencia']]},
+{id:'iaas',nom:'IAAS y PROA',d:'Programas IAAS y PROA, protocolos de bioseguridad y adherencia.',secs:[['programa','Plan / Programa IAAS y PROA'],['cronograma','Cronograma PCI y PROA'],['protocolos','Protocolos de Bioseguridad'],['higiene','Lista de chequeo Higiene de Manos'],['seguimiento','Seguimiento de Adherencia']]},
 {id:'sst',nom:'SST',d:'Matriz de peligros, emergencias, comités y accidentes de trabajo.',secs:[['peligros','Matriz de Peligros'],['emergencias','Planes de Emergencia'],['comites','COPASST y Comités'],['accidentes','Reporte de Accidentes de Trabajo']]},
-{id:'capacitaciones',nom:'Capacitaciones',d:'Material educativo, evaluaciones de conocimiento y registro de asistencia.',secs:[['actividades','Actividades educativas']]}];
+{id:'capacitaciones',nom:'Capacitaciones',d:'Material educativo, evaluaciones de conocimiento y registro de asistencia.',secs:[['actividades','Actividades educativas'],['cronograma','Cronograma anual de capacitaciones']]}];
 const modBy=id=>MODS.find(m=>m.id===id);
 const SERV=['Urgencias','Hospitalización','Consulta externa','Laboratorio clínico','Imágenes diagnósticas','Cirugía ambulatoria','Farmacia','Administrativo','Otro'];
 const TIPOS=['Procedimiento','Protocolo','Guía','Manual','Formato','Programa','Plan','Instructivo','Política','Acta'];
@@ -303,15 +313,15 @@ const RCAT=[['apr','Aprovechables','np'],['noa','No aprovechables','np'],['org',
 const RCOL={apr:'#8DB4DE',noa:'#5B87B8',org:'#2E5F94',bio:'#D9534A',cor:'#B42318',ana:'#E8875A',qui:'#F2B65E'};
 const PAQ=[['Detectar, prevenir y reducir infecciones asociadas a la atención en salud','Higiene de manos, aislamientos y prevención de infecciones asociadas a dispositivos.'],['Mejorar la seguridad en la utilización de medicamentos','Prescripción, dispensación y administración segura; medicamentos de alto riesgo y LASA.'],['Procesos para la prevención y reducción de la frecuencia de caídas','Valoración del riesgo, medidas de prevención y seguimiento.'],['Prevenir úlceras por presión','Valoración con escala de riesgo, cambios de posición y cuidado de la piel.'],['Asegurar la correcta identificación del paciente en los procesos asistenciales','Manilla con dos identificadores y verificación en cada procedimiento.'],['Evaluación de la frecuencia con la cual ocurren los eventos adversos','Reporte, análisis y gestión de incidentes y eventos adversos.']];
 
-const T={users:'perfiles',docs:'documentos',planes:'planes',pamec:'pamec',hab:'habilitacion',ind:'indicadores',vals:'indicador_valores',rondas:'rondas',riesgos:'riesgos',eventos:'eventos',rh1:'rh1',limpieza:'limpieza',obs:'observaciones',peligros:'peligros',brigada:'brigada',comites:'comites',miembros:'comite_miembros',reuniones:'comite_reuniones',trainings:'capacitaciones',claves:'capacitacion_claves',att:'intentos',asis:'asistencias',evid:'plan_evidencias',acc:'accidentes',procs:'procesos',tdoc:'tipos_doc',nov:'novedades',hm:'higiene_manos',dver:'documento_versiones'};
+const T={users:'perfiles',docs:'documentos',planes:'planes',pamec:'pamec',hab:'habilitacion',ind:'indicadores',vals:'indicador_valores',rondas:'rondas',riesgos:'riesgos',eventos:'eventos',rh1:'rh1',limpieza:'limpieza',obs:'observaciones',peligros:'peligros',brigada:'brigada',comites:'comites',miembros:'comite_miembros',reuniones:'comite_reuniones',trainings:'capacitaciones',claves:'capacitacion_claves',att:'intentos',asis:'asistencias',evid:'plan_evidencias',acc:'accidentes',procs:'procesos',tdoc:'tipos_doc',nov:'novedades',hm:'higiene_manos',dver:'documento_versiones',crono:'cronograma'};
 let DB=Object.fromEntries(Object.keys(T).map(k=>[k,[]]));
 const S={year:new Date().getFullYear(),side:(()=>{try{return localStorage.getItem('ipsc-side')!=='0'}catch(e){return true}})(),novOpen:false,novPrev:null,user:null,phase:'boot',msg:'',mod:'inicio',sec:null,sub:null,nav:false,tab:'copasst',ctab:'pend',fclas:'',fres:'',repo:null,draft:null,wstep:1,last:null,recovery:false};
 
 const ROLES={admin:'Administrador',jefe:'Jefe / Coordinador',aux:'Auxiliar',sst:'SST'};
 const ROLESL=[['aux','Auxiliar'],['jefe','Jefe o coordinador de área'],['sst','Seguridad y Salud en el Trabajo (SST)'],['admin','Administrador (Calidad)']];
-const ACCESS={aux:['calidad/listado','seguridad/eventos','sst/accidentes','capacitaciones/actividades'],
- jefe:['calidad/listado','calidad/planes','seguridad/eventos','sst/accidentes','capacitaciones/actividades'],
- sst:['calidad/listado','calidad/planes','sst/peligros','sst/emergencias','sst/comites','indicadores/sst','sst/accidentes','seguridad/eventos','capacitaciones/actividades']};
+const ACCESS={aux:['calidad/listado','seguridad/eventos','sst/accidentes','capacitaciones/actividades','capacitaciones/cronograma'],
+ jefe:['calidad/listado','calidad/planes','seguridad/eventos','sst/accidentes','capacitaciones/actividades','capacitaciones/cronograma'],
+ sst:['calidad/listado','calidad/planes','sst/peligros','sst/emergencias','sst/comites','indicadores/sst','sst/accidentes','seguridad/eventos','capacitaciones/actividades','capacitaciones/cronograma']};
 const isAdmin=()=>S.user?.rol==='admin';
 const isSST=()=>S.user?.rol==='sst';
 const isJefe=()=>S.user?.rol==='jefe';
@@ -943,6 +953,55 @@ function vSeguimiento(){const TP=['Higiene de manos','Uso de EPP'];
  `<p class="note">La higiene de manos se mide ahora con la <button class="linkbtn" data-act="nav" data-m="iaas" data-s="higiene">Lista de chequeo Higiene de Manos</button> (5 momentos y técnica). Aquí puede seguir registrando la observación del uso de EPP.</p><div class="tiles">${TP.map(t=>{const a=agg(t);return `<div class="tile ${a.n?pcls(a.v):''}"><div class="v">${a.n?a.v+'%':'—'}</div><div class="l">Adherencia global · ${esc(t)}</div></div>`}).join('')}</div>
  <div class="grid w">${TP.map(t=>{const sv=[...new Set(DB.obs.filter(o=>o.tipo===t).map(o=>o.serv))];return sv.length?`<section class="card" style="display:grid;gap:14px"><h2>${esc(t)} por servicio</h2><div class="bars">${sv.map(s=>{const v=agg(t,s).v;return `<div class="bar"><span class="lb">${esc(s)}</span><span class="tr"><b style="width:${v}%;background:var(--${pcls(v)})"></b></span><span class="num"><b>${v}%</b></span></div>`}).join('')}</div></section>`:''}).join('')}</div>`+entTable('obs',[...DB.obs].sort(byDate('fecha')))}
 
+/* Cronogramas anuales (capacitaciones, seguridad del paciente, PCI y PROA) */
+const CRONOS={capacitaciones:{t:'Cronograma anual de capacitaciones',d:'Programación mensual de las capacitaciones del año y su ejecución.',act:'Tema de la capacitación',cat:'Dirigido a',catPh:'Ej.: Todo el personal asistencial',nuevo:'Nueva capacitación',file:'Cronograma capacitaciones'},
+ seguridad:{t:'Cronograma del Programa de Seguridad del Paciente',d:'Actividades programadas para la ejecución del programa y su cumplimiento mes a mes.',act:'Actividad',cat:'Componente o línea de acción',catPh:'Ej.: Rondas de seguridad, comité, capacitación',nuevo:'Nueva actividad',file:'Cronograma seguridad del paciente'},
+ iaas:{t:'Cronograma del Programa PCI y PROA',d:'Actividades programadas de los programas de prevención y control de infecciones (PCI) y de optimización de antimicrobianos (PROA).',act:'Actividad',cat:'Programa',catOpts:['PCI','PROA','PCI y PROA'],nuevo:'Nueva actividad',file:'Cronograma PCI y PROA'}};
+const crYear=()=>S.crYear||curYear();
+const crRows=(prog,y=crYear())=>DB.crono.filter(r=>r.prog===prog&&Number(r.anio)===y).sort((a,b)=>(a.orden||0)-(b.orden||0)||String(a.actividad).localeCompare(String(b.actividad)));
+const crLim=y=>y<curYear()?12:y>curYear()?0:new Date().getMonth()+1;
+const crSt=(r,m,y)=>{const p=(r.meses_p||[]).map(Number).includes(m),e=(r.meses_e||[]).map(Number).includes(m),lim=crLim(y);return p&&e?'e':p?(m<lim||(y<curYear())?'n':'p'):e?'x':''};
+const crDue=(m,y,ex)=>y<curYear()||(y===curYear()&&(m<crLim(y)||(m===crLim(y)&&ex)));
+function crStats(L,y){let p=0,e=0,tot=0;L.forEach(r=>{const P=(r.meses_p||[]).map(Number),E=(r.meses_e||[]).map(Number);tot+=P.length;P.forEach(m=>{if(crDue(m,y,E.includes(m))){p++;if(E.includes(m))e++}})});return {p,e,tot}}
+function vCrono(prog){const C=CRONOS[prog],y=crYear(),L=crRows(prog,y),ed=isAdmin(),lim=crLim(y);
+ const ys=[...new Set([curYear(),curYear()+1,...DB.crono.filter(r=>r.prog===prog).map(r=>Number(r.anio))])].sort((a,b)=>b-a);
+ const prev=crRows(prog,y-1),st=crStats(L,y),pct=pc(st.e,st.p);
+ const cell=(r,m)=>{const c=crSt(r,m,y),lbl={e:'Ejecutada',n:'No ejecutada',p:'Programada',x:'Ejecutada sin programar','':'Sin programar'}[c],tx={e:'✓',n:'✗',p:'P',x:'✓','':''}[c];
+  return ed?`<td class="crc"><button type="button" class="crb ${c}" data-act="cr-cell" data-id="${r.id}" data-k="${m}" title="${MN[m-1]}: ${lbl}. Clic para cambiar" aria-label="${esc(r.actividad)}, ${ML[m-1]}: ${lbl}">${tx}</button></td>`:`<td class="crc"><span class="crb ${c}" title="${MN[m-1]}: ${lbl}">${tx}</span></td>`};
+ const rows=L.map((r,i)=>{const P=(r.meses_p||[]).map(Number),E=(r.meses_e||[]).map(Number),pp=P.filter(m=>crDue(m,y,E.includes(m))),ee=pp.filter(m=>E.includes(m));
+  return `<tr><td class="crn">${i+1}</td><td class="cra"><b>${esc(r.actividad)}</b>${r.cat||r.modalidad?`<div class="muted small">${esc([r.cat,r.modalidad].filter(Boolean).join(' · '))}</div>`:''}${r.obs?`<div class="small" style="margin-top:2px">${esc(r.obs)}</div>`:''}</td><td class="small">${esc(r.resp||'')}</td>${Array.from({length:12},(_,k)=>cell(r,k+1)).join('')}<td class="num">${pp.length?`<b>${pc(ee.length,pp.length)}%</b>`:'<span class="muted">—</span>'}</td>${ed?`<td class="ra" style="white-space:nowrap"><button class="btn sm ghost ic" data-act="cr-edit" data-id="${r.id}" title="Editar" aria-label="Editar">${ico('edit')}</button><button class="btn sm ghost ic" data-act="cr-del" data-id="${r.id}" title="Eliminar" aria-label="Eliminar">${ico('x')}</button></td>`:''}</tr>`}).join('');
+ const foot=`<tr class="crf"><td></td><td><b>Cumplimiento del mes</b></td><td></td>${Array.from({length:12},(_,k)=>{const m=k+1;let p=0,e=0,d=0;L.forEach(r=>{if((r.meses_p||[]).map(Number).includes(m)){const x=(r.meses_e||[]).map(Number).includes(m);p++;if(x)e++;if(crDue(m,y,x))d++}});return `<td class="crc small">${p&&d&&(y<curYear()||m<lim)?`<b style="color:var(--${pcls(pc(e,p))})">${pc(e,p)}%</b>`:p?`<span class="muted">${p}</span>`:''}</td>`}).join('')}<td class="num"><b>${st.p?pct+'%':'—'}</b></td>${ed?'<td></td>':''}</tr>`;
+ return pageHead(C.t,C.d,ed?`<button class="btn pri" data-act="cr-new" data-c="${prog}">${ico('plus')}${C.nuevo}</button>`:'')+
+ `<div class="filters"><label class="fld" style="flex:0 0 130px"><span>Año</span><select data-cryear>${ys.map(v=>`<option${v===y?' selected':''}>${v}</option>`).join('')}</select></label>${L.length?`<div class="acts" style="align-self:end"><button class="btn ghost" data-act="cr-csv" data-c="${prog}">${ico('dl')}Descargar en Excel</button></div>`:''}</div>`+
+ `<div class="tiles"><div class="tile pri"><div class="v">${L.length}</div><div class="l">${prog==='capacitaciones'?'Capacitaciones':'Actividades'} en ${y}</div></div><div class="tile"><div class="v">${st.tot}</div><div class="l">Programaciones en el año</div></div><div class="tile ${st.p?pcls(pct):''}"><div class="v">${st.p?pct+'%':'—'}</div><div class="l">Cumplimiento a la fecha <span class="small">(${st.e} de ${st.p} ejecutadas)</span></div></div><div class="tile ${st.p-st.e?'bad':'ok'}"><div class="v">${st.p-st.e}</div><div class="l">Programadas sin ejecutar a la fecha</div></div></div>`+
+ (L.length?`<section class="card" style="display:grid;gap:12px"><div class="crleg"><span><i class="crb p">P</i>Programada</span><span><i class="crb e">✓</i>Ejecutada</span><span><i class="crb n">✗</i>No ejecutada (mes vencido)</span><span><i class="crb x">✓</i>Ejecutada sin programar</span>${ed?'<span class="muted">Haga clic en un mes para cambiarlo: vacío → programada → ejecutada → vacío.</span>':''}</div>
+ <div class="crw"><table class="crt"><thead><tr><th>#</th><th>${esc(C.act)}</th><th>Responsable</th>${MN.map((m,k)=>`<th class="crc${y===curYear()&&k+1===lim?' now':''}">${m}</th>`).join('')}<th class="num">Cumpl.</th>${ed?'<th></th>':''}</tr></thead><tbody>${rows}</tbody><tfoot>${foot}</tfoot></table></div></section>`
+ :`<div class="card empty">${ed?`Aún no hay ${prog==='capacitaciones'?'capacitaciones':'actividades'} programadas para ${y}. Use «${C.nuevo}»${prev.length?` o copie las ${prev.length} del año ${y-1}`:''}.${prev.length?`<div style="margin-top:12px"><button class="btn" data-act="cr-copy" data-c="${prog}">${ico('plus')}Copiar las de ${y-1}</button></div>`:''}`:`Aún no hay ${prog==='capacitaciones'?'capacitaciones':'actividades'} programadas para ${y}.`}</div>`)}
+function crForm(prog,id){const C=CRONOS[prog],r=id?DB.crono.find(x=>x.id===id):null,y=r?Number(r.anio):crYear(),MO=ML.map((m,k)=>[String(k+1),m]);
+ const fields=[['actividad',C.act,'text'],C.catOpts?['cat',C.cat,'select',C.catOpts]:['cat',C.cat,'text',null,OPT],['resp','Responsable','text',null,OPT],
+  ...(prog==='capacitaciones'?[['modalidad','Modalidad','select',['Presencial','Virtual','Mixta']]]:[]),
+  ['anio','Año','number'],['meses_p','Meses programados','checks',MO],['meses_e','Meses ejecutados','checks',MO],['obs','Observaciones','textarea',null,OPT]];
+ const vals=r?Object.assign({},r,{meses_p:(r.meses_p||[]).map(String),meses_e:(r.meses_e||[]).map(String)}):{anio:y,meses_p:[],meses_e:[],modalidad:'Presencial',cat:C.catOpts?C.catOpts[0]:''};
+ openForm(r?'Editar '+(prog==='capacitaciones'?'capacitación':'actividad'):C.nuevo,fields,vals,async v=>{
+  const row={prog,actividad:v.actividad,cat:v.cat||null,resp:v.resp||null,modalidad:prog==='capacitaciones'?v.modalidad:null,anio:Number(v.anio),meses_p:v.meses_p.map(Number).sort((a,b)=>a-b),meses_e:v.meses_e.map(Number).sort((a,b)=>a-b),obs:v.obs||null};
+  if(!(row.anio>=2000&&row.anio<=2100)){toast('Escriba un año válido.','bad');return false}
+  if(!row.meses_p.length){toast('Marque al menos un mes programado.','bad');return false}
+  if(!r)row.orden=crRows(prog,row.anio).length+1;
+  const ok=await dbSave('crono',row,r?.id);if(ok){S.crYear=row.anio;toast(r?'Cronograma actualizado.':'Agregada al cronograma.');render()}return ok},'Guardar')}
+async function crCell(id,m){const r=DB.crono.find(x=>x.id===id);if(!r)return;let P=(r.meses_p||[]).map(Number),E=(r.meses_e||[]).map(Number);const p=P.includes(m),e=E.includes(m);
+ if(!p&&!e)P.push(m);else if(p&&!e)E.push(m);else{P=P.filter(x=>x!==m);E=E.filter(x=>x!==m)}
+ const row={meses_p:P.sort((a,b)=>a-b),meses_e:E.sort((a,b)=>a-b)};Object.assign(r,row);render();
+ const {error}=await sb.from('cronograma').update(row).eq('id',id);if(error){toast(errMsg(error),'bad');await reload('crono');render()}}
+async function crCopy(prog){const y=crYear(),L=crRows(prog,y-1);if(!L.length)return;
+ const {error}=await sb.from('cronograma').insert(L.map((r,i)=>({prog,actividad:r.actividad,cat:r.cat,resp:r.resp,modalidad:r.modalidad,anio:y,meses_p:r.meses_p||[],meses_e:[],obs:null,orden:i+1})));
+ if(error){toast(errMsg(error),'bad');return}await reload('crono');toast(`Se copiaron ${L.length} del año ${y-1}. Ajuste los meses si es necesario.`);render()}
+function crCsv(prog){const C=CRONOS[prog],y=crYear(),L=crRows(prog,y),q=x=>`"${String(x??'').replace(/"/g,'""')}"`;
+ const head=['#',C.act,C.cat,...(prog==='capacitaciones'?['Modalidad']:[]),'Responsable',...ML,'Cumplimiento a la fecha','Observaciones'];
+ const lim=crLim(y),lines=[[C.t+' '+y],[],head].concat(L.map((r,i)=>{const P=(r.meses_p||[]).map(Number),E=(r.meses_e||[]).map(Number),pp=P.filter(m=>crDue(m,y,E.includes(m))),ee=pp.filter(m=>E.includes(m));
+  return [i+1,r.actividad,r.cat||'',...(prog==='capacitaciones'?[r.modalidad||'']:[]),r.resp||'',...Array.from({length:12},(_,k)=>{const c=crSt(r,k+1,y);return {e:'Ejecutada',n:'No ejecutada',p:'Programada',x:'Ejecutada (no programada)','':''}[c]}),pp.length?pc(ee.length,pp.length)+'%':'',r.obs||'']}));
+ const csv='﻿'+lines.map(l=>l.map(q).join(';')).join('\r\n'),u=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'})),a=document.createElement('a');
+ a.href=u;a.download=`${C.file} ${y}.csv`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),2000)}
+
 /* Lista de chequeo higiene de manos */
 const canHMEdit=h=>isAdmin()||(h&&h.creado_por===S.user?.id);
 function vHigiene(){const yr=String(S.year);
@@ -1156,12 +1215,12 @@ function navHTML(){let h=`<button class="nv ${S.mod==='inicio'?'on':''}" data-ac
  return h;}
 const IND_T={calidad:'Indicadores de Calidad',ambiental:'Indicadores de Gestión Ambiental',seguridad:'Indicadores de Seguridad del Paciente',iaas:'Indicadores IAAS',sst:'Indicadores SST',th:'Indicadores de Talento Humano'};
 const VIEWS={'indicadores/resumen':vIndResumen,...Object.fromEntries(Object.keys(IND_T).map(k=>['indicadores/'+k,()=>vIndicadores(k)])),'calidad/listado':vListado,'calidad/planes':vPlanes,'calidad/pamec':vPamec,'calidad/habilitacion':vHab,'calidad/codificacion':vCodif,
-'seguridad/programa':vSPPrograma,'seguridad/paquetes':vPaquetes,'seguridad/rondas':vRondas,'seguridad/riesgos':vRiesgos,'seguridad/eventos':vEventos,
+'seguridad/programa':vSPPrograma,'seguridad/cronograma':()=>vCrono('seguridad'),'seguridad/paquetes':vPaquetes,'seguridad/rondas':vRondas,'seguridad/riesgos':vRiesgos,'seguridad/eventos':vEventos,
 'ambiental/pgirhs':()=>pageHead('PGIRHS','Plan de Gestión Integral de Residuos Hospitalarios y documentos relacionados.')+docRepo(d=>d.sec==='pgirhs',{def:'ambiental|pgirhs',title:'Documentos del PGIRHS'}),
 'ambiental/rh1':vRH1,'ambiental/limpieza':vLimpieza,
 'iaas/programa':()=>pageHead('Plan / Programa IAAS y PROA','Programas de prevención de infecciones y de uso racional de antimicrobianos.')+docRepo(d=>d.mod==='iaas'&&d.sec==='programa',{def:'iaas|programa',title:'Documentos de los programas'}),
 'iaas/protocolos':()=>pageHead('Protocolos de Bioseguridad','Manual y protocolos de bioseguridad vigentes.')+docRepo(d=>d.sec==='protocolos',{def:'iaas|protocolos',title:'Protocolos'}),
-'iaas/higiene':vHigiene,'iaas/seguimiento':vSeguimiento,'sst/peligros':vPeligros,'sst/emergencias':vEmergencias,'sst/comites':vComites,'sst/accidentes':vAccidentes,'capacitaciones/actividades':vCap};
+'iaas/cronograma':()=>vCrono('iaas'),'iaas/higiene':vHigiene,'iaas/seguimiento':vSeguimiento,'sst/peligros':vPeligros,'sst/emergencias':vEmergencias,'sst/comites':vComites,'sst/accidentes':vAccidentes,'capacitaciones/actividades':vCap,'capacitaciones/cronograma':()=>vCrono('capacitaciones')};
 function view(){S.repo=null;
  if(S.mod==='inicio')return vInicio();
  if(S.mod==='usuarios')return isAdmin()?vUsuarios():vNoAuth();
@@ -1271,6 +1330,12 @@ document.addEventListener('click',async e=>{if(S.novOpen&&!e.target.closest('.no
  case 'sop-dl':openSop(id,Number(b.dataset.k),true);break;
  case 'vw-dl':if(VW.dl)VW.dl();break;
  case 'sop-del':openConfirm('Quitar soporte','El archivo se eliminará de forma permanente.',()=>delSop(id,b.dataset.k),'Quitar');break;
+ case 'cr-new':crForm(b.dataset.c);break;
+ case 'cr-edit':{const r=DB.crono.find(x=>x.id===id);if(r)crForm(r.prog,id);break}
+ case 'cr-del':{const r=DB.crono.find(x=>x.id===id);if(r)openConfirm('Eliminar del cronograma',`Se eliminará «${r.actividad}» del cronograma ${r.anio}.`,async()=>{const {error}=await sb.from('cronograma').delete().eq('id',id);if(error){toast(errMsg(error),'bad');return}await reload('crono');toast('Eliminada del cronograma.');render()},'Eliminar');break}
+ case 'cr-cell':if(isAdmin())crCell(id,Number(b.dataset.k));break;
+ case 'cr-copy':crCopy(b.dataset.c);break;
+ case 'cr-csv':crCsv(b.dataset.c);break;
  case 'hm-new':hmForm();break;
  case 'hm-edit':hmForm(id);break;
  case 'hm-ver':hmVer(id);break;
@@ -1317,6 +1382,7 @@ document.addEventListener('change',async e=>{const t=e.target;
  else if(t.dataset.fres!==undefined){S.fres=t.value;render()}
  else if(t.dataset.year!==undefined){S.year=Number(t.value);render()}
  else if(t.dataset.ftipo!==undefined){S.ftipo=t.value;render()}
+ else if(t.dataset.cryear!==undefined){S.crYear=Number(t.value);render()}
  else if(t.dataset.hmmes!==undefined){S.hmMes=Number(t.value)||0;render()}
  else if(t.dataset.hmserv!==undefined){S.hmServ=t.value;render()}});
 document.addEventListener('submit',async e=>{e.preventDefault();const f=e.target;
