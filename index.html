@@ -243,6 +243,7 @@ const mesL=p=>{if(!p)return '—';const [y,m]=String(p).split('-');return `${ML[
 const mesC=p=>{if(!p)return '';const [y,m]=String(p).split('-');return `${MN[Number(m)-1]||''} ${String(y).slice(2)}`};
 
 const IC={
+indicadores:'<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',
 bell:'<path d="M6 8a6 6 0 0 1 12 0c0 7 3 8 3 8H3s3-1 3-8"/><path d="M10 21a2 2 0 0 0 4 0"/>',sidebar:'<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16"/>',
 mail:'<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/>',lock:'<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',eyeoff:'<path d="M3 3l18 18M10.6 5.1A10 10 0 0 1 12 5c6.5 0 10 7 10 7a17 17 0 0 1-3.2 4.1M6.6 6.6C3.7 8.4 2 12 2 12s3.5 7 10 7a9.7 9.7 0 0 0 5.4-1.6M9.9 9.9a3 3 0 0 0 4.2 4.2"/>',
 home:'<path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',
@@ -264,11 +265,12 @@ const ico=n=>`<svg class="i" viewBox="0 0 24 24" aria-hidden="true">${IC[n]||''}
 const logo=()=>`<span class="logo"><img src="img/simbolo.png" alt="" width="36" height="36"></span>`;
 
 const MODS=[
-{id:'calidad',nom:'Calidad',d:'Documentos controlados, planes de mejora, PAMEC, indicadores y habilitación.',secs:[['listado','Listado Maestro de Documentos'],['planes','Planes de Mejora'],['pamec','PAMEC'],['indicadores','Indicadores de Gestión'],['habilitacion','Habilitación (Res. 3100)'],['codificacion','Codificación documental']]},
+{id:'calidad',nom:'Calidad',d:'Documentos controlados, planes de mejora, PAMEC, habilitación y codificación.',secs:[['listado','Listado Maestro de Documentos'],['planes','Planes de Mejora'],['pamec','PAMEC'],['habilitacion','Habilitación (Res. 3100)'],['codificacion','Codificación documental']]},
+{id:'indicadores',nom:'Indicadores de Gestión',d:'Indicadores de calidad, ambiental, seguridad del paciente, IAAS, SST y talento humano.',secs:[['calidad','Indicadores de Calidad'],['ambiental','Indicadores de Gestión Ambiental'],['seguridad','Indicadores de Seguridad del Paciente'],['iaas','Indicadores IAAS'],['sst','Indicadores SST'],['th','Indicadores de Talento Humano']]},
 {id:'seguridad',nom:'Seguridad del Paciente',d:'Programa, paquetes instruccionales, rondas, matriz de riesgos y reporte de eventos.',secs:[['programa','Programa de Seguridad del Paciente'],['paquetes','Paquetes Instruccionales'],['rondas','Rondas de Seguridad'],['riesgos','Matriz de Riesgos'],['eventos','Reporte de Eventos Adversos']]},
 {id:'ambiental',nom:'Ambiental',d:'PGIRHS, registro mensual RH1 y seguimiento de limpieza y desinfección.',secs:[['pgirhs','PGIRHS'],['rh1','Formulario RH1'],['limpieza','Limpieza y Desinfección de Áreas']]},
 {id:'iaas',nom:'IAAS y PROA',d:'Programas IAAS y PROA, protocolos de bioseguridad y adherencia.',secs:[['programa','Plan / Programa IAAS y PROA'],['protocolos','Protocolos de Bioseguridad'],['seguimiento','Seguimiento de Adherencia']]},
-{id:'sst',nom:'SST',d:'Matriz de peligros, emergencias, comités, indicadores y accidentes de trabajo.',secs:[['peligros','Matriz de Peligros'],['emergencias','Planes de Emergencia'],['comites','COPASST y Comités'],['indicadores','Indicadores SST'],['accidentes','Reporte de Accidentes de Trabajo']]},
+{id:'sst',nom:'SST',d:'Matriz de peligros, emergencias, comités y accidentes de trabajo.',secs:[['peligros','Matriz de Peligros'],['emergencias','Planes de Emergencia'],['comites','COPASST y Comités'],['accidentes','Reporte de Accidentes de Trabajo']]},
 {id:'capacitaciones',nom:'Capacitaciones',d:'Material educativo, evaluaciones de conocimiento y registro de asistencia.',secs:[['actividades','Actividades educativas']]}];
 const modBy=id=>MODS.find(m=>m.id===id);
 const SERV=['Urgencias','Hospitalización','Consulta externa','Laboratorio clínico','Imágenes diagnósticas','Cirugía ambulatoria','Farmacia','Administrativo','Otro'];
@@ -287,14 +289,14 @@ const ROLES={admin:'Administrador',jefe:'Jefe / Coordinador',aux:'Auxiliar',sst:
 const ROLESL=[['aux','Auxiliar'],['jefe','Jefe o coordinador de área'],['sst','Seguridad y Salud en el Trabajo (SST)'],['admin','Administrador (Calidad)']];
 const ACCESS={aux:['calidad/listado','seguridad/eventos','sst/accidentes','capacitaciones/actividades'],
  jefe:['calidad/listado','calidad/planes','seguridad/eventos','sst/accidentes','capacitaciones/actividades'],
- sst:['calidad/listado','sst/peligros','sst/emergencias','sst/comites','sst/indicadores','sst/accidentes','seguridad/eventos','capacitaciones/actividades']};
+ sst:['calidad/listado','sst/peligros','sst/emergencias','sst/comites','indicadores/sst','sst/accidentes','seguridad/eventos','capacitaciones/actividades']};
 const isAdmin=()=>S.user?.rol==='admin';
 const isSST=()=>S.user?.rol==='sst';
 const isJefe=()=>S.user?.rol==='jefe';
 const allowed=(m,s)=>isAdmin()||(ACCESS[S.user?.rol]||[]).includes(m+'/'+s);
 const can=a=>{if(!S.user)return false;if(isAdmin())return a!=='train';
  if(a==='report'||a==='train')return true;
- if(a==='create'||a==='edit')return (isSST()&&S.mod==='sst')||(isJefe()&&S.mod==='calidad'&&S.sec==='planes');
+ if(a==='create'||a==='edit')return (isSST()&&(S.mod==='sst'||(S.mod==='indicadores'&&S.sec==='sst')))||(isJefe()&&S.mod==='calidad'&&S.sec==='planes');
  if(a==='archive')return isSST()&&S.mod==='sst';
  return false};
 const canDoc=()=>isAdmin()||(isSST()&&S.mod==='sst');
@@ -345,7 +347,7 @@ planes:{one:'plan de mejora',k:'planes',rowEdit:r=>isAdmin()||r.estado!=='Cerrad
   ['estado','Estado','select',isAdmin()?['Abierto','En ejecución','Pendiente de verificación','Cerrado']:['Abierto','En ejecución','Pendiente de verificación']]]},
 pamec:{one:'paso del PAMEC',k:'pamec',f:[['est','Estado','select',['Pendiente','En curso','Completado']],['detalle','Observaciones / avance','textarea',null,OPT]]},
 hab:{one:'criterio de habilitación',k:'hab',f:[['std','Estándar','select',['Talento humano','Infraestructura','Dotación','Medicamentos, dispositivos médicos e insumos','Procesos prioritarios','Historia clínica y registros','Interdependencia']],['est','Estado','select',[['C','Cumple'],['NC','No cumple'],['NA','No aplica']]],['item','Criterio','textarea'],['orden','Orden','number',null,OPT]]},
-ind:{one:'indicador',k:'ind',f:[['nom','Nombre del indicador','text'],['meta','Meta','number'],['sen','La meta se cumple cuando el resultado es','select',[['mayor','Mayor o igual a la meta'],['menor','Menor o igual a la meta']]],['u','Unidad','select',[['%','Porcentaje (%)'],[' días','Días'],['','Sin unidad (tasa o número)']]],['dec','Decimales','select',[[0,'Sin decimales'],[1,'1 decimal']]],['orden','Orden en la página','number',null,OPT]]},
+ind:{one:'indicador',k:'ind',f:()=>[...(isAdmin()?[['mod','Carpeta de indicadores','select',Object.entries(IND_T)]]:[]),['nom','Nombre del indicador','text'],['meta','Meta','number'],['sen','La meta se cumple cuando el resultado es','select',[['mayor','Mayor o igual a la meta'],['menor','Menor o igual a la meta']]],['u','Unidad','select',[['%','Porcentaje (%)'],[' días','Días'],['','Sin unidad (tasa o número)']]],['dec','Decimales','select',[[0,'Sin decimales'],[1,'1 decimal']]],['orden','Orden en la página','number',null,OPT]]},
 rondas:{one:'ronda de seguridad',k:'rondas',cols:[['Fecha',r=>fd(r.fecha)],['Servicio',r=>esc(r.serv)],['Responsable',r=>esc(r.resp)],['Hallazgos',r=>esc(r.hall||'—')],['Compromisos',r=>esc(r.comp||'—')],['Estado',r=>badge(r.estado)]],
  f:[['fecha','Fecha','date'],['serv','Servicio','select',SERV],['resp','Responsable','text'],['estado','Estado','select',['Programada','Realizada']],['hall','Hallazgos','textarea',null,OPT],['comp','Compromisos','textarea',null,OPT]]},
 riesgos:{one:'riesgo',k:'riesgos',cols:[['Proceso',r=>esc(r.proceso)],['Riesgo',r=>`<b>${esc(r.riesgo)}</b><div class="muted small">${esc(r.causa)}</div>`],['Prob. × Impacto',r=>esc(`${r.prob} × ${r.imp} = ${r.prob*r.imp}`)],['Nivel',r=>badge(nivelR(r))],['Controles',r=>esc(r.control)],['Responsable',r=>esc(r.resp)]],
@@ -399,10 +401,10 @@ function closeModal(){document.getElementById('modal').innerHTML='';MF=null}
 function toast(m,k=''){const t=document.createElement('div');t.className='toast '+k;t.textContent=m;document.getElementById('toasts').appendChild(t);setTimeout(()=>t.remove(),k==='bad'?6000:3600)}
 
 function entForm(key,id,extra={}){const c=ENT[key],kf=c.key||'id',row=id?DB[c.k].find(r=>String(r[kf])===String(id)):null;
- openForm((row?'Editar ':'Nuevo ')+c.one,typeof c.f==='function'?c.f(row):c.f,row||{},async v=>{
+ openForm((row?'Editar ':'Nuevo ')+c.one,typeof c.f==='function'?c.f(row):c.f,row||Object.assign({},extra),async v=>{
   if(c.pre){const m=c.pre(v,row);if(m){toast(m,'bad');return false}}
   if(key==='planes'){if('resp_id' in v&&!v.resp_id)v.resp_id=null;if(!v.resp)v.resp=v.resp_id?(userBy(v.resp_id)?.nombre||''):(isJefe()?S.user.nombre:'');}
-  const ok=await dbSave(c.k,Object.assign(v,extra),row?row[kf]:null,kf);if(ok){toast(row?'Cambios guardados.':'Registro creado.');render()}return ok});}
+  const ok=await dbSave(c.k,row?v:Object.assign({},extra,v),row?row[kf]:null,kf);if(ok){toast(row?'Cambios guardados.':'Registro creado.');render()}return ok});}
 
 /* ===== Documents ===== */
 const pad3=n=>String(n).padStart(3,'0');
@@ -564,7 +566,7 @@ const indSt=(i,v)=>{v=Number(v);const m=Number(i.meta);if(i.sen==='mayor')return
 const indF=(i,v)=>(Number(i.dec)?Number(v).toFixed(1).replace('.',','):Math.round(v))+(i.u||'');
 const serie=i=>DB.vals.filter(v=>v.ind_id===i.id).sort((a,b)=>String(a.periodo).localeCompare(String(b.periodo))).slice(-12);
 function vIndicadores(mod='calidad'){const L=DB.ind.filter(i=>(i.mod||'calidad')===mod).sort((a,b)=>(a.orden||0)-(b.orden||0));
- return pageHead(mod==='sst'?'Indicadores SST':'Indicadores de Gestión','Resultado mensual frente a la meta. Verde: cumple · Ámbar: cerca de la meta · Rojo: no cumple.',newBtn('ind','Nuevo indicador',` data-mod="${mod}"`))+
+ return pageHead(IND_T[mod]||'Indicadores de Gestión','Resultado mensual frente a la meta. Verde: cumple · Ámbar: cerca de la meta · Rojo: no cumple.',newBtn('ind','Nuevo indicador',` data-mod="${mod}"`))+
  (L.length?`<div class="grid w">${L.map(i=>{const s=serie(i),last=s[s.length-1],prev=s[s.length-2];
   const ed=can('edit')?`<div class="acts"><button class="btn sm pri" data-act="ind-upd" data-id="${i.id}">${ico('plus')}Resultado</button><button class="btn sm ghost ic" data-act="ent-edit" data-e="ind" data-id="${i.id}" title="Editar indicador" aria-label="Editar indicador">${ico('edit')}</button></div>`:'';
   if(!last)return `<article class="card ind"><div class="ind-h"><h3>${esc(i.nom)}</h3>${ed}</div><div class="ind-m">Meta ${i.sen==='mayor'?'≥':'≤'} ${esc(indF(i,i.meta))}</div><div class="empty">Sin resultados registrados todavía.</div></article>`;
@@ -798,7 +800,7 @@ function vUsuarios(){return pageHead('Usuarios','Personas con acceso a la intran
  entTable('users',[...DB.users].sort((a,b)=>String(a.nombre).localeCompare(String(b.nombre))))}
 
 /* ===== Navigation, shell, auth screens ===== */
-const SECDESC={'calidad/listado':'Consulte y descargue los documentos vigentes de la institución.','calidad/planes':'Registre planes de mejora y suba las evidencias de cumplimiento.','seguridad/eventos':'Reporte incidentes y eventos adversos, también de forma anónima.','sst/accidentes':'Reporte accidentes e incidentes de trabajo.','capacitaciones/actividades':'Realice sus capacitaciones y evaluaciones.','sst/peligros':'Matriz de peligros y valoración de riesgos (GTC 45).','sst/emergencias':'Plan de emergencias, brigada y documentos.','sst/comites':'COPASST, Comité de Convivencia y otros comités.','sst/indicadores':'Indicadores del Sistema de Gestión SST.'};
+const SECDESC={'calidad/listado':'Consulte y descargue los documentos vigentes de la institución.','calidad/planes':'Registre planes de mejora y suba las evidencias de cumplimiento.','seguridad/eventos':'Reporte incidentes y eventos adversos, también de forma anónima.','sst/accidentes':'Reporte accidentes e incidentes de trabajo.','capacitaciones/actividades':'Realice sus capacitaciones y evaluaciones.','sst/peligros':'Matriz de peligros y valoración de riesgos (GTC 45).','sst/emergencias':'Plan de emergencias, brigada y documentos.','sst/comites':'COPASST, Comité de Convivencia y otros comités.','indicadores/sst':'Indicadores del Sistema de Gestión SST.'};
 const secName=(m,s)=>{const md=modBy(m),x=md&&md.secs.find(y=>y[0]===s);return m==='capacitaciones'?'Capacitaciones':x?x[1]:''};
 function crumbs(){const parts=[`<button data-act="nav" data-m="inicio">Inicio</button>`];
  if(S.mod==='usuarios')parts.push('<b>Usuarios</b>');
@@ -813,13 +815,14 @@ function navHTML(){let h=`<button class="nv ${S.mod==='inicio'?'on':''}" data-ac
   if(on&&m.secs.length>1)h+=`<div class="subs">${m.secs.map(s=>`<button class="sb ${S.sec===s[0]?'on':''}" data-act="nav" data-m="${m.id}" data-s="${s[0]}">${esc(s[1])}</button>`).join('')}</div>`});
  h+=`<button class="nv ${S.mod==='usuarios'?'on':''}" data-act="nav" data-m="usuarios">${ico('usuarios')}Usuarios</button>`;
  return h;}
-const VIEWS={'calidad/listado':vListado,'calidad/planes':vPlanes,'calidad/pamec':vPamec,'calidad/indicadores':()=>vIndicadores('calidad'),'calidad/habilitacion':vHab,'calidad/codificacion':vCodif,
+const IND_T={calidad:'Indicadores de Calidad',ambiental:'Indicadores de Gestión Ambiental',seguridad:'Indicadores de Seguridad del Paciente',iaas:'Indicadores IAAS',sst:'Indicadores SST',th:'Indicadores de Talento Humano'};
+const VIEWS={...Object.fromEntries(Object.keys(IND_T).map(k=>['indicadores/'+k,()=>vIndicadores(k)])),'calidad/listado':vListado,'calidad/planes':vPlanes,'calidad/pamec':vPamec,'calidad/habilitacion':vHab,'calidad/codificacion':vCodif,
 'seguridad/programa':vSPPrograma,'seguridad/paquetes':vPaquetes,'seguridad/rondas':vRondas,'seguridad/riesgos':vRiesgos,'seguridad/eventos':vEventos,
 'ambiental/pgirhs':()=>pageHead('PGIRHS','Plan de Gestión Integral de Residuos Hospitalarios y documentos relacionados.')+docRepo(d=>d.sec==='pgirhs',{def:'ambiental|pgirhs',title:'Documentos del PGIRHS'}),
 'ambiental/rh1':vRH1,'ambiental/limpieza':vLimpieza,
 'iaas/programa':()=>pageHead('Plan / Programa IAAS y PROA','Programas de prevención de infecciones y de uso racional de antimicrobianos.')+docRepo(d=>d.mod==='iaas'&&d.sec==='programa',{def:'iaas|programa',title:'Documentos de los programas'}),
 'iaas/protocolos':()=>pageHead('Protocolos de Bioseguridad','Manual y protocolos de bioseguridad vigentes.')+docRepo(d=>d.sec==='protocolos',{def:'iaas|protocolos',title:'Protocolos'}),
-'iaas/seguimiento':vSeguimiento,'sst/peligros':vPeligros,'sst/emergencias':vEmergencias,'sst/comites':vComites,'sst/indicadores':()=>vIndicadores('sst'),'sst/accidentes':vAccidentes,'capacitaciones/actividades':vCap};
+'iaas/seguimiento':vSeguimiento,'sst/peligros':vPeligros,'sst/emergencias':vEmergencias,'sst/comites':vComites,'sst/accidentes':vAccidentes,'capacitaciones/actividades':vCap};
 function view(){S.repo=null;
  if(S.mod==='inicio')return vInicio();
  if(S.mod==='usuarios')return isAdmin()?vUsuarios():vNoAuth();
