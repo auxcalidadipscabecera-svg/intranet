@@ -208,7 +208,7 @@ pre,.scroll{overflow-x:auto}code{overflow-wrap:anywhere}
 .vw-t{display:flex;gap:10px;align-items:center;flex-wrap:wrap;min-width:0}.vw-t b{font-size:15px}.vw-h .iconbtn{background:rgba(255,255,255,.12);border-color:transparent;color:#fff}
 .vw-b{flex:1;overflow:auto;padding:16px 12px 40px;display:flex;flex-direction:column;align-items:center;gap:16px;user-select:none;-webkit-user-select:none}
 .vw-p{position:relative;flex:none;background:#fff;box-shadow:0 8px 30px rgba(0,0,0,.4);overflow:hidden}.vw-p canvas{display:block;pointer-events:none}
-.vw-wm{position:absolute;inset:-50%;transform:rotate(-30deg);color:rgba(12,12,144,.11);font:600 17px/64px Inter,sans-serif;word-spacing:6px;pointer-events:none;overflow:hidden;white-space:normal}
+.vw-wm{position:absolute;inset:-60%;transform:rotate(-30deg);color:rgba(12,12,144,.11);font:600 17px/64px Inter,sans-serif;word-spacing:6px;pointer-events:none;overflow:hidden;white-space:normal}
 .vw-msg{color:#D5DAFA;margin-top:40px}.alertbox{display:flex;gap:12px;align-items:center;flex-wrap:wrap;padding:12px 16px;border-radius:12px;background:var(--bad-s);color:var(--bad);font-size:15px;margin-bottom:12px}.alertbox>div:first-of-type{flex:1 1 260px;color:var(--ink)}.alertbox>svg.i{width:22px;height:22px}.codebox{display:grid;gap:4px;padding:14px 16px;border-radius:12px;background:var(--pri-soft)}.codebig{font-size:28px;font-weight:700;letter-spacing:.04em;color:var(--pri);font-variant-numeric:tabular-nums}.codebig.bad{color:var(--bad)}.vw-tag{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;background:rgba(255,255,255,.16);color:#fff;padding:3px 10px;border-radius:99px}.vw-tag svg.i{width:14px;height:14px}
 @media print{body.noprint>*{display:none!important}body.noprint::before{content:"La impresión de este documento no está permitida.";display:block;padding:40px;font:20px sans-serif;color:#000}}
 </style><script>new MutationObserver(()=>{for(const c of document.querySelectorAll('.stack td:not([data-l])')){let i=0,p=c;while(p=p.previousElementSibling)i+=p.colSpan;c.dataset.l=c.closest('table').rows[0].cells[i]?.textContent||''}}).observe(document,{childList:true,subtree:true})</script></head><body>
@@ -488,13 +488,14 @@ async function viewPdf(d){
  v.innerHTML=`<div class="vw" role="dialog" aria-modal="true" aria-label="${esc(d.nom)}"><div class="vw-h"><div class="vw-t"><b>${esc(d.cod)} · ${esc(d.nom)}</b><span class="vw-tag">${ico('lock')}Solo consulta</span></div><button class="iconbtn" data-act="vw-close" aria-label="Cerrar">${ico('x')}</button></div><div class="vw-b" id="vw-b"><p class="vw-msg">Cargando documento…</p></div></div>`;
  try{const {data,error}=await sb.storage.from('documentos').createSignedUrl(d.archivo,300);if(error||!data)throw error||new Error('Sin acceso');
   const pdfjs=await import('./lib/pdfjs/pdf.min.mjs');pdfjs.GlobalWorkerOptions.workerSrc='lib/pdfjs/pdf.worker.min.mjs';
-  const doc=await pdfjs.getDocument({url:data.signedUrl}).promise;let box=document.getElementById('vw-b');if(!box)return;box.innerHTML='';
+  const base=new URL('lib/pdfjs/',location.href).href;
+  const doc=await pdfjs.getDocument({url:data.signedUrl,cMapUrl:base+'cmaps/',cMapPacked:true,standardFontDataUrl:base+'standard_fonts/',wasmUrl:base+'wasm/',iccUrl:base+'iccs/',useSystemFonts:true}).promise;let box=document.getElementById('vw-b');if(!box)return;box.innerHTML='';
   const wm=`${S.user.nombre} · ${fdr(today())} · Uso interno · No imprimir`,dpr=Math.min(window.devicePixelRatio||1,2),W=Math.max(280,Math.min(box.clientWidth-24,900));
   for(let i=1;i<=doc.numPages;i++){box=document.getElementById('vw-b');if(!box)return;
    const page=await doc.getPage(i),v1=page.getViewport({scale:1}),sc=W/v1.width,vp=page.getViewport({scale:sc*dpr});
    const wrap=document.createElement('div');wrap.className='vw-p';wrap.style.width=W+'px';
    const c=document.createElement('canvas');c.width=Math.floor(vp.width);c.height=Math.floor(vp.height);c.style.width=W+'px';c.style.height=Math.floor(vp.height/dpr)+'px';
-   const m=document.createElement('div');m.className='vw-wm';m.textContent=(wm+'     ').repeat(60);
+   const m=document.createElement('div');m.className='vw-wm';m.textContent=(wm+'     ').repeat(220);
    wrap.append(c,m);box.appendChild(wrap);
    await page.render({canvas:c,canvasContext:c.getContext('2d'),viewport:vp}).promise}
  }catch(e){const box=document.getElementById('vw-b');if(box)box.innerHTML=`<p class="vw-msg">No se pudo mostrar el documento. ${esc(errMsg(e))}</p>`}}
