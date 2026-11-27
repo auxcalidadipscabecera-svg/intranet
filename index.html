@@ -202,9 +202,19 @@ textarea{min-height:88px;resize:vertical}
 }
 pre,.scroll{overflow-x:auto}code{overflow-wrap:anywhere}
 @media(max-width:600px){table{font-size:14px}.stack thead{display:none}.stack tr{display:grid;padding-block:10px;border-bottom:1px solid var(--line)}.stack td{display:flow-root;border:0;padding:3px 12px;padding-inline-start:calc(8em + 12px);text-align:start}.stack td::before{content:attr(data-l);float:inline-start;width:7.5em;margin-inline-start:-8em;white-space:normal;color:var(--mute);font-size:13px}.stack td:empty{display:none}.stack td.ra{text-align:start}}
+.chip.lock{color:var(--pri);background:var(--pri-soft);display:inline-flex;align-items:center;gap:4px}.chip.lock svg.i{width:12px;height:12px}
+#viewer:empty{display:none}.vw{position:fixed;inset:0;z-index:90;background:rgba(6,8,40,.94);display:flex;flex-direction:column}
+.vw-h{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 16px;background:#0C0C90;color:#fff}
+.vw-t{display:flex;gap:10px;align-items:center;flex-wrap:wrap;min-width:0}.vw-t b{font-size:15px}.vw-h .iconbtn{background:rgba(255,255,255,.12);border-color:transparent;color:#fff}
+.vw-b{flex:1;overflow:auto;padding:16px 12px 40px;display:flex;flex-direction:column;align-items:center;gap:16px;user-select:none;-webkit-user-select:none}
+.vw-p{position:relative;flex:none;background:#fff;box-shadow:0 8px 30px rgba(0,0,0,.4);overflow:hidden}.vw-p canvas{display:block;pointer-events:none}
+.vw-wm{position:absolute;inset:-50%;transform:rotate(-30deg);color:rgba(12,12,144,.11);font:600 17px/64px Inter,sans-serif;word-spacing:6px;pointer-events:none;overflow:hidden;white-space:normal}
+.vw-msg{color:#D5DAFA;margin-top:40px}.vw-tag{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;background:rgba(255,255,255,.16);color:#fff;padding:3px 10px;border-radius:99px}.vw-tag svg.i{width:14px;height:14px}
+@media print{body.noprint>*{display:none!important}body.noprint::before{content:"La impresión de este documento no está permitida.";display:block;padding:40px;font:20px sans-serif;color:#000}}
 </style><script>new MutationObserver(()=>{for(const c of document.querySelectorAll('.stack td:not([data-l])')){let i=0,p=c;while(p=p.previousElementSibling)i+=p.colSpan;c.dataset.l=c.closest('table').rows[0].cells[i]?.textContent||''}}).observe(document,{childList:true,subtree:true})</script></head><body>
 <div id="app"></div>
 <div id="modal"></div>
+<div id="viewer"></div>
 <div id="toasts" aria-live="polite"></div>
 <script src="config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -393,29 +403,53 @@ function updateDocs(){const el=document.getElementById('repo-body');if(!el||!S.r
  const rows=DB.docs.filter(R.base).filter(d=>(!q||(d.cod+' '+d.nom).toLowerCase().includes(q))&&(!R.tipo||d.tipo===R.tipo)&&(!R.est||d.est===R.est)&&(!R.mod||d.mod===R.mod)).sort((a,b)=>String(a.cod).localeCompare(String(b.cod)));
  const ed0=canDoc(),edr=d=>ed0&&(isAdmin()||d.mod==='sst');
  el.innerHTML=`<p class="muted small" style="margin-bottom:10px">${rows.length} documento${rows.length===1?'':'s'}</p>`+tbl(['Documento',...(R.showMod?['Módulo']:[]),'Tipo','Vigencia','Estado','Acciones'],rows.map(d=>`<tr>
-  <td><span class="code">${esc(d.cod)}</span> <span class="muted small">· V${esc(d.ver)}</span><div><b>${esc(d.nom)}</b>${vencida(d)?'<span class="chip">Revisión vencida</span>':''}</div><div class="muted small">${esc(d.resp)}</div></td>${R.showMod?`<td>${esc(modBy(d.mod)?.nom)}</td>`:''}
+  <td><span class="code">${esc(d.cod)}</span> <span class="muted small">· V${esc(d.ver)}</span><div><b>${esc(d.nom)}</b>${vencida(d)?'<span class="chip">Revisión vencida</span>':''}${d.descarga===false?`<span class="chip lock">${ico('lock')}Solo lectura</span>`:''}</div><div class="muted small">${esc(d.resp)}</div></td>${R.showMod?`<td>${esc(modBy(d.mod)?.nom)}</td>`:''}
   <td>${esc(d.tipo)}</td><td class="small" style="white-space:nowrap">Aprobado ${fd(d.apr)}<br><span class="muted">Revisión ${fd(d.rev)}</span></td><td>${badge(d.est)}</td>
-  <td class="ra"><div class="rowacts"><button class="btn sm ghost ic" data-act="doc-view" data-id="${d.id}" title="Ver" aria-label="Ver">${ico('eye')}</button>${d.archivo?`<button class="btn sm ghost ic" data-act="doc-dl" data-id="${d.id}" title="Descargar" aria-label="Descargar">${ico('dl')}</button>`:''}${edr(d)?`<button class="btn sm ghost ic" data-act="doc-edit" data-id="${d.id}" title="Editar" aria-label="Editar">${ico('edit')}</button>${d.est!=='Obsoleto'?`<button class="btn sm ghost ic" data-act="doc-arch" data-id="${d.id}" title="Archivar" aria-label="Archivar">${ico('archive')}</button>`:''}`:''}</div></td></tr>`),'stack',DB.docs.some(R.base)?'No hay documentos con esos filtros.':(canDoc()?'Aún no hay documentos. Use "Nuevo documento" para agregar el primero.':'Aún no hay documentos publicados en esta sección.'));}
-const DOCF=[['cod','Código (ej. CAL-PR-001)','text'],['ubic','Sección','select',DOCSECS],['nom','Nombre del documento','text'],['tipo','Tipo','select',TIPOS],['ver','Versión','number'],['est','Estado','select',ESTD],['apr','Fecha de aprobación','date'],['rev','Próxima revisión','date',null,OPT],['resp','Responsable','text'],['info','Agregue un enlace (por ejemplo de Google Drive) o suba el archivo. Tamaño máximo del archivo: 50 MB.','info'],['url','Enlace al documento','url'],['archivo','Archivo (PDF, Word, Excel…)','file']];
+  <td class="ra"><div class="rowacts"><button class="btn sm ghost ic" data-act="doc-view" data-id="${d.id}" title="Ver" aria-label="Ver">${ico('eye')}</button>${d.archivo&&canDL(d)?`<button class="btn sm ghost ic" data-act="doc-dl" data-id="${d.id}" title="Descargar" aria-label="Descargar">${ico('dl')}</button>`:''}${edr(d)?`<button class="btn sm ghost ic" data-act="doc-edit" data-id="${d.id}" title="Editar" aria-label="Editar">${ico('edit')}</button>${d.est!=='Obsoleto'?`<button class="btn sm ghost ic" data-act="doc-arch" data-id="${d.id}" title="Archivar" aria-label="Archivar">${ico('archive')}</button>`:''}`:''}</div></td></tr>`),'stack',DB.docs.some(R.base)?'No hay documentos con esos filtros.':(canDoc()?'Aún no hay documentos. Use "Nuevo documento" para agregar el primero.':'Aún no hay documentos publicados en esta sección.'));}
+const DOCF=[['cod','Código (ej. CAL-PR-001)','text'],['ubic','Sección','select',DOCSECS],['nom','Nombre del documento','text'],['tipo','Tipo','select',TIPOS],['ver','Versión','number'],['est','Estado','select',ESTD],['descarga','Permiso para los colaboradores','select',[['true','Pueden descargar e imprimir'],['false','Solo lectura (no pueden descargar ni imprimir)']]],['apr','Fecha de aprobación','date'],['rev','Próxima revisión','date',null,OPT],['resp','Responsable','text'],['info','Agregue un enlace (por ejemplo de Google Drive) o suba el archivo. Tamaño máximo del archivo: 50 MB.','info'],['url','Enlace al documento','url'],['archivo','Archivo (PDF, Word, Excel…)','file']];
 async function docForm(id){const d=id?DB.docs.find(x=>x.id===id):null;
- const vals=d?Object.assign({},d,{ubic:d.mod+'|'+d.sec}):{ubic:S.repo?.def,ver:1,est:'Vigente',apr:today()};
+ const vals=d?Object.assign({},d,{ubic:d.mod+'|'+d.sec,descarga:String(d.descarga!==false)}):{ubic:S.repo?.def,ver:1,est:'Vigente',apr:today(),descarga:'true'};
  let fields=d&&d.archivo?DOCF.map(f=>f[0]==='archivo'?['archivo','Reemplazar archivo (ya tiene uno cargado)','file']:f):DOCF;
  if(!isAdmin())fields=fields.map(f=>f[0]==='ubic'?['ubic','Sección','select',DOCSECS.filter(x=>x[0].startsWith('sst|'))]:f);
  openForm(d?'Editar documento':'Nuevo documento',fields,vals,async v=>{
   const [mod,sec]=String(v.ubic).split('|');delete v.ubic;delete v.info;v.mod=mod;v.sec=sec;
-  const file=v.archivo;delete v.archivo;
+  const file=v.archivo;delete v.archivo;v.descarga=v.descarga!=='false';
+  if(!v.descarga){const fn=file instanceof File?file.name:(d&&d.archivo||'');
+   if(fn&&!isPdf(fn)){toast('Para "Solo lectura" el archivo debe estar en PDF. Guárdelo como PDF y vuelva a subirlo.','bad');return false}
+   if(!fn&&v.url)toast('Es un enlace: configure también en Google Drive que los lectores no puedan descargar ni imprimir.');}
   if(file instanceof File){if(file.size>50*1024*1024){toast('El archivo supera 50 MB. Súbalo a Google Drive y pegue el enlace.','bad');return false}
    const path=`${mod}/${Date.now()}-${file.name.normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^\w.\-]+/g,'_')}`;
    toast('Subiendo archivo…');const {error}=await sb.storage.from('documentos').upload(path,file,{upsert:false});
    if(error){toast('No se pudo subir el archivo: '+errMsg(error),'bad');return false}v.archivo=path;}
   const ok=await dbSave('docs',v,d?.id);if(ok){toast(d?'Documento actualizado.':'Documento creado.');render()}return ok});}
+const isPdf=p=>/\.pdf$/i.test(p||'');
+const canDL=d=>d.descarga!==false||isAdmin()||(isSST()&&d.mod==='sst');
 async function openDoc(id,download=false){const d=DB.docs.find(x=>x.id===id);if(!d)return;
  if(!d.archivo&&!d.url){toast('Este documento todavía no tiene archivo ni enlace.','bad');return}
+ if(!canDL(d)){if(download){toast('Este documento es de solo lectura: no se puede descargar.','bad');return}
+  if(d.archivo){if(!isPdf(d.archivo)){toast('Este documento de solo lectura no está en PDF. Pida a Calidad que lo cargue en PDF.','bad');return}return viewPdf(d)}
+  window.open(d.url,'_blank','noopener');return}
  if(d.url&&(!d.archivo||!download)){window.open(d.url,'_blank','noopener');return}
  const w=window.open('','_blank');
  const {data,error}=await sb.storage.from('documentos').createSignedUrl(d.archivo,600,download?{download:true}:undefined);
  if(error||!data){if(w)w.close();toast('No se pudo abrir el archivo: '+errMsg(error),'bad');return}
  if(w)w.location.href=data.signedUrl;else location.href=data.signedUrl;}
+function closeViewer(){const v=document.getElementById('viewer');if(v)v.innerHTML='';document.body.classList.remove('noprint')}
+async function viewPdf(d){
+ const v=document.getElementById('viewer');document.body.classList.add('noprint');
+ v.innerHTML=`<div class="vw" role="dialog" aria-modal="true" aria-label="${esc(d.nom)}"><div class="vw-h"><div class="vw-t"><b>${esc(d.cod)} · ${esc(d.nom)}</b><span class="vw-tag">${ico('lock')}Solo lectura</span></div><button class="iconbtn" data-act="vw-close" aria-label="Cerrar">${ico('x')}</button></div><div class="vw-b" id="vw-b"><p class="vw-msg">Cargando documento…</p></div></div>`;
+ try{const {data,error}=await sb.storage.from('documentos').createSignedUrl(d.archivo,300);if(error||!data)throw error||new Error('Sin acceso');
+  const pdfjs=await import('./lib/pdfjs/pdf.min.mjs');pdfjs.GlobalWorkerOptions.workerSrc='lib/pdfjs/pdf.worker.min.mjs';
+  const doc=await pdfjs.getDocument({url:data.signedUrl}).promise;let box=document.getElementById('vw-b');if(!box)return;box.innerHTML='';
+  const wm=`${S.user.nombre} · ${fdr(today())} · Uso interno · No imprimir`,dpr=Math.min(window.devicePixelRatio||1,2),W=Math.max(280,Math.min(box.clientWidth-24,900));
+  for(let i=1;i<=doc.numPages;i++){box=document.getElementById('vw-b');if(!box)return;
+   const page=await doc.getPage(i),v1=page.getViewport({scale:1}),sc=W/v1.width,vp=page.getViewport({scale:sc*dpr});
+   const wrap=document.createElement('div');wrap.className='vw-p';wrap.style.width=W+'px';
+   const c=document.createElement('canvas');c.width=Math.floor(vp.width);c.height=Math.floor(vp.height);c.style.width=W+'px';c.style.height=Math.floor(vp.height/dpr)+'px';
+   const m=document.createElement('div');m.className='vw-wm';m.textContent=(wm+'     ').repeat(60);
+   wrap.append(c,m);box.appendChild(wrap);
+   await page.render({canvas:c,canvasContext:c.getContext('2d'),viewport:vp}).promise}
+ }catch(e){const box=document.getElementById('vw-b');if(box)box.innerHTML=`<p class="vw-msg">No se pudo mostrar el documento. ${esc(errMsg(e))}</p>`}}
 
 /* ===== Views ===== */
 function vInicio(){const u=S.user,first=(u.nombre||'').split(' ')[0];let mid='';
@@ -773,6 +807,7 @@ document.addEventListener('click',async e=>{const b=e.target.closest('[data-act]
    const {error}=await sb.auth.resetPasswordForEmail(v.email,{redirectTo:location.origin+location.pathname});
    if(error){toast(errMsg(error),'bad');return false}toast('Si el correo está registrado, recibirá el enlace en unos minutos. Revise también la carpeta de spam.');return true},'Enviar enlace');break;
  case 'modal-close':closeModal();break;
+ case 'vw-close':closeViewer();break;
  case 'confirm-yes':{const f=MF?.onYes;closeModal();if(f)f();break}
  case 'doc-new':if(canDoc())docForm();break;
  case 'doc-edit':if(canDoc())docForm(id);break;
@@ -843,7 +878,10 @@ document.addEventListener('submit',async e=>{e.preventDefault();const f=e.target
   const {data,error}=await sb.rpc('enviar_evaluacion',{p_cap:t.id,p_resp:ans});
   if(error){btn.disabled=false;err.textContent=errMsg(error);err.hidden=false;return}
   await reload('att');S.last={tid:t.id,nota:data.nota,ok:data.ok};render();window.scrollTo(0,0);}});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'&&document.getElementById('modal').innerHTML)closeModal()});
+document.addEventListener('keydown',e=>{const vw=document.getElementById('viewer');
+ if(vw&&vw.innerHTML){if(e.key==='Escape'){closeViewer();return}if((e.ctrlKey||e.metaKey)&&['p','s'].includes(e.key.toLowerCase())){e.preventDefault();toast('Este documento es de solo lectura: no se puede imprimir ni descargar.','bad');return}}
+ if(e.key==='Escape'&&document.getElementById('modal').innerHTML)closeModal()});
+document.addEventListener('contextmenu',e=>{if(e.target.closest&&e.target.closest('#viewer'))e.preventDefault()});
 
 /* ===== Start ===== */
 if(!CFG_OK){S.phase='config';render()}
