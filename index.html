@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="es-CO">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Intranet IPS Cabecera</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='5' fill='%230B5CAD'/%3E%3Cpath d='M10 5h4v5h5v4h-5v5h-4v-5H5v-4h5z' fill='%23fff'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* VOICE: clinical, calm and institutional; the quality office's own control register, not a marketing site
+   IDEA: the controlled-document register of a Colombian IPS: código, versión, vigencia, all stamped and traceable
+   PICTURE: the working intranet itself; the login shows a drawn clinic beside a stamped document stack
+   COLOUR and TYPE: deep clinical-blue navigation, white cards on soft gray, #0B5CAD accent, status green/amber/red; Inter
+   LAYOUT: fixed left navigation, sticky header, content to 1240px; drawer and stacked tables below 900px */
+:root{color-scheme:light dark;
+--bg:light-dark(#F3F6FA,#0D1620);--card:light-dark(#FFFFFF,#15202C);--ink:light-dark(#1F2937,#E5ECF4);--mute:light-dark(#5B6676,#9CAABA);
+--line:light-dark(#E1E7EF,#263443);--pri:light-dark(#0B5CAD,#62A8F0);--on-pri:light-dark(#FFFFFF,#06192E);--pri-soft:light-dark(#E8F1FB,#16324F);
+--nav:light-dark(#0A3E78,#0A1928);--nav-ink:#E6F0FB;--nav-mute:#A9C3E2;--nav-act:light-dark(#0F5299,#15314F);
+--ok:light-dark(#157F4A,#58C890);--ok-s:light-dark(#E2F4EA,#123526);--warn:light-dark(#995400,#F2B65E);--warn-s:light-dark(#FFF1D9,#3B2A10);
+--bad:light-dark(#B42318,#F48C82);--bad-s:light-dark(#FDE6E3,#3E1713);--h3:light-dark(#F7C47A,#7A5414)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;overflow-x:clip}
+h1,h2,h3{line-height:1.15;margin:0;text-wrap:balance}h1{font-size:clamp(26px,3vw,34px);font-weight:700}h2{font-size:20px;font-weight:600}h3{font-size:16px;font-weight:600}
+p{margin:0}.lead{color:var(--mute);margin-top:6px;max-width:70ch}
+button,input,select,textarea{font:inherit;color:inherit}
+svg.i{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+:focus-visible{outline:3px solid color-mix(in srgb,var(--pri) 55%,transparent);outline-offset:2px}
+.demo{background:var(--pri-soft);color:var(--pri);font-size:13px;text-align:center;padding:6px 12px;font-weight:500}
+/* shell */
+.layout{display:grid;grid-template-columns:272px minmax(0,1fr);min-height:100vh;background:linear-gradient(to right,var(--nav) 272px,transparent 272px)}
+.side{background:var(--nav);color:var(--nav-ink);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto}
+.brand{display:flex;gap:12px;align-items:center;padding:20px 18px 18px;border-bottom:1px solid rgba(255,255,255,.12)}
+.brand b{display:block;font-size:15px}.brand span{font-size:13px;color:var(--nav-mute)}
+.logo{width:40px;height:40px;border-radius:10px;background:#fff;display:grid;place-items:center;flex:none}
+.side nav{padding:12px 10px;display:grid;gap:2px}
+.nv{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:none;border:0;color:var(--nav-ink);padding:10px 12px;border-radius:8px;cursor:pointer;min-height:44px;font-size:15px}
+.nv:hover{background:rgba(255,255,255,.08)}.nv.on{background:var(--nav-act);font-weight:600}
+.subs{display:grid;gap:1px;margin:2px 0 8px 22px;padding-left:12px;border-left:1px solid rgba(255,255,255,.18)}
+.sb{background:none;border:0;text-align:left;color:var(--nav-mute);padding:8px 10px;border-radius:6px;cursor:pointer;font-size:14px;min-height:38px}
+.sb:hover{color:#fff;background:rgba(255,255,255,.06)}.sb.on{color:#fff;background:rgba(255,255,255,.12);font-weight:600}
+.side-foot{margin-top:auto;padding:16px 18px;font-size:13px;color:var(--nav-mute);border-top:1px solid rgba(255,255,255,.12)}
+.main{display:flex;flex-direction:column;min-height:100%}
+.top{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--card) 92%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;padding:10px clamp(16px,3vw,32px);min-height:64px}
+.crumbs{font-size:14px;color:var(--mute);display:flex;flex-wrap:wrap;gap:6px;align-items:center;flex:1}
+.crumbs button{background:none;border:0;color:var(--pri);cursor:pointer;padding:2px 0}.crumbs b{color:var(--ink);font-weight:600}
+.who{display:flex;align-items:center;gap:10px}.who-t{text-align:right;line-height:1.25}.who-t b{display:block;font-size:14px}.who-t span{font-size:13px;color:var(--mute)}
+.content{padding:clamp(18px,3vw,36px) clamp(16px,3vw,36px);width:100%;max-width:1240px;margin:0 auto;flex:1;display:grid;gap:22px;align-content:start}
+.foot{padding:18px clamp(16px,3vw,36px);font-size:13px;color:var(--mute);border-top:1px solid var(--line);text-align:center}
+.linkbtn{background:none;border:0;color:var(--pri);cursor:pointer;text-decoration:underline;font-size:13px;padding:0}
+.iconbtn.only-m{display:none}.scrim{display:none}
+.btn.ic{width:36px;padding:0}.rowacts{display:flex;gap:4px;justify-content:flex-end;flex-wrap:nowrap}
+.scroll th{white-space:normal;vertical-align:bottom}.scroll td:first-child{white-space:nowrap}
+/* parts */
+.ph{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap}.acts{display:flex;gap:8px;flex-wrap:wrap}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:clamp(16px,2vw,22px);box-shadow:0 1px 2px rgba(16,40,70,.05)}
+.grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr))}
+.grid.w{grid-template-columns:repeat(auto-fill,minmax(min(100%,360px),1fr))}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 16px;border-radius:10px;border:1px solid var(--line);background:var(--card);cursor:pointer;font-weight:500;font-size:15px;white-space:nowrap;text-decoration:none;color:var(--ink)}
+.btn:hover{border-color:var(--pri)}.btn.pri{background:var(--pri);border-color:var(--pri);color:var(--on-pri)}.btn.pri:hover{filter:brightness(1.08)}
+.btn.ghost{background:transparent}.btn.sm{min-height:36px;padding:0 10px;font-size:14px}.btn.block{width:100%}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+.iconbtn{width:44px;height:44px;display:grid;place-items:center;border-radius:10px;border:1px solid var(--line);background:var(--card);cursor:pointer}
+.badge{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:99px;font-size:13px;font-weight:600;background:var(--pri-soft);color:var(--pri);white-space:nowrap}
+.badge.ok{background:var(--ok-s);color:var(--ok)}.badge.warn{background:var(--warn-s);color:var(--warn)}.badge.bad{background:var(--bad-s);color:var(--bad)}.badge.neu{background:color-mix(in srgb,var(--mute) 14%,transparent);color:var(--mute)}
+.chip{font-size:12px;font-weight:600;color:var(--bad);background:var(--bad-s);border-radius:6px;padding:1px 7px;margin-left:6px;white-space:nowrap}
+.muted{color:var(--mute)}.small{font-size:14px}.ra{text-align:right;white-space:nowrap}.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.prog{display:flex;align-items:center;gap:8px;min-width:110px}.prog i{flex:1;height:8px;border-radius:9px;background:var(--line);overflow:hidden;display:block}.prog i b{display:block;height:100%;background:var(--pri);border-radius:9px}.prog span{font-size:13px;font-variant-numeric:tabular-nums;width:3.2em;text-align:right}
+.prog.ok i b{background:var(--ok)}.prog.warn i b{background:var(--warn)}.prog.bad i b{background:var(--bad)}
+/* tables */
+.tw{border:1px solid var(--line);border-radius:12px;background:var(--card);overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th{text-align:left;font-size:13px;font-weight:600;color:var(--mute);background:color-mix(in srgb,var(--pri-soft) 55%,var(--card));padding:10px 12px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:11px 12px;border-bottom:1px solid var(--line);vertical-align:top}tr:last-child td{border-bottom:0}
+tbody tr:hover td{background:color-mix(in srgb,var(--pri-soft) 35%,transparent)}
+.scroll{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--card)}.scroll table{min-width:860px}
+.empty{padding:28px;text-align:center;color:var(--mute)}
+.code{font-variant-numeric:tabular-nums;font-weight:600;color:var(--pri);white-space:nowrap}
+/* filters */
+.filters{display:flex;gap:10px;flex-wrap:wrap;align-items:end}
+.fld{display:grid;gap:5px;font-size:14px}.fld>span{font-weight:500;color:var(--mute)}
+input[type=text],input[type=email],input[type=password],input[type=date],input[type=number],input[type=url],input[type=search],select,textarea{width:100%;min-height:44px;border:1px solid var(--line);border-radius:10px;background:var(--card);padding:9px 12px;font-size:16px}
+textarea{min-height:88px;resize:vertical}
+.filters .fld{flex:1 1 170px}.filters .fld.fq{flex:2 1 260px}
+.chk{display:flex;gap:10px;align-items:flex-start;font-size:15px;cursor:pointer}.chk input{width:20px;height:20px;margin-top:2px;accent-color:var(--pri);flex:none}
+/* tiles */
+.tiles{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(min(100%,160px),1fr))}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+.tile .v{font-size:clamp(28px,3vw,36px);font-weight:700;line-height:1.1;font-variant-numeric:tabular-nums}.tile .l{font-size:14px;color:var(--mute);margin-top:4px}
+.tile.ok .v{color:var(--ok)}.tile.warn .v{color:var(--warn)}.tile.bad .v{color:var(--bad)}.tile.pri .v{color:var(--pri)}
+.mod{display:flex;flex-direction:column;gap:10px;text-align:left;cursor:pointer;transition:transform .15s,border-color .15s;font:inherit;color:inherit}
+.mod:hover{border-color:var(--pri);transform:translateY(-2px)}
+.mod .ic{width:46px;height:46px;border-radius:12px;background:var(--pri-soft);color:var(--pri);display:grid;place-items:center}.mod .ic svg{width:24px;height:24px}
+.mod p{color:var(--mute);font-size:15px}.mod small{color:var(--pri);font-weight:600;font-size:14px;margin-top:auto}
+.hello{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center;background:var(--nav);color:#fff;border-radius:16px;padding:clamp(20px,3vw,30px);border:0}
+.hello p{color:var(--nav-mute);margin-top:6px}
+/* lists */
+.list{display:grid;gap:10px}.li{display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:14px 16px;border:1px solid var(--line);border-radius:12px;background:var(--card)}
+.li h3{font-size:15px}.li .meta{font-size:14px;color:var(--mute)}
+.sec-h{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+/* indicators */
+.ind{display:grid;gap:8px}.ind-h{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.ind-h h3{font-size:15px}
+.ind-v{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}.big{font-size:34px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1}
+.big.ok{color:var(--ok)}.big.warn{color:var(--warn)}.big.bad{color:var(--bad)}
+.trend{font-size:13px;font-weight:600}.trend.ok{color:var(--ok)}.trend.bad{color:var(--bad)}.trend.neu{color:var(--mute)}
+.ind-m{font-size:14px;color:var(--mute);display:flex;align-items:center;gap:8px}
+.dot{width:10px;height:10px;border-radius:50%;display:inline-block;background:var(--mute)}.dot.ok{background:var(--ok)}.dot.warn{background:var(--warn)}.dot.bad{background:var(--bad)}
+.fig{position:relative;min-height:170px}.fig>svg{position:absolute;inset:0;width:100%;height:100%}
+.fig .gl{stroke:var(--line)}.fig .tk{fill:var(--mute);font-size:11px}.fig .goal{stroke:var(--mute);stroke-dasharray:5 4;stroke-width:1.5}
+.fig .ln{fill:none;stroke:var(--pri);stroke-width:2.5;stroke-linejoin:round}.fig .pt{fill:var(--card);stroke:var(--pri);stroke-width:2}.fig .pt.bad{stroke:var(--bad)}.fig .pt.warn{stroke:var(--warn)}
+.legend{display:flex;gap:16px;font-size:13px;color:var(--mute);flex-wrap:wrap}.legend i{display:inline-block;width:18px;height:0;border-top:2.5px solid var(--pri);vertical-align:middle;margin-right:6px}.legend i.g{border-top:2px dashed var(--mute)}
+.legend i.sq{width:12px;height:12px;border:0;border-radius:3px}
+/* bars */
+.bars{display:grid;gap:12px}.bar{display:grid;grid-template-columns:minmax(0,190px) minmax(0,1fr) 5.5em;gap:12px;align-items:center;font-size:14px}
+.bar .tr{height:22px;background:var(--line);border-radius:6px;overflow:hidden;display:flex}.bar .tr b{display:block;height:100%}
+.stackbar .tr{background:transparent;gap:2px}
+/* heat */
+.heat{display:grid;grid-template-columns:auto repeat(5,minmax(0,1fr));gap:6px;font-size:13px}
+.heat .ax{color:var(--mute);display:flex;align-items:center;justify-content:center;text-align:center;padding:4px}
+.heat .c{aspect-ratio:1.6;border-radius:8px;display:grid;place-items:center;font-weight:700;font-size:18px;min-height:44px}
+.lv1{background:var(--ok-s);color:var(--ok)}.lv2{background:var(--warn-s);color:var(--warn)}.lv3{background:var(--h3);color:#4A2C00}.lv4{background:var(--bad);color:#fff}
+.heat .c.z{opacity:.55;font-weight:500}
+/* stepper */
+.steps{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(min(100%,220px),1fr))}
+.step{display:flex;gap:12px;padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--card);align-items:flex-start}
+.step .n{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-weight:700;flex:none;background:var(--line);color:var(--mute)}
+.step.ok .n{background:var(--ok);color:#fff}.step.warn .n{background:var(--pri);color:#fff}
+.step h3{font-size:15px}.step p{font-size:13px;color:var(--mute);margin-top:4px}
+/* tabs */
+.tabs{display:flex;gap:6px;flex-wrap:wrap;border-bottom:1px solid var(--line)}
+.tab{background:none;border:0;border-bottom:3px solid transparent;padding:10px 14px;cursor:pointer;color:var(--mute);font-weight:500;min-height:44px}
+.tab.on{color:var(--pri);border-bottom-color:var(--pri);font-weight:600}
+/* modal + toast */
+.mback{position:fixed;inset:0;background:rgba(8,20,36,.5);display:grid;place-items:center;padding:16px;z-index:60}
+.modal{background:var(--card);border-radius:16px;width:min(640px,100%);max-height:calc(100vh - 32px);overflow:auto;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.mh{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:18px 20px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--card);z-index:1}
+.fgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;padding:20px}.full{grid-column:1/-1}
+.mf{display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap;padding-top:6px}
+.note{font-size:14px;background:var(--warn-s);color:var(--warn);padding:10px 12px;border-radius:10px}
+.info{font-size:14px;background:var(--pri-soft);color:var(--pri);padding:12px 14px;border-radius:10px}
+#toasts{position:fixed;bottom:18px;right:18px;display:grid;gap:8px;z-index:80;max-width:min(380px,calc(100vw - 36px))}
+.toast{background:#13263C;color:#fff;padding:12px 16px;border-radius:10px;font-size:15px;box-shadow:0 8px 24px rgba(0,0,0,.25);border-left:4px solid #58C890;animation:tin .2s ease-out}
+.toast.bad{border-left-color:#F48C82}
+@keyframes tin{from{transform:translateY(8px);opacity:0}}
+@media(prefers-reduced-motion:reduce){.toast{animation:none}.mod{transition:none}.mod:hover{transform:none}}
+/* quiz */
+.q{display:grid;gap:8px;padding:16px;border:1px solid var(--line);border-radius:12px}
+.q legend{font-weight:600;padding:0;margin-bottom:6px}
+.opt{display:flex;gap:10px;align-items:center;padding:10px 12px;border:1px solid var(--line);border-radius:10px;cursor:pointer;min-height:44px}
+.opt:hover{border-color:var(--pri)}.opt input{width:18px;height:18px;accent-color:var(--pri);flex:none}
+.opt.right{border-color:var(--ok);background:var(--ok-s)}
+.result{display:flex;gap:18px;align-items:center;flex-wrap:wrap}.result .big{font-size:48px}
+.mat{display:flex;gap:12px;align-items:center;padding:12px 14px;border:1px solid var(--line);border-radius:12px;justify-content:space-between;flex-wrap:wrap}
+.mat .ic{width:40px;height:40px;border-radius:10px;background:var(--pri-soft);color:var(--pri);display:grid;place-items:center;flex:none}
+.wsteps{display:flex;gap:8px;flex-wrap:wrap}.wsteps span{padding:6px 12px;border-radius:99px;font-size:14px;background:var(--line);color:var(--mute);font-weight:500}.wsteps span.on{background:var(--pri);color:var(--on-pri)}.wsteps span.done{background:var(--ok-s);color:var(--ok)}
+.wq{display:grid;gap:10px;padding:16px;border:1px solid var(--line);border-radius:12px}
+.wrow{display:grid;grid-template-columns:210px minmax(0,1fr) minmax(0,1fr) auto;gap:10px;align-items:end}
+.wopt{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;align-items:center}
+.cargos{display:flex;flex-wrap:wrap;gap:8px 18px}
+/* login */
+.login{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);min-height:100vh}
+.login-art{background:var(--nav);color:#fff;padding:clamp(28px,5vw,64px);display:flex;flex-direction:column;gap:22px;justify-content:center}
+.login-art h1{font-size:clamp(30px,3.6vw,46px);max-width:15ch}.login-art p{color:var(--nav-mute);max-width:46ch;font-size:17px}
+.login-art svg.art{width:100%;max-width:560px;height:auto;align-self:center}
+.login-side{padding:clamp(24px,5vw,64px);display:flex;flex-direction:column;justify-content:center;gap:16px;max-width:520px;width:100%;margin:0 auto}
+.login-side form{display:grid;gap:14px}.err{color:var(--bad);font-size:14px;font-weight:500}
+.demo-u{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-top:1px solid var(--line);font-size:14px;flex-wrap:wrap}
+.demo-u code{font-size:13px;color:var(--mute)}
+@media(max-width:900px){
+.layout{grid-template-columns:minmax(0,1fr)}
+.side{position:fixed;left:0;top:0;bottom:0;width:min(300px,86vw);z-index:50;transform:translateX(-105%);transition:transform .2s}
+.side.open{transform:none}.scrim.on{display:block;position:fixed;inset:0;background:rgba(8,20,36,.45);z-index:45}
+.iconbtn.only-m{display:grid}.who-t{display:none}.layout{background:none}
+.login{grid-template-columns:minmax(0,1fr)}.login-art{padding-bottom:20px}.login-art svg.art{max-width:380px}
+}
+@media(max-width:600px){
+.hide-s{display:none}.fgrid{grid-template-columns:minmax(0,1fr)}.bar{grid-template-columns:minmax(0,1fr) 4.5em}.bar .lb{grid-column:1/-1}
+.wrow{grid-template-columns:minmax(0,1fr)}.crumbs{font-size:13px}.top{gap:8px}
+.heat .c{font-size:15px;aspect-ratio:1.2}.hn{display:none}.crumbs>button,.crumbs>span{display:none}
+}
+pre,.scroll{overflow-x:auto}code{overflow-wrap:anywhere}
+@media(max-width:600px){table{font-size:14px}.stack thead{display:none}.stack tr{display:grid;padding-block:10px;border-bottom:1px solid var(--line)}.stack td{display:flow-root;border:0;padding:3px 12px;padding-inline-start:calc(8em + 12px);text-align:start}.stack td::before{content:attr(data-l);float:inline-start;width:7.5em;margin-inline-start:-8em;white-space:normal;color:var(--mute);font-size:13px}.stack td:empty{display:none}.stack td.ra{text-align:start}}
+</style><script>new MutationObserver(()=>{for(const c of document.querySelectorAll('.stack td:not([data-l])')){let i=0,p=c;while(p=p.previousElementSibling)i+=p.colSpan;c.dataset.l=c.closest('table').rows[0].cells[i]?.textContent||''}}).observe(document,{childList:true,subtree:true})</script></head><body>
+<div id="app"></div>
+<div id="modal"></div>
+<div id="toasts" aria-live="polite"></div>
+<script src="config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+{
+const CFG_OK=/^https:\/\/.+\.supabase\.co\/?$/.test(String(window.SUPABASE_URL||'').trim())&&String(window.SUPABASE_KEY||'').length>20&&!/PEGUE/.test(window.SUPABASE_KEY);
+const sb=CFG_OK&&window.supabase?window.supabase.createClient(window.SUPABASE_URL.trim(),window.SUPABASE_KEY.trim()):null;
+const pad=n=>String(n).padStart(2,'0');
+const today=()=>{const d=new Date();return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`};
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fdr=iso=>{if(!iso)return '—';const p=String(iso).slice(0,10).split('-');return p.length===3?`${p[2]}/${p[1]}/${p[0]}`:String(iso)};
+const fd=iso=>esc(fdr(iso));
+const kg=n=>Number(n||0).toLocaleString('es-CO',{maximumFractionDigits:1});
+const MN=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+const ML=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+const mesL=p=>{if(!p)return '—';const [y,m]=String(p).split('-');return `${ML[Number(m)-1]||''} ${y}`};
+const mesC=p=>{if(!p)return '';const [y,m]=String(p).split('-');return `${MN[Number(m)-1]||''} ${String(y).slice(2)}`};
+
+const IC={
+home:'<path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',
+calidad:'<circle cx="12" cy="12" r="9"/><path d="m8 12.2 2.8 2.8L16.5 9"/>',
+seguridad:'<path d="M12 3 4.5 6v5.5c0 4.8 3.2 8.3 7.5 9.5 4.3-1.2 7.5-4.7 7.5-9.5V6z"/><path d="M12 9v6M9 12h6"/>',
+ambiental:'<path d="M5 20c0-9 5.5-14.5 15-16-1 10-6.5 16-15 16z"/><path d="M5 20 13.5 11.5"/>',
+iaas:'<circle cx="12" cy="12" r="4.5"/><path d="M12 3v4.5M12 16.5V21M3 12h4.5M16.5 12H21M5.6 5.6l3 3M15.4 15.4l3 3M5.6 18.4l3-3M15.4 8.6l3-3"/>',
+sst:'<path d="M3 18h18M5 18v-3a7 7 0 0 1 14 0v3"/><path d="M10 9V5.5h4V9"/>',
+capacitaciones:'<path d="m2 9 10-5 10 5-10 5z"/><path d="M6 11v5c3.2 2.2 8.8 2.2 12 0v-5M22 9v5"/>',
+usuarios:'<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.5-4 3-6 6.5-6s6 2 6.5 6"/><path d="M16 4.6a3.5 3.5 0 0 1 0 6.8M18 14.2c2 .7 3.2 2.6 3.5 5.8"/>',
+menu:'<path d="M4 7h16M4 12h16M4 17h16"/>',x:'<path d="M6 6l12 12M18 6 6 18"/>',plus:'<path d="M12 5v14M5 12h14"/>',
+edit:'<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="m13.5 6.5 4 4"/>',archive:'<rect x="3" y="4" width="18" height="5" rx="1"/><path d="M5 9v10h14V9M10 13h4"/>',
+eye:'<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',dl:'<path d="M12 4v11M7 10l5 5 5-5M5 20h14"/>',
+logout:'<path d="M15 4h4v16h-4M10 8l-4 4 4 4M6 12h11"/>',check:'<path d="m5 12.5 4.5 4.5L19 7"/>',key:'<circle cx="8" cy="15" r="4"/><path d="m11 12 9-9M17 6l3 3M15 8l2 2"/>',
+file:'<path d="M6 3h8l5 5v13H6z"/><path d="M14 3v5h5M9 13h7M9 17h5"/>',link:'<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>',
+video:'<rect x="3" y="6" width="13" height="12" rx="2"/><path d="m16 10 5-3v10l-5-3"/>',back:'<path d="M15 5l-7 7 7 7"/>',copy:'<rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V4H4v12h4"/>',
+alert:'<path d="M12 3 2 20h20z"/><path d="M12 10v4M12 17h.01"/>',clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>'};
+const ico=n=>`<svg class="i" viewBox="0 0 24 24" aria-hidden="true">${IC[n]||''}</svg>`;
+const logo=()=>`<span class="logo"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M9 3h6v6h6v6h-6v6H9v-6H3V9h6z" fill="#0B5CAD"/></svg></span>`;
+
+const MODS=[
+{id:'calidad',nom:'Calidad',d:'Documentos controlados, planes de mejora, PAMEC, indicadores y habilitación.',secs:[['listado','Listado Maestro de Documentos'],['planes','Planes de Mejora'],['pamec','PAMEC'],['indicadores','Indicadores de Gestión'],['habilitacion','Habilitación (Res. 3100)']]},
+{id:'seguridad',nom:'Seguridad del Paciente',d:'Programa, paquetes instruccionales, rondas, matriz de riesgos y reporte de eventos.',secs:[['programa','Programa de Seguridad del Paciente'],['paquetes','Paquetes Instruccionales'],['rondas','Rondas de Seguridad'],['riesgos','Matriz de Riesgos'],['eventos','Reporte de Eventos Adversos']]},
+{id:'ambiental',nom:'Ambiental',d:'PGIRHS, registro mensual RH1 y seguimiento de limpieza y desinfección.',secs:[['pgirhs','PGIRHS'],['rh1','Formulario RH1'],['limpieza','Limpieza y Desinfección de Áreas']]},
+{id:'iaas',nom:'IAAS y PROA',d:'Programas IAAS y PROA, protocolos de bioseguridad y adherencia.',secs:[['programa','Plan / Programa IAAS y PROA'],['protocolos','Protocolos de Bioseguridad'],['seguimiento','Seguimiento de Adherencia']]},
+{id:'sst',nom:'SST',d:'Matriz de peligros, planes de emergencia, COPASST y comités.',secs:[['peligros','Matriz de Peligros'],['emergencias','Planes de Emergencia'],['comites','COPASST y Comités']]},
+{id:'capacitaciones',nom:'Capacitaciones',d:'Material educativo, evaluaciones de conocimiento y registro de asistencia.',secs:[['actividades','Actividades educativas']]}];
+const modBy=id=>MODS.find(m=>m.id===id);
+const SERV=['Urgencias','Hospitalización','Consulta externa','Laboratorio clínico','Imágenes diagnósticas','Cirugía ambulatoria','Farmacia','Administrativo','Otro'];
+const TIPOS=['Procedimiento','Protocolo','Guía','Manual','Formato','Programa','Plan','Instructivo','Política','Acta'];
+const ESTD=['Vigente','En revisión','Obsoleto'];
+const DOCSECS=[['calidad|general','Calidad › Documentos generales'],['calidad|planes','Calidad › Planes de mejora'],['calidad|pamec','Calidad › PAMEC'],['calidad|habilitacion','Calidad › Habilitación'],['seguridad|programa','Seguridad del Paciente › Programa'],['seguridad|paquetes','Seguridad del Paciente › Paquetes instruccionales'],['seguridad|rondas','Seguridad del Paciente › Rondas'],['ambiental|pgirhs','Ambiental › PGIRHS'],['ambiental|limpieza','Ambiental › Limpieza y desinfección'],['iaas|programa','IAAS y PROA › Plan / Programa'],['iaas|protocolos','IAAS y PROA › Protocolos de bioseguridad'],['sst|general','SST › Documentos generales'],['sst|peligros','SST › Matriz de peligros'],['sst|emergencias','SST › Planes de emergencia'],['sst|comites','SST › Actas de comités']];
+const RCAT=[['apr','Aprovechables','np'],['noa','No aprovechables','np'],['org','Orgánicos','np'],['bio','Biosanitarios','p'],['cor','Cortopunzantes','p'],['ana','Anatomopatológicos','p'],['qui','Químicos / fármacos','p']];
+const RCOL={apr:'#8DB4DE',noa:'#5B87B8',org:'#2E5F94',bio:'#D9534A',cor:'#B42318',ana:'#E8875A',qui:'#F2B65E'};
+const PAQ=[['Detectar, prevenir y reducir infecciones asociadas a la atención en salud','Higiene de manos, aislamientos y prevención de infecciones asociadas a dispositivos.'],['Mejorar la seguridad en la utilización de medicamentos','Prescripción, dispensación y administración segura; medicamentos de alto riesgo y LASA.'],['Procesos para la prevención y reducción de la frecuencia de caídas','Valoración del riesgo, medidas de prevención y seguimiento.'],['Prevenir úlceras por presión','Valoración con escala de riesgo, cambios de posición y cuidado de la piel.'],['Asegurar la correcta identificación del paciente en los procesos asistenciales','Manilla con dos identificadores y verificación en cada procedimiento.'],['Evaluación de la frecuencia con la cual ocurren los eventos adversos','Reporte, análisis y gestión de incidentes y eventos adversos.']];
+
+const T={users:'perfiles',docs:'documentos',planes:'planes',pamec:'pamec',hab:'habilitacion',ind:'indicadores',vals:'indicador_valores',rondas:'rondas',riesgos:'riesgos',eventos:'eventos',rh1:'rh1',limpieza:'limpieza',obs:'observaciones',peligros:'peligros',brigada:'brigada',comites:'comites',miembros:'comite_miembros',reuniones:'comite_reuniones',trainings:'capacitaciones',claves:'capacitacion_claves',att:'intentos',asis:'asistencias'};
+let DB=Object.fromEntries(Object.keys(T).map(k=>[k,[]]));
+const S={user:null,phase:'boot',msg:'',mod:'inicio',sec:null,sub:null,nav:false,tab:'copasst',ctab:'pend',fclas:'',fres:'',repo:null,draft:null,wstep:1,last:null,recovery:false};
+
+const PERMS={admin:['create','edit','archive','manage','results','report'],colab:['report','train']};
+const can=a=>!!S.user&&(PERMS[S.user.rol]||[]).includes(a);
+const isAdmin=()=>S.user?.rol==='admin';
+const userBy=id=>DB.users.find(u=>u.id===id);
+
+function errMsg(e){const m=String(e?.message||e||'');
+ if(/row-level security|permission denied/i.test(m))return 'No tiene permisos para esta acción.';
+ if(/Invalid login credentials/i.test(m))return 'Correo o contraseña incorrectos.';
+ if(/Email not confirmed/i.test(m))return 'El correo aún no ha sido confirmado. Pida a Calidad que confirme su usuario.';
+ if(/duplicate key/i.test(m))return 'Ya existe un registro con esos datos.';
+ if(/Failed to fetch|NetworkError|network/i.test(m))return 'Sin conexión. Revise su internet e intente de nuevo.';
+ if(/Password should be|password.*characters/i.test(m))return 'La contraseña debe tener al menos 6 caracteres.';
+ if(/rate limit|too many/i.test(m))return 'Demasiados intentos. Espere unos minutos e intente de nuevo.';
+ return m||'Ocurrió un error. Intente de nuevo.';}
+async function loadT(k){const {data,error}=await sb.from(T[k]).select('*');if(error)throw error;DB[k]=data||[]}
+async function loadAll(){await Promise.all(Object.keys(T).filter(k=>k!=='claves'||isAdmin()).map(loadT))}
+async function reload(...ks){try{await Promise.all(ks.map(loadT))}catch(e){toast(errMsg(e),'bad')}}
+async function dbSave(k,row,id){const q=id?sb.from(T[k]).update(row).eq('id',id):sb.from(T[k]).insert(row);const {error}=await q;
+ if(error){toast(errMsg(error),'bad');return false}await reload(k);return true}
+
+const BM={ok:['Vigente','Cumple','Cerrado','Realizada','Aprobado','Completado','Activo','Bajo','IV – Aceptable','Asistencia registrada'],warn:['En revisión','En ejecución','En análisis','Programada','Abierto','Recibido','Moderado','Leve','III – Mejorable','II – No aceptable o aceptable con control específico','En curso','Alto'],bad:['Obsoleto','Vencido','Vencida','No cumple','No aprobado','Extremo','Grave','Centinela','I – No aceptable','Inactivo']};
+const bcls=t=>BM.ok.includes(t)?'ok':BM.warn.includes(t)?'warn':BM.bad.includes(t)?'bad':'neu';
+const badge=t=>`<span class="badge ${bcls(t)}">${esc(t)}</span>`;
+const prog=(v,c='')=>{const n=Math.max(0,Math.min(100,Number(v)||0));return `<span class="prog ${c}"><i><b style="width:${n}%"></b></i><span>${Math.round(n)}%</span></span>`};
+const pc=(a,b)=>b?Math.round(a/b*100):0;
+const pcls=v=>v>=90?'ok':v>=75?'warn':'bad';
+const byDate=k=>(a,b)=>String(b[k]||'').localeCompare(String(a[k]||''));
+
+function tbl(heads,rows,mode='stack',emptyMsg='Aún no hay registros.'){
+ if(!rows.length)return `<div class="tw"><div class="empty">${esc(emptyMsg)}</div></div>`;
+ const t=`<table class="${mode==='stack'?'stack':''}"><thead><tr>${heads.map(h=>`<th${h.startsWith('#')?' class="num"':''}>${esc(h.replace(/^#/,''))}</th>`).join('')}</tr></thead><tbody>${rows.join('')}</tbody></table>`;
+ return mode==='stack'?`<div class="tw">${t}</div>`:`<div class="scroll">${t}</div>`;}
+function pageHead(t,d,a=''){return `<div class="ph"><div><h1>${esc(t)}</h1>${d?`<p class="lead">${esc(d)}</p>`:''}</div>${a?`<div class="acts">${a}</div>`:''}</div>`}
+
+/* ===== Generic entities ===== */
+const nivelR=r=>{const v=r.prob*r.imp;return v>=15?'Extremo':v>=10?'Alto':v>=5?'Moderado':'Bajo'};
+const estPlan=r=>r.estado!=='Cerrado'&&r.limite&&r.limite<today()?'Vencido':r.estado;
+const n15=[1,2,3,4,5].map(n=>[n,String(n)]);
+const OPT='opt';
+const ENT={
+planes:{one:'plan de mejora',k:'planes',cols:[['Origen',r=>esc(r.origen)],['Hallazgo',r=>esc(r.hallazgo)],['Acción de mejora',r=>esc(r.accion)],['Responsable',r=>esc(r.resp)],['Fecha límite',r=>fd(r.limite)],['Avance',r=>prog(r.avance)],['Estado',r=>badge(estPlan(r))]],
+ f:[['origen','Origen','select',['Auditoría interna','Auditoría externa','PAMEC','Evento adverso','Habilitación','Queja / PQRS','Ronda de seguridad','Indicador']],['resp','Responsable','text'],['hallazgo','Hallazgo','textarea'],['accion','Acción de mejora','textarea'],['limite','Fecha límite','date'],['avance','% de avance (0 a 100)','number'],['estado','Estado','select',['Abierto','En ejecución','Cerrado']]]},
+pamec:{one:'paso del PAMEC',k:'pamec',f:[['est','Estado','select',['Pendiente','En curso','Completado']],['detalle','Observaciones / avance','textarea',null,OPT]]},
+hab:{one:'criterio de habilitación',k:'hab',f:[['std','Estándar','select',['Talento humano','Infraestructura','Dotación','Medicamentos, dispositivos médicos e insumos','Procesos prioritarios','Historia clínica y registros','Interdependencia']],['est','Estado','select',[['C','Cumple'],['NC','No cumple'],['NA','No aplica']]],['item','Criterio','textarea'],['orden','Orden','number',null,OPT]]},
+ind:{one:'indicador',k:'ind',f:[['nom','Nombre del indicador','text'],['meta','Meta','number'],['sen','La meta se cumple cuando el resultado es','select',[['mayor','Mayor o igual a la meta'],['menor','Menor o igual a la meta']]],['u','Unidad','select',[['%','Porcentaje (%)'],[' días','Días'],['','Sin unidad (tasa o número)']]],['dec','Decimales','select',[[0,'Sin decimales'],[1,'1 decimal']]],['orden','Orden en la página','number',null,OPT]]},
+rondas:{one:'ronda de seguridad',k:'rondas',cols:[['Fecha',r=>fd(r.fecha)],['Servicio',r=>esc(r.serv)],['Responsable',r=>esc(r.resp)],['Hallazgos',r=>esc(r.hall||'—')],['Compromisos',r=>esc(r.comp||'—')],['Estado',r=>badge(r.estado)]],
+ f:[['fecha','Fecha','date'],['serv','Servicio','select',SERV],['resp','Responsable','text'],['estado','Estado','select',['Programada','Realizada']],['hall','Hallazgos','textarea',null,OPT],['comp','Compromisos','textarea',null,OPT]]},
+riesgos:{one:'riesgo',k:'riesgos',cols:[['Proceso',r=>esc(r.proceso)],['Riesgo',r=>`<b>${esc(r.riesgo)}</b><div class="muted small">${esc(r.causa)}</div>`],['Prob. × Impacto',r=>esc(`${r.prob} × ${r.imp} = ${r.prob*r.imp}`)],['Nivel',r=>badge(nivelR(r))],['Controles',r=>esc(r.control)],['Responsable',r=>esc(r.resp)]],
+ f:[['proceso','Proceso','text'],['riesgo','Riesgo','text'],['causa','Causa principal','textarea',null,OPT],['prob','Probabilidad (1 raro – 5 casi seguro)','select',n15],['imp','Impacto (1 insignificante – 5 catastrófico)','select',n15],['control','Controles existentes','textarea',null,OPT],['resp','Responsable','text']]},
+rh1:{one:'registro mensual RH1',k:'rh1',wide:true,cols:[['Mes',r=>esc(mesL(r.periodo))],...RCAT.map(c=>['#'+c[1],r=>kg(r[c[0]])]),['#Total kg',r=>`<b>${kg(RCAT.reduce((s,c)=>s+Number(r[c[0]]||0),0))}</b>`]],
+ f:[['periodo','Mes','month'],...RCAT.map(c=>[c[0],c[1]+' (kg)','number'])]},
+limpieza:{one:'registro de limpieza',k:'limpieza',cols:[['Área',r=>esc(r.area)],['Tipo',r=>esc(r.tipo)],['Fecha',r=>fd(r.fecha)],['Responsable',r=>esc(r.resp)],['Producto',r=>esc(r.prod)],['Verificado por',r=>esc(r.verif)],['Resultado',r=>badge(r.estado)]],
+ f:[['area','Área','text'],['tipo','Tipo de limpieza','select',['Rutinaria','Terminal']],['fecha','Fecha','date'],['resp','Responsable','text'],['prod','Producto utilizado','text'],['verif','Verificado por','text'],['estado','Resultado','select',['Cumple','No cumple']]]},
+obs:{one:'observación',k:'obs',cols:[['Fecha',r=>fd(r.fecha)],['Servicio',r=>esc(r.serv)],['Tipo',r=>esc(r.tipo)],['#Oportunidades',r=>esc(r.oport)],['#Cumplidas',r=>esc(r.cumpl)],['#Adherencia',r=>`<b>${pc(r.cumpl,r.oport)}%</b>`],['Observador',r=>esc(r.obs)]],
+ f:[['fecha','Fecha','date'],['serv','Servicio','select',SERV],['tipo','Tipo de observación','select',['Higiene de manos','Uso de EPP']],['obs','Observador','text'],['oport','Oportunidades observadas','number'],['cumpl','Oportunidades cumplidas','number']]},
+peligros:{one:'peligro',k:'peligros',cols:[['Proceso / actividad',r=>`<b>${esc(r.proceso)}</b><div class="muted small">${esc(r.act)}</div>`],['Peligro',r=>esc(r.pel)],['Clasificación',r=>esc(r.clas)],['Efectos posibles',r=>esc(r.efec)],['Nivel de riesgo',r=>badge(r.nivel)],['Controles',r=>esc(r.ctrl)]],
+ f:[['proceso','Proceso','text'],['act','Actividad','text'],['pel','Peligro (descripción)','text'],['clas','Clasificación','select',['Biológico','Biomecánico','Psicosocial','Químico','Físico','Condiciones de seguridad','Fenómenos naturales']],['efec','Efectos posibles','text'],['nivel','Nivel de riesgo (GTC 45)','select',['I – No aceptable','II – No aceptable o aceptable con control específico','III – Mejorable','IV – Aceptable']],['ctrl','Controles existentes','textarea',null,OPT]]},
+brigada:{one:'brigadista',k:'brigada',cols:[['Nombre',r=>`<b>${esc(r.nombre)}</b>`],['Rol en la brigada',r=>esc(r.rol)],['Área',r=>esc(r.area)]],f:[['nombre','Nombre','text'],['rol','Rol en la brigada','select',['Líder de brigada','Primeros auxilios','Evacuación','Control de incendios','Comunicaciones']],['area','Área','text']]},
+miembros:{one:'integrante',k:'miembros',cols:[['Nombre',r=>`<b>${esc(r.nombre)}</b>`],['Rol',r=>esc(r.rol)]],f:[['nombre','Nombre','text'],['rol','Rol en el comité','text']]},
+reuniones:{one:'reunión',k:'reuniones',cols:[['Fecha',r=>fd(r.fecha)],['Tema',r=>esc(r.tema)]],f:[['fecha','Fecha','date'],['tema','Tema o tipo de reunión','text']]},
+users:{one:'usuario',k:'users',cols:[['Nombre',r=>`<b>${esc(r.nombre)}</b>`],['Correo',r=>esc(r.correo)],['Cargo',r=>esc(r.cargo||'—')],['Área',r=>esc(r.area||'—')],['Rol',r=>`<span class="badge ${r.rol==='admin'?'':'neu'}">${r.rol==='admin'?'Administrador':'Colaborador'}</span>`],['Estado',r=>badge(r.estado)]],
+ f:[['nombre','Nombre completo','text'],['cargo','Cargo','text'],['area','Área','text'],['rol','Rol','select',[['colab','Colaborador'],['admin','Administrador (Calidad)']]],['estado','Estado','select',['Activo','Inactivo']]]}
+};
+function entTable(key,rows){const c=ENT[key],ed=can('edit');
+ return tbl([...c.cols.map(x=>x[0]),...(ed?['Acciones']:[])],rows.map(r=>`<tr>${c.cols.map(x=>`<td${x[0].startsWith('#')?' class="num"':''}>${x[1](r)}</td>`).join('')}${ed?`<td class="ra"><button class="btn sm ghost" data-act="ent-edit" data-e="${key}" data-id="${esc(r.id)}">${ico('edit')}Editar</button></td>`:''}</tr>`),c.wide?'wide':'stack');}
+const newBtn=(key,l,extra='')=>can('create')?`<button class="btn pri" data-act="ent-new" data-e="${key}"${extra}>${ico('plus')}${esc(l)}</button>`:'';
+
+/* ===== Forms / modal ===== */
+let MF=null;
+function fieldHTML(f,v){const [k,l,t,o,opt]=f;let val=v??'';
+ if(t==='select')return `<label class="fld"><span>${esc(l)}</span><select name="${k}">${o.map(x=>{const [a,b]=Array.isArray(x)?x:[x,x];return `<option value="${esc(a)}"${String(val)===String(a)?' selected':''}>${esc(b)}</option>`}).join('')}</select></label>`;
+ if(t==='textarea')return `<label class="fld full"><span>${esc(l)}${opt?' <small>(opcional)</small>':''}</span><textarea name="${k}" rows="3"${opt?'':' required'}>${esc(val)}</textarea></label>`;
+ if(t==='check')return `<label class="chk full"><input type="checkbox" name="${k}"${val?' checked':''}><span>${esc(l)}</span></label>`;
+ if(t==='file')return `<label class="fld full"><span>${esc(l)}</span><input type="file" name="${k}" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.png,.jpg,.jpeg"></label>`;
+ if(t==='note')return `<p class="note full">${esc(l)}</p>`;
+ if(t==='info')return `<p class="info full">${esc(l)}</p>`;
+ if(t==='month')val=String(val).slice(0,7);
+ const req=(t==='url'||opt)?'':' required';
+ return `<label class="fld${t==='url'?' full':''}"><span>${esc(l)}${opt||t==='url'?' <small>(opcional)</small>':''}</span><input name="${k}" type="${t}" value="${esc(val)}"${t==='number'?' step="any" min="0"':''}${t==='password'?' autocomplete="new-password" minlength="6"':''}${req}></label>`;}
+function openForm(title,fields,vals,onSave,btn='Guardar'){
+ MF={fields,onSave};
+ document.getElementById('modal').innerHTML=`<div class="mback" data-act="mback"><div class="modal" role="dialog" aria-modal="true" aria-label="${esc(title)}"><div class="mh"><h2>${esc(title)}</h2><button class="iconbtn" data-act="modal-close" aria-label="Cerrar">${ico('x')}</button></div>
+ <form id="mform" class="fgrid" novalidate>${fields.map(f=>fieldHTML(f,vals[f[0]])).join('')}<div class="mf full"><button type="button" class="btn ghost" data-act="modal-close">Cancelar</button><button class="btn pri" type="submit">${ico('check')}${esc(btn)}</button></div></form></div></div>`;
+ const first=document.querySelector('#mform input,#mform select,#mform textarea');if(first)first.focus();}
+function openConfirm(title,msg,onYes,yes='Confirmar'){MF={onYes};
+ document.getElementById('modal').innerHTML=`<div class="mback" data-act="mback"><div class="modal" role="alertdialog" aria-modal="true" style="width:min(460px,100%)"><div class="mh"><h2>${esc(title)}</h2></div><div style="padding:20px;display:grid;gap:18px"><p>${esc(msg)}</p><div class="mf"><button class="btn ghost" data-act="modal-close">Cancelar</button><button class="btn pri" data-act="confirm-yes">${esc(yes)}</button></div></div></div></div>`;}
+function closeModal(){document.getElementById('modal').innerHTML='';MF=null}
+function toast(m,k=''){const t=document.createElement('div');t.className='toast '+k;t.textContent=m;document.getElementById('toasts').appendChild(t);setTimeout(()=>t.remove(),k==='bad'?6000:3600)}
+
+function entForm(key,id,extra={}){const c=ENT[key],row=id?DB[c.k].find(r=>r.id===id):null;
+ openForm((row?'Editar ':'Nuevo ')+c.one,c.f,row||{},async v=>{
+  const ok=await dbSave(c.k,Object.assign(v,extra),row?.id);if(ok){toast(row?'Cambios guardados.':'Registro creado.');render()}return ok});}
+
+/* ===== Documents ===== */
+const vencida=d=>d.rev&&d.rev<today()&&d.est!=='Obsoleto';
+function docRepo(base,opt={}){
+ S.repo={base,q:'',tipo:'',est:'',mod:'',showMod:!!opt.showMod,def:opt.def||'calidad|general'};
+ return `<section class="card" style="display:grid;gap:14px">
+ <div class="sec-h"><h2>${esc(opt.title||'Documentos')}</h2>${can('create')?`<button class="btn pri" data-act="doc-new">${ico('plus')}Nuevo documento</button>`:''}</div>
+ <div class="filters">
+  <label class="fld fq"><span>Buscar</span><input type="search" data-flt="q" placeholder="Código o nombre del documento"></label>
+  ${opt.showMod?`<label class="fld"><span>Módulo</span><select data-flt="mod"><option value="">Todos</option>${MODS.filter(m=>m.id!=='capacitaciones').map(m=>`<option value="${m.id}">${esc(m.nom)}</option>`).join('')}</select></label>`:''}
+  <label class="fld"><span>Tipo</span><select data-flt="tipo"><option value="">Todos</option>${TIPOS.map(t=>`<option>${t}</option>`).join('')}</select></label>
+  <label class="fld"><span>Estado</span><select data-flt="est"><option value="">Todos</option>${ESTD.map(t=>`<option>${t}</option>`).join('')}</select></label>
+ </div><div id="repo-body"></div></section>`;}
+function updateDocs(){const el=document.getElementById('repo-body');if(!el||!S.repo)return;const R=S.repo,q=R.q.toLowerCase();
+ const rows=DB.docs.filter(R.base).filter(d=>(!q||(d.cod+' '+d.nom).toLowerCase().includes(q))&&(!R.tipo||d.tipo===R.tipo)&&(!R.est||d.est===R.est)&&(!R.mod||d.mod===R.mod)).sort((a,b)=>String(a.cod).localeCompare(String(b.cod)));
+ const ed=can('edit');
+ el.innerHTML=`<p class="muted small" style="margin-bottom:10px">${rows.length} documento${rows.length===1?'':'s'}</p>`+tbl(['Documento',...(R.showMod?['Módulo']:[]),'Tipo','Vigencia','Estado','Acciones'],rows.map(d=>`<tr>
+  <td><span class="code">${esc(d.cod)}</span> <span class="muted small">· V${esc(d.ver)}</span><div><b>${esc(d.nom)}</b>${vencida(d)?'<span class="chip">Revisión vencida</span>':''}</div><div class="muted small">${esc(d.resp)}</div></td>${R.showMod?`<td>${esc(modBy(d.mod)?.nom)}</td>`:''}
+  <td>${esc(d.tipo)}</td><td class="small" style="white-space:nowrap">Aprobado ${fd(d.apr)}<br><span class="muted">Revisión ${fd(d.rev)}</span></td><td>${badge(d.est)}</td>
+  <td class="ra"><div class="rowacts"><button class="btn sm ghost ic" data-act="doc-view" data-id="${d.id}" title="Ver" aria-label="Ver">${ico('eye')}</button>${d.archivo?`<button class="btn sm ghost ic" data-act="doc-dl" data-id="${d.id}" title="Descargar" aria-label="Descargar">${ico('dl')}</button>`:''}${ed?`<button class="btn sm ghost ic" data-act="doc-edit" data-id="${d.id}" title="Editar" aria-label="Editar">${ico('edit')}</button>${d.est!=='Obsoleto'?`<button class="btn sm ghost ic" data-act="doc-arch" data-id="${d.id}" title="Archivar" aria-label="Archivar">${ico('archive')}</button>`:''}`:''}</div></td></tr>`),'stack',DB.docs.some(R.base)?'No hay documentos con esos filtros.':(can('create')?'Aún no hay documentos. Use "Nuevo documento" para agregar el primero.':'Aún no hay documentos publicados en esta sección.'));}
+const DOCF=[['cod','Código (ej. CAL-PR-001)','text'],['ubic','Sección','select',DOCSECS],['nom','Nombre del documento','text'],['tipo','Tipo','select',TIPOS],['ver','Versión','number'],['est','Estado','select',ESTD],['apr','Fecha de aprobación','date'],['rev','Próxima revisión','date',null,OPT],['resp','Responsable','text'],['info','Agregue un enlace (por ejemplo de Google Drive) o suba el archivo. Tamaño máximo del archivo: 50 MB.','info'],['url','Enlace al documento','url'],['archivo','Archivo (PDF, Word, Excel…)','file']];
+async function docForm(id){const d=id?DB.docs.find(x=>x.id===id):null;
+ const vals=d?Object.assign({},d,{ubic:d.mod+'|'+d.sec}):{ubic:S.repo?.def,ver:1,est:'Vigente',apr:today()};
+ const fields=d&&d.archivo?DOCF.map(f=>f[0]==='archivo'?['archivo','Reemplazar archivo (ya tiene uno cargado)','file']:f):DOCF;
+ openForm(d?'Editar documento':'Nuevo documento',fields,vals,async v=>{
+  const [mod,sec]=String(v.ubic).split('|');delete v.ubic;delete v.info;v.mod=mod;v.sec=sec;
+  const file=v.archivo;delete v.archivo;
+  if(file instanceof File){if(file.size>50*1024*1024){toast('El archivo supera 50 MB. Súbalo a Google Drive y pegue el enlace.','bad');return false}
+   const path=`${mod}/${Date.now()}-${file.name.normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^\w.\-]+/g,'_')}`;
+   toast('Subiendo archivo…');const {error}=await sb.storage.from('documentos').upload(path,file,{upsert:false});
+   if(error){toast('No se pudo subir el archivo: '+errMsg(error),'bad');return false}v.archivo=path;}
+  const ok=await dbSave('docs',v,d?.id);if(ok){toast(d?'Documento actualizado.':'Documento creado.');render()}return ok});}
+async function openDoc(id,download=false){const d=DB.docs.find(x=>x.id===id);if(!d)return;
+ if(!d.archivo&&!d.url){toast('Este documento todavía no tiene archivo ni enlace.','bad');return}
+ if(d.url&&(!d.archivo||!download)){window.open(d.url,'_blank','noopener');return}
+ const w=window.open('','_blank');
+ const {data,error}=await sb.storage.from('documentos').createSignedUrl(d.archivo,600,download?{download:true}:undefined);
+ if(error||!data){if(w)w.close();toast('No se pudo abrir el archivo: '+errMsg(error),'bad');return}
+ if(w)w.location.href=data.signedUrl;else location.href=data.signedUrl;}
+
+/* ===== Views ===== */
+function vInicio(){const u=S.user,first=(u.nombre||'').split(' ')[0];let mid='';
+ if(isAdmin()){const st=capStats(),venc=DB.docs.filter(vencida).length,abiertos=DB.planes.filter(p=>p.estado!=='Cerrado').length,ev=DB.eventos.filter(e=>String(e.fecha).slice(0,7)===today().slice(0,7)).length;
+  mid=`<div class="tiles"><div class="tile ${st.tot?pcls(st.pct):''}"><div class="v">${st.tot?st.pct+'%':'—'}</div><div class="l">Cumplimiento de capacitaciones</div></div>
+  <div class="tile ${venc?'bad':'ok'}"><div class="v">${venc}</div><div class="l">Documentos con revisión vencida</div></div>
+  <div class="tile warn"><div class="v">${abiertos}</div><div class="l">Planes de mejora abiertos</div></div>
+  <div class="tile pri"><div class="v">${ev}</div><div class="l">Eventos reportados este mes</div></div></div>`;
+  const sinCargo=DB.users.filter(x=>x.rol==='colab'&&x.estado==='Activo'&&!x.cargo).length;
+  if(sinCargo)mid+=`<p class="note">${sinCargo} usuario${sinCargo===1?'':'s'} sin cargo asignado. Complete su cargo en <button class="linkbtn" data-act="nav" data-m="usuarios">Usuarios</button> para asignarles capacitaciones por cargo.</p>`;
+ }else{const p=myTrainings().filter(x=>!x.done);
+  mid=`<section class="card" style="display:grid;gap:12px"><div class="sec-h"><h2>Mis capacitaciones pendientes</h2><span class="badge ${p.length?'warn':'ok'}">${p.length} pendiente${p.length===1?'':'s'}</span></div>
+  ${p.length?`<div class="list">${p.map(x=>`<div class="li"><div><h3>${esc(x.t.titulo)}</h3><div class="meta">${esc(x.t.modulo)} · Fecha límite ${fd(x.t.limite)}${x.t.limite&&x.t.limite<today()?' · <b style="color:var(--bad)">Vencida</b>':''}</div></div><button class="btn pri sm" data-act="cap-open" data-id="${x.t.id}">Realizar ahora</button></div>`).join('')}</div>`:'<p class="muted">Está al día. No tiene actividades pendientes.</p>'}</section>`;}
+ return `<section class="card hello"><div><h1>Hola, ${esc(first)}</h1><p>${isAdmin()?'Panel de Calidad: revise el estado general y gestione la información institucional.':'Consulte los documentos vigentes y complete sus capacitaciones.'}</p></div></section>
+ ${mid}<div class="sec-h"><h2>Módulos</h2></div>
+ <div class="grid">${MODS.map(m=>`<button class="card mod" data-act="nav" data-m="${m.id}"><span class="ic">${ico(m.id)}</span><h3>${esc(m.nom)}</h3><p>${esc(m.d)}</p><small>${m.secs.length>1?m.secs.length+' secciones':'Abrir'} →</small></button>`).join('')}</div>`;}
+function vNoAuth(){return `<section class="card" style="text-align:center;display:grid;gap:12px;justify-items:center;padding:48px 20px"><span class="badge bad">${ico('alert')}Acceso no autorizado</span><h1>No tiene permisos para ver esta página</h1><p class="muted">Esta sección es solo para el rol Administrador (Calidad).</p><button class="btn pri" data-act="nav" data-m="inicio">Volver a Inicio</button></section>`}
+
+/* Calidad */
+function vListado(){return pageHead('Listado Maestro de Documentos','Todos los documentos controlados de la institución, con su versión y fecha de revisión.')+docRepo(()=>true,{showMod:true,title:'Documentos de todos los módulos'})}
+function vPlanes(){const r=[...DB.planes].sort(byDate('limite')).reverse(),ven=r.filter(p=>estPlan(p)==='Vencido').length;
+ return pageHead('Planes de Mejora','Acciones derivadas de auditorías, PAMEC, eventos adversos, habilitación y PQRS.',newBtn('planes','Nuevo plan de mejora'))+
+ `<div class="tiles"><div class="tile pri"><div class="v">${r.length}</div><div class="l">Planes registrados</div></div><div class="tile warn"><div class="v">${r.filter(p=>p.estado!=='Cerrado').length}</div><div class="l">Abiertos o en ejecución</div></div><div class="tile ${ven?'bad':'ok'}"><div class="v">${ven}</div><div class="l">Vencidos</div></div><div class="tile"><div class="v">${r.length?Math.round(r.reduce((s,p)=>s+Number(p.avance||0),0)/r.length)+'%':'—'}</div><div class="l">Avance promedio</div></div></div>`+entTable('planes',r)+docRepo(d=>d.sec==='planes',{def:'calidad|planes',title:'Soportes de planes de mejora'})}
+function vPamec(){const st=[...DB.pamec].sort((a,b)=>a.orden-b.orden);
+ return pageHead('PAMEC','Programa de Auditoría para el Mejoramiento de la Calidad: ruta crítica.')+
+ `<section class="card" style="display:grid;gap:14px"><h2>Ruta crítica</h2><div class="steps">${st.map(p=>`<div class="step ${p.est==='Completado'?'ok':p.est==='En curso'?'warn':''}"><span class="n">${p.est==='Completado'?ico('check'):esc(p.orden)}</span><div><h3>${esc(p.nom)}</h3>${p.detalle?`<p>${esc(p.detalle)}</p>`:''}<div style="margin-top:6px;display:flex;gap:6px;align-items:center;flex-wrap:wrap">${badge(p.est)}${can('edit')?`<button class="btn sm ghost" data-act="ent-edit" data-e="pamec" data-id="${p.id}">${ico('edit')}Editar</button>`:''}</div></div></div>`).join('')}</div></section>`+docRepo(d=>d.sec==='pamec',{def:'calidad|pamec',title:'Documentos del PAMEC'})}
+const indSt=(i,v)=>{v=Number(v);const m=Number(i.meta);if(i.sen==='mayor')return v>=m?'ok':v>=m*0.9?'warn':'bad';return v<=m?'ok':v<=m*1.1?'warn':'bad'};
+const indF=(i,v)=>(Number(i.dec)?Number(v).toFixed(1).replace('.',','):Math.round(v))+(i.u||'');
+const serie=i=>DB.vals.filter(v=>v.ind_id===i.id).sort((a,b)=>String(a.periodo).localeCompare(String(b.periodo))).slice(-12);
+function vIndicadores(){const L=[...DB.ind].sort((a,b)=>(a.orden||0)-(b.orden||0));
+ return pageHead('Indicadores de Gestión','Resultado mensual frente a la meta. Verde: cumple · Ámbar: cerca de la meta · Rojo: no cumple.',newBtn('ind','Nuevo indicador'))+
+ (L.length?`<div class="grid w">${L.map(i=>{const s=serie(i),last=s[s.length-1],prev=s[s.length-2];
+  const ed=can('edit')?`<div class="acts"><button class="btn sm pri" data-act="ind-upd" data-id="${i.id}">${ico('plus')}Resultado</button><button class="btn sm ghost ic" data-act="ent-edit" data-e="ind" data-id="${i.id}" title="Editar indicador" aria-label="Editar indicador">${ico('edit')}</button></div>`:'';
+  if(!last)return `<article class="card ind"><div class="ind-h"><h3>${esc(i.nom)}</h3>${ed}</div><div class="ind-m">Meta ${i.sen==='mayor'?'≥':'≤'} ${esc(indF(i,i.meta))}</div><div class="empty">Sin resultados registrados todavía.</div></article>`;
+  const v=Number(last.valor),st=indSt(i,v),d=prev?v-Number(prev.valor):null,better=d!==null&&(i.sen==='mayor'?d>0:d<0);
+  return `<article class="card ind"><div class="ind-h"><h3>${esc(i.nom)}</h3>${ed}</div>
+  <div class="ind-v"><span class="big ${st}">${esc(indF(i,v))}</span>${d===null?'':`<span class="trend ${d===0?'neu':better?'ok':'bad'}">${d===0?'Sin cambio':(d>0?'▲ ':'▼ ')+esc(indF(i,Math.abs(d)))+' vs. mes anterior'}</span>`}</div>
+  <div class="ind-m"><span class="dot ${st}"></span>Meta ${i.sen==='mayor'?'≥':'≤'} ${esc(indF(i,i.meta))} · Corte ${esc(mesL(last.periodo).toLowerCase())}</div>
+  ${s.length>1?`<div class="fig" data-ind="${i.id}"><svg role="img" aria-label="Tendencia mensual"></svg></div><div class="legend"><span><i></i>Resultado mensual</span><span><i class="g"></i>Meta</span></div>`:'<p class="muted small">La gráfica aparece desde el segundo mes registrado.</p>'}</article>`}).join('')}</div>`:`<div class="card empty">Aún no hay indicadores.</div>`)}
+function drawInd(fig){const i=DB.ind.find(x=>x.id===fig.dataset.ind);const svg=fig.querySelector('svg');if(!i||!svg)return;
+ const s=serie(i);if(s.length<2)return;const W=fig.clientWidth,H=fig.clientHeight;if(!W||!H)return;const nar=W<380;
+ const L=36,R=12,T=10,B=22,vals=s.map(x=>Number(x.valor)),all=[...vals,Number(i.meta)];
+ let lo=Math.min(...all),hi=Math.max(...all);const pd=(hi-lo)*0.18||1;lo-=pd;hi+=pd;
+ const x=k=>L+(W-L-R)*k/(vals.length-1),y=v=>T+(H-T-B)*(1-(v-lo)/(hi-lo));
+ const tk=[lo+(hi-lo)*0.15,(lo+hi)/2,hi-(hi-lo)*0.15],f=v=>Number(i.dec)?v.toFixed(1).replace('.',','):Math.round(v);
+ const step=vals.length<=6?1:nar?3:2,lastK=vals.length-1;
+ let g=tk.map(t=>`<line class="gl" x1="${L}" x2="${W-R}" y1="${y(t)}" y2="${y(t)}"/><text class="tk" x="${L-6}" y="${y(t)+4}" text-anchor="end">${f(t)}</text>`).join('');
+ g+=`<line class="goal" x1="${L}" x2="${W-R}" y1="${y(i.meta)}" y2="${y(i.meta)}"/><polyline class="ln" points="${vals.map((v,k)=>x(k)+','+y(v)).join(' ')}"/>`;
+ g+=vals.map((v,k)=>`<circle class="pt ${indSt(i,v)}" cx="${x(k)}" cy="${y(v)}" r="${k===lastK?5:3}"/>`).join('');
+ g+=s.map((p,k)=>((lastK-k)%step===0)?`<text class="tk" x="${x(k)}" y="${H-5}" text-anchor="${k===lastK?'end':k===0?'start':'middle'}">${esc(mesC(p.periodo))}</text>`:'').join('');
+ svg.innerHTML=g;}
+function indForm(id){const i=DB.ind.find(x=>x.id===id),s=serie(i),d=new Date();
+ const prevM=`${d.getMonth()===0?d.getFullYear()-1:d.getFullYear()}-${pad(d.getMonth()===0?12:d.getMonth())}`;
+ openForm('Registrar resultado',[['info',i.nom,'info'],['periodo','Mes','month'],['valor','Resultado del mes','number']],{periodo:prevM},async v=>{
+  const {error}=await sb.from('indicador_valores').upsert({ind_id:i.id,periodo:v.periodo,valor:v.valor},{onConflict:'ind_id,periodo'});
+  if(error){toast(errMsg(error),'bad');return false}await reload('vals');toast('Resultado registrado.');render();return true},'Guardar resultado');}
+function vHab(){const stds=[...new Set(DB.hab.map(h=>h.std))];const tot=DB.hab.filter(h=>h.est!=='NA'),tc=pc(tot.filter(h=>h.est==='C').length,tot.length);
+ const L={C:'Cumple',NC:'No cumple',NA:'No aplica'};
+ return pageHead('Habilitación (Res. 3100 de 2019)','Autoevaluación de las condiciones de habilitación por estándar.',newBtn('hab','Nuevo criterio'))+
+ `<div class="tiles"><div class="tile ${pcls(tc)}"><div class="v">${tc}%</div><div class="l">Cumplimiento general</div></div><div class="tile bad"><div class="v">${DB.hab.filter(h=>h.est==='NC').length}</div><div class="l">Criterios que no cumplen</div></div><div class="tile"><div class="v">${DB.hab.length}</div><div class="l">Criterios evaluados</div></div></div>
+ <div class="grid w">${stds.map(s=>{const it=DB.hab.filter(h=>h.std===s).sort((a,b)=>(a.orden||0)-(b.orden||0)),ap=it.filter(h=>h.est!=='NA'),v=pc(ap.filter(h=>h.est==='C').length,ap.length);
+ return `<section class="card" style="display:grid;gap:12px;align-content:start"><h3>${esc(s)}</h3>${prog(v,pcls(v))}<div class="list">${it.map(h=>`<div style="display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap;font-size:14px;border-top:1px solid var(--line);padding-top:10px"><span style="flex:1 1 180px">${esc(h.item)}</span>${can('edit')?`<span style="display:flex;gap:4px"><select data-hab="${h.id}" style="width:auto;min-height:38px;font-size:14px" aria-label="Estado del criterio">${Object.entries(L).map(([k,l])=>`<option value="${k}"${h.est===k?' selected':''}>${l}</option>`).join('')}</select><button class="btn sm ghost ic" data-act="ent-edit" data-e="hab" data-id="${h.id}" title="Editar criterio" aria-label="Editar criterio">${ico('edit')}</button></span>`:badge(L[h.est])}</div>`).join('')}</div></section>`}).join('')}</div>`+docRepo(d=>d.sec==='habilitacion',{def:'calidad|habilitacion',title:'Documentos de habilitación'})}
+
+/* Seguridad del paciente */
+function vSPPrograma(){return pageHead('Programa de Seguridad del Paciente','Política, objetivos y documentos del programa institucional.')+docRepo(d=>d.mod==='seguridad'&&d.sec==='programa',{def:'seguridad|programa',title:'Documentos del programa'})}
+function vPaquetes(){return pageHead('Paquetes Instruccionales','Buenas prácticas para la seguridad del paciente adoptadas por la institución.')+
+ `<div class="grid w">${PAQ.map(p=>`<section class="card" style="display:grid;gap:8px;align-content:start"><h3>${esc(p[0])}</h3><p class="muted small">${esc(p[1])}</p></section>`).join('')}</div>`+docRepo(d=>d.sec==='paquetes',{def:'seguridad|paquetes',title:'Protocolos de los paquetes'})}
+function vRondas(){const r=[...DB.rondas].sort(byDate('fecha'));
+ return pageHead('Rondas de Seguridad','Programación, hallazgos y compromisos de las rondas por servicio.',newBtn('rondas','Programar ronda'))+
+ `<div class="tiles"><div class="tile ok"><div class="v">${r.filter(x=>x.estado==='Realizada').length}</div><div class="l">Rondas realizadas</div></div><div class="tile warn"><div class="v">${r.filter(x=>x.estado==='Programada').length}</div><div class="l">Rondas programadas</div></div></div>`+entTable('rondas',r)+docRepo(d=>d.sec==='rondas',{def:'seguridad|rondas',title:'Formatos y soportes de rondas'})}
+function vRiesgos(){const P=['Raro','Improbable','Posible','Probable','Casi seguro'],I=['Insignificante','Menor','Moderado','Mayor','Catastrófico'];
+ const lv=v=>v>=15?4:v>=10?3:v>=5?2:1;let cells='';
+ for(let p=5;p>=1;p--){cells+=`<div class="ax" style="justify-content:flex-end">${p}<span class="hn">&nbsp;· ${P[p-1]}</span></div>`;for(let i=1;i<=5;i++){const n=DB.riesgos.filter(r=>Number(r.prob)===p&&Number(r.imp)===i).length;cells+=`<div class="c lv${lv(p*i)}${n?'':' z'}" title="Probabilidad ${p}, impacto ${i}">${n||''}</div>`}}
+ cells+='<div class="ax"></div>'+I.map((x,k)=>`<div class="ax">${k+1}<span class="hn"><br>${x}</span></div>`).join('');
+ return pageHead('Matriz de Riesgos','Riesgos de la atención valorados por probabilidad e impacto.',newBtn('riesgos','Nuevo riesgo'))+
+ `<section class="card" style="display:grid;gap:14px"><div class="sec-h"><h2>Mapa de calor</h2><div class="legend"><span><i class="sq lv1"></i>Bajo</span><span><i class="sq lv2"></i>Moderado</span><span><i class="sq lv3"></i>Alto</span><span><i class="sq lv4"></i>Extremo</span></div></div>
+ <div style="display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px;align-items:center"><div class="muted small" style="writing-mode:vertical-rl;transform:rotate(180deg);text-align:center">Probabilidad</div><div><div class="heat">${cells}</div><p class="muted small" style="text-align:center;margin-top:6px">Impacto</p></div></div><p class="muted small">Cada número indica cuántos riesgos están en esa casilla. Probabilidad: 1 raro a 5 casi seguro. Impacto: 1 insignificante a 5 catastrófico.</p></section>`+entTable('riesgos',[...DB.riesgos].sort((a,b)=>b.prob*b.imp-a.prob*a.imp))}
+const EVF=[['note','No escriba nombres, documentos ni datos que identifiquen al paciente.','note'],['fecha','Fecha del evento','date'],['serv','Servicio','select',SERV],['tipo','Tipo','select',['Incidente','Evento adverso prevenible','Evento adverso no prevenible']],['sev','Severidad','select',['Leve','Moderado','Grave','Centinela']],['descr','¿Qué pasó? (descripción)','textarea'],['acc','Acciones inmediatas realizadas','textarea',null,OPT],['anon','Reportar de forma anónima (Calidad no verá su nombre y el reporte no aparecerá en "Mis reportes")','check']];
+function vEventos(){const admin=isAdmin(),rows=[...DB.eventos].sort(byDate('fecha'));
+ const who=e=>e.anon||!e.autor?'<span class="muted">Anónimo</span>':esc(userBy(e.autor)?.nombre||'—');
+ let top=`<section class="card" style="display:grid;gap:10px"><h2>¿Identificó un incidente o evento adverso?</h2><p class="muted" style="max-width:70ch">Repórtelo aquí. El reporte es confidencial y no punitivo: su objetivo es aprender y evitar que se repita.</p><div><button class="btn pri" data-act="ev-new">${ico('plus')}Reportar evento</button></div></section>`;
+ if(admin&&rows.length){const TP=['Incidente','Evento adverso prevenible','Evento adverso no prevenible'],mx=Math.max(1,...TP.map(t=>rows.filter(e=>e.tipo===t).length));
+  top+=`<section class="card" style="display:grid;gap:14px"><h2>Reportes por tipo</h2><div class="bars">${TP.map(t=>{const n=rows.filter(e=>e.tipo===t).length;return `<div class="bar"><span class="lb">${esc(t)}</span><span class="tr"><b style="width:${n/mx*100}%;background:var(--pri)"></b></span><span class="num"><b>${n}</b></span></div>`}).join('')}</div></section>`;}
+ return pageHead('Reporte de Eventos Adversos',admin?'Todos los reportes recibidos. Cambie el estado a medida que avanza el análisis.':'Sus reportes enviados y el estado de cada uno.')+top+
+ `<div class="sec-h"><h2>${admin?'Todos los reportes':'Mis reportes'}</h2></div>`+
+ tbl(['Fecha','Servicio','Tipo','Severidad','Descripción',...(admin?['Reportado por']:[]),'Estado'],rows.map(e=>`<tr><td>${fd(e.fecha)}</td><td>${esc(e.serv)}</td><td>${esc(e.tipo)}</td><td>${badge(e.sev)}</td><td>${esc(e.descr)}${e.acc?`<div class="muted small">Acciones: ${esc(e.acc)}</div>`:''}</td>${admin?`<td>${who(e)}</td>`:''}<td>${admin?`<select data-evst="${e.id}" style="width:auto;min-height:38px;font-size:14px" aria-label="Estado del reporte">${['Recibido','En análisis','Cerrado'].map(s=>`<option${e.estado===s?' selected':''}>${s}</option>`).join('')}</select>`:badge(e.estado)}</td></tr>`),'stack',admin?'Aún no se han recibido reportes.':'Aún no ha enviado reportes con su nombre.')}
+
+/* Ambiental */
+function vRH1(){const r=[...DB.rh1].sort((a,b)=>String(a.periodo).localeCompare(String(b.periodo))).slice(-12),tot=x=>RCAT.reduce((s,c)=>s+Number(x[c[0]]||0),0),mx=Math.max(1,...r.map(tot));
+ const last=r[r.length-1],lp=last?RCAT.filter(c=>c[2]==='p').reduce((s,c)=>s+Number(last[c[0]]||0),0):0,ln=last?RCAT.filter(c=>c[2]==='np').reduce((s,c)=>s+Number(last[c[0]]||0),0):0;
+ return pageHead('Formulario RH1','Registro mensual de generación de residuos por tipo, en kilogramos.',newBtn('rh1','Registrar mes'))+
+ (last?`<div class="tiles"><div class="tile pri"><div class="v">${kg(ln+lp)} kg</div><div class="l">Total ${esc(mesL(last.periodo))}</div></div><div class="tile bad"><div class="v">${kg(lp)} kg</div><div class="l">Residuos peligrosos</div></div><div class="tile"><div class="v">${kg(ln)} kg</div><div class="l">Residuos no peligrosos</div></div></div>
+ <section class="card" style="display:grid;gap:14px"><h2>Generación por mes</h2><div class="legend">${RCAT.map(c=>`<span><i class="sq" style="background:${RCOL[c[0]]}"></i>${esc(c[1])}</span>`).join('')}</div>
+ <div class="bars stackbar">${r.map(x=>`<div class="bar"><span class="lb">${esc(mesL(x.periodo))}</span><span class="tr" style="width:${tot(x)/mx*100}%">${RCAT.map(c=>`<b title="${esc(c[1])}: ${kg(x[c[0]])} kg" style="flex:${Number(x[c[0]])||0} 0 0;background:${RCOL[c[0]]}"></b>`).join('')}</span><span class="num">${kg(tot(x))} kg</span></div>`).join('')}</div></section>`:'')+
+ entTable('rh1',[...DB.rh1].sort((a,b)=>String(b.periodo).localeCompare(String(a.periodo))))}
+function vLimpieza(){const areas=[...new Set(DB.limpieza.map(l=>l.area))];
+ return pageHead('Limpieza y Desinfección de Áreas','Verificación de limpieza rutinaria y terminal por área.',newBtn('limpieza','Nuevo registro'))+
+ (areas.length?`<section class="card" style="display:grid;gap:14px"><h2>Cumplimiento por área</h2><div class="bars">${areas.map(a=>{const it=DB.limpieza.filter(l=>l.area===a),v=pc(it.filter(l=>l.estado==='Cumple').length,it.length);return `<div class="bar"><span class="lb">${esc(a)}</span><span class="tr"><b style="width:${v}%;background:var(--${pcls(v)})"></b></span><span class="num"><b>${v}%</b></span></div>`}).join('')}</div></section>`:'')+entTable('limpieza',[...DB.limpieza].sort(byDate('fecha')))+docRepo(d=>d.sec==='limpieza',{def:'ambiental|limpieza',title:'Protocolos y formatos de limpieza'})}
+
+/* IAAS */
+function vSeguimiento(){const TP=['Higiene de manos','Uso de EPP'];
+ const agg=(t,s)=>{const it=DB.obs.filter(o=>o.tipo===t&&(!s||o.serv===s));return {v:pc(it.reduce((a,o)=>a+Number(o.cumpl||0),0),it.reduce((a,o)=>a+Number(o.oport||0),0)),n:it.length}};
+ return pageHead('Seguimiento de Adherencia','Observación directa de higiene de manos y uso de elementos de protección personal.',newBtn('obs','Nueva observación'))+
+ `<div class="tiles">${TP.map(t=>{const a=agg(t);return `<div class="tile ${a.n?pcls(a.v):''}"><div class="v">${a.n?a.v+'%':'—'}</div><div class="l">Adherencia global · ${esc(t)}</div></div>`}).join('')}</div>
+ <div class="grid w">${TP.map(t=>{const sv=[...new Set(DB.obs.filter(o=>o.tipo===t).map(o=>o.serv))];return sv.length?`<section class="card" style="display:grid;gap:14px"><h2>${esc(t)} por servicio</h2><div class="bars">${sv.map(s=>{const v=agg(t,s).v;return `<div class="bar"><span class="lb">${esc(s)}</span><span class="tr"><b style="width:${v}%;background:var(--${pcls(v)})"></b></span><span class="num"><b>${v}%</b></span></div>`}).join('')}</div></section>`:''}).join('')}</div>`+entTable('obs',[...DB.obs].sort(byDate('fecha')))}
+
+/* SST */
+function vPeligros(){const C=['Biológico','Biomecánico','Psicosocial','Químico','Físico','Condiciones de seguridad','Fenómenos naturales'];const r=DB.peligros.filter(p=>!S.fclas||p.clas===S.fclas);
+ return pageHead('Matriz de Peligros','Identificación de peligros y valoración de riesgos según la GTC 45.',newBtn('peligros','Nuevo peligro'))+
+ `<div class="filters"><label class="fld" style="flex:0 1 320px"><span>Clasificación</span><select data-fclas><option value="">Todas</option>${C.map(c=>`<option${S.fclas===c?' selected':''}>${c}</option>`).join('')}</select></label></div>`+entTable('peligros',r)+docRepo(d=>d.sec==='peligros',{def:'sst|peligros',title:'Documentos de la matriz de peligros'})}
+function vEmergencias(){return pageHead('Planes de Emergencia','Plan de respuesta, brigada y contactos de emergencia.')+
+ `<div class="grid w"><section class="card" style="display:grid;gap:12px;align-content:start"><div class="sec-h"><h2>Brigada de emergencias</h2>${can('create')?`<button class="btn sm pri" data-act="ent-new" data-e="brigada">${ico('plus')}Agregar</button>`:''}</div>${entTable('brigada',DB.brigada)}</section>
+ <section class="card" style="display:grid;gap:12px;align-content:start"><h2>Líneas de emergencia nacionales</h2><div class="list">${[['Línea única de emergencias','123'],['Bomberos','119'],['Cruz Roja','132']].map(c=>`<div class="li"><span>${esc(c[0])}</span><b style="font-size:20px">${esc(c[1])}</b></div>`).join('')}</div></section></div>`+
+ docRepo(d=>d.sec==='emergencias',{def:'sst|emergencias',title:'Documentos del plan de emergencias'})}
+function vComites(){const cs=[...DB.comites].sort((a,b)=>(a.orden||0)-(b.orden||0));const c=cs.find(x=>x.id===S.tab)||cs[0];
+ if(!c)return pageHead('COPASST y Comités','')+'<div class="card empty">No hay comités configurados.</div>';
+ const mem=DB.miembros.filter(m=>m.comite===c.id),reu=DB.reuniones.filter(r=>r.comite===c.id).sort((a,b)=>String(a.fecha).localeCompare(String(b.fecha)));
+ const ex=` data-c="${esc(c.id)}"`;
+ return pageHead('COPASST y Comités','Integrantes, reuniones y actas de los comités institucionales.')+
+ `<div class="tabs" role="tablist">${cs.map(x=>`<button class="tab ${x.id===c.id?'on':''}" role="tab" aria-selected="${x.id===c.id}" data-act="tab" data-id="${esc(x.id)}">${esc(x.nom)}</button>`).join('')}</div>
+ <div class="grid w"><section class="card" style="display:grid;gap:12px;align-content:start"><div class="sec-h"><h2>Integrantes</h2>${can('create')?`<button class="btn sm pri" data-act="ent-new" data-e="miembros"${ex}>${ico('plus')}Agregar</button>`:''}</div>${entTable('miembros',mem)}</section>
+ <section class="card" style="display:grid;gap:12px;align-content:start"><div class="sec-h"><h2>Reuniones</h2>${can('create')?`<button class="btn sm pri" data-act="ent-new" data-e="reuniones"${ex}>${ico('plus')}Programar</button>`:''}</div>${entTable('reuniones',reu)}</section></div>`+
+ docRepo(d=>d.sec==='comites',{def:'sst|comites',title:'Actas de comités'})}
+
+/* ===== Capacitaciones ===== */
+const assigned=(t,u)=>u.rol==='colab'&&u.estado==='Activo'&&((t.cargos||[]).includes('Todos')||(u.cargo&&(t.cargos||[]).includes(u.cargo)));
+function tStatus(t,u){const a=DB.att.filter(x=>x.cap_id===t.id&&x.uid===u.id).sort((x,y)=>x.intento-y.intento),ok=a.some(x=>x.ok),asis=DB.asis.some(x=>x.cap_id===t.id&&x.uid===u.id);
+ return {a,ok,asis,used:a.length,left:Math.max(0,t.intentos-a.length),best:a.reduce((m,x)=>Math.max(m,x.nota),0),done:ok||a.length>=t.intentos}}
+function myTrainings(){return DB.trainings.filter(t=>assigned(t,S.user)).map(t=>Object.assign({t},tStatus(t,S.user)))}
+function capStats(){let tot=0,ok=0;DB.trainings.forEach(t=>DB.users.forEach(u=>{if(assigned(t,u)){tot++;if(tStatus(t,u).ok)ok++}}));return {tot,ok,pct:pc(ok,tot)}}
+const CARGOS=()=>[...new Set(DB.users.filter(u=>u.rol==='colab'&&u.cargo).map(u=>u.cargo))].sort();
+const MODN=MODS.filter(m=>m.id!=='capacitaciones').map(m=>m.nom);
+function vCap(){
+ if(S.sub==='new')return isAdmin()?vWizard():vNoAuth();
+ if(S.sub&&S.sub.startsWith('t:'))return vTake(S.sub.slice(2));
+ if(S.sub&&S.sub.startsWith('r:'))return isAdmin()?vRes(S.sub.slice(2)):vNoAuth();
+ const L=[...DB.trainings].sort(byDate('creado'));
+ if(isAdmin()){const st=capStats();
+  return pageHead('Capacitaciones','Publique material educativo con evaluación y haga seguimiento al cumplimiento.',`<button class="btn pri" data-act="cap-new">${ico('plus')}Nueva actividad</button>`)+
+  `<div class="tiles"><div class="tile pri"><div class="v">${L.length}</div><div class="l">Actividades publicadas</div></div><div class="tile ${st.tot?pcls(st.pct):''}"><div class="v">${st.tot?st.pct+'%':'—'}</div><div class="l">Cumplimiento global</div></div><div class="tile"><div class="v">${st.ok} / ${st.tot}</div><div class="l">Evaluaciones aprobadas / asignadas</div></div></div>`+
+  tbl(['Actividad','Módulo','Fecha límite','Dirigida a','Avance','Acciones'],L.map(t=>{const as=DB.users.filter(u=>assigned(t,u)),ok=as.filter(u=>tStatus(t,u).ok).length,v=pc(ok,as.length);
+   return `<tr><td><b>${esc(t.titulo)}</b><div class="muted small">${(t.preg||[]).length} preguntas · aprueba con ${esc(t.minimo)}%${t.asistencia?' · con asistencia':''}</div></td><td>${esc(t.modulo)}</td><td>${fd(t.limite)}</td><td>${esc((t.cargos||[]).join(', '))}</td><td>${prog(v,pcls(v))}<div class="muted small">${ok} de ${as.length} aprobados</div></td><td class="ra"><div class="acts" style="justify-content:flex-end"><button class="btn sm ghost" data-act="cap-res" data-id="${t.id}">Resultados</button><button class="btn sm ghost" data-act="cap-open" data-id="${t.id}">${ico('eye')}Vista previa</button></div></td></tr>`}),'stack','Aún no hay actividades. Use "Nueva actividad" para crear la primera.');}
+ const all=myTrainings(),pend=all.filter(x=>!x.done),comp=all.filter(x=>x.done),list=S.ctab==='pend'?pend:comp;
+ return pageHead('Capacitaciones','Revise el material, responda la evaluación y deje su registro.')+
+ `<div class="tabs" role="tablist"><button class="tab ${S.ctab==='pend'?'on':''}" data-act="ctab" data-id="pend">Pendientes (${pend.length})</button><button class="tab ${S.ctab==='comp'?'on':''}" data-act="ctab" data-id="comp">Completadas (${comp.length})</button></div>`+
+ (list.length?`<div class="grid w">${list.map(x=>{const venc=!x.done&&x.t.limite&&x.t.limite<today();return `<section class="card" style="display:grid;gap:10px;align-content:start"><div class="sec-h"><span class="badge neu">${esc(x.t.modulo)}</span>${x.done?badge(x.ok?'Aprobado':'No aprobado'):venc?badge('Vencida'):badge('Pendiente')}</div><h3>${esc(x.t.titulo)}</h3><p class="muted small">${esc(x.t.descr)}</p><p class="small">Fecha límite: <b>${fd(x.t.limite)}</b>${x.used?` · Intentos usados: ${x.used} de ${esc(x.t.intentos)} · Mejor nota: <b>${x.best}%</b>`:''}</p><div><button class="btn ${x.done?'ghost':'pri'}" data-act="cap-open" data-id="${x.t.id}">${x.done?'Ver detalle':x.used?'Reintentar':'Iniciar actividad'}</button></div></section>`}).join('')}</div>`:`<div class="card empty">${S.ctab==='pend'?'No tiene actividades pendientes. ¡Buen trabajo!':'Aún no ha completado actividades.'}</div>`);}
+function matHTML(m){const ic=m.tipo==='Video'?'video':m.tipo==='Documento'?'file':'link';
+ const d=m.tipo==='Documento'?DB.docs.find(x=>x.id===m.doc_id):null;
+ const btn=m.tipo==='Documento'?(d?`<button class="btn sm" data-act="doc-view" data-id="${d.id}">${ico('eye')}Abrir</button>`:'<span class="muted small">Documento no disponible</span>'):(m.url?`<a class="btn sm" href="${esc(m.url)}" target="_blank" rel="noopener">${ico('eye')}Abrir</a>`:'');
+ return `<div class="mat"><div style="display:flex;gap:12px;align-items:center"><span class="ic">${ico(ic)}</span><div><b>${esc(m.titulo||(d?d.cod+' '+d.nom:''))}</b><div class="muted small">${m.tipo==='Documento'?'Documento de la intranet':esc(m.tipo)}${m.tipo==='Video'?' · se abre en una pestaña nueva':''}</div></div></div>${btn}</div>`}
+function vTake(id){const t=DB.trainings.find(x=>x.id===id);if(!t){S.sub=null;return vCap()}
+ const back=`<div><button class="btn ghost sm" data-act="cap-back">${ico('back')}Volver a capacitaciones</button></div>`;
+ const head=pageHead(t.titulo,t.descr)+`<div class="filters small muted" style="gap:18px"><span>Módulo: <b>${esc(t.modulo)}</b></span><span>Fecha límite: <b>${fd(t.limite)}</b></span><span>Aprobación: <b>${esc(t.minimo)}%</b></span><span>Intentos permitidos: <b>${esc(t.intentos)}</b></span></div>`;
+ const mat=`<section class="card" style="display:grid;gap:12px"><h2>1. Material educativo</h2>${(t.material||[]).map(matHTML).join('')||'<p class="muted">Sin material.</p>'}</section>`;
+ if(isAdmin()){const k=(DB.claves.find(c=>c.cap_id===t.id)||{}).claves||[];
+  return back+head+`<p class="info">Vista previa: así ve la actividad un colaborador. Las respuestas correctas están resaltadas (solo usted las ve).</p>`+mat+
+  `<section class="card" style="display:grid;gap:12px"><h2>2. Evaluación</h2>${(t.preg||[]).map((p,i)=>`<div class="q"><b>${i+1}. ${esc(p.q)}</b>${p.o.map((o,j)=>`<div class="opt ${j===k[i]?'right':''}">${j===k[i]?ico('check'):'<span style="width:18px"></span>'}${esc(o)}</div>`).join('')}</div>`).join('')}</section>`;}
+ const st=tStatus(t,S.user),u=S.user;let res='';
+ if(S.last&&S.last.tid===t.id){const L=S.last;res=`<section class="card result" style="border-color:var(--${L.ok?'ok':'bad'})"><span class="big ${L.ok?'ok':'bad'}">${L.nota}%</span><div><h2>${L.ok?'¡Aprobado!':'No aprobado'}</h2><p class="muted">${L.ok?'Su resultado quedó registrado con su nombre, cargo y fecha.':st.left?`Necesita ${esc(t.minimo)}% para aprobar. Le queda${st.left===1?'':'n'} ${st.left} intento${st.left===1?'':'s'}: revise el material y vuelva a intentarlo.`:'Agotó los intentos permitidos. Comuníquese con el área de Calidad.'}</p></div></section>`}
+ const asis=t.asistencia?`<section class="card" style="display:grid;gap:10px"><h2>Registro de asistencia</h2>${st.asis?`<p>${badge('Asistencia registrada')}</p>`:`<p class="muted">Si asistió a la sesión presencial, registre su asistencia.</p><div><button class="btn" data-act="att-reg" data-id="${t.id}">${ico('check')}Registrar asistencia</button></div>`}</section>`:'';
+ let quiz='';
+ if(st.ok){const ap=st.a.find(a=>a.ok);quiz=`<section class="card" style="display:grid;gap:8px"><h2>2. Evaluación</h2><p>${badge('Aprobado')} Nota: <b>${ap.nota}%</b> · ${fd(ap.fecha)}</p></section>`}
+ else if(!st.left)quiz=`<section class="card"><h2>2. Evaluación</h2><p class="muted" style="margin-top:8px">Agotó los ${esc(t.intentos)} intentos. Mejor nota: ${st.best}%. Comuníquese con el área de Calidad.</p></section>`;
+ else quiz=`<form id="quiz" data-tid="${t.id}" class="card" style="display:grid;gap:14px" novalidate><h2>2. Evaluación de conocimientos</h2><p class="muted small">Intento ${st.used+1} de ${esc(t.intentos)} · Se registrará: ${esc(u.nombre)}${u.cargo?', '+esc(u.cargo):''}, ${fd(today())}</p>
+ <label class="chk"><input type="checkbox" name="leido"><span>Confirmo que revisé el material educativo.</span></label>
+ ${(t.preg||[]).map((p,k)=>`<fieldset class="q" style="margin:0"><legend>${k+1}. ${esc(p.q)}</legend>${p.o.map((o,j)=>`<label class="opt"><input type="radio" name="q${k}" value="${j}">${esc(o)}</label>`).join('')}</fieldset>`).join('')}
+ <p class="err" id="quiz-err" hidden></p><div><button class="btn pri" type="submit">${ico('check')}Enviar respuestas</button></div></form>`;
+ return back+res+head+mat+quiz+asis;}
+function vRes(id){const t=DB.trainings.find(x=>x.id===id);if(!t){S.sub=null;return vCap()}
+ const a=DB.att.filter(x=>x.cap_id===id&&(S.fres===''||(S.fres==='ok'?x.ok:!x.ok))).sort(byDate('creado'));
+ const pend=DB.users.filter(u=>assigned(t,u)&&!tStatus(t,u).ok);
+ return `<div><button class="btn ghost sm" data-act="cap-back">${ico('back')}Volver a capacitaciones</button></div>`+pageHead('Resultados: '+t.titulo,`Fecha límite ${fdr(t.limite)} · Aprobación con ${t.minimo}%`,`<button class="btn" data-act="csv" data-id="${t.id}">${ico('copy')}Copiar en formato CSV</button>`)+
+ `<div class="filters"><label class="fld" style="flex:0 1 260px"><span>Mostrar</span><select data-fres><option value=""${S.fres===''?' selected':''}>Todos los intentos</option><option value="ok"${S.fres==='ok'?' selected':''}>Solo aprobados</option><option value="no"${S.fres==='no'?' selected':''}>Solo no aprobados</option></select></label></div>`+
+ tbl(['Nombre','Cargo','Fecha','#Calificación','#Intento','Resultado'],a.map(x=>{const u=userBy(x.uid)||{};return `<tr><td><b>${esc(u.nombre)}</b></td><td>${esc(u.cargo)}</td><td>${fd(x.fecha)}</td><td class="num"><b>${esc(x.nota)}%</b></td><td class="num">${esc(x.intento)}</td><td>${badge(x.ok?'Aprobado':'No aprobado')}</td></tr>`}),'stack','Aún no hay intentos registrados.')+
+ (t.asistencia?`<div class="sec-h"><h2>Registro de asistencia</h2></div>`+tbl(['Nombre','Cargo','Fecha','Hora'],DB.asis.filter(x=>x.cap_id===id).map(x=>{const u=userBy(x.uid)||{},h=x.creado?new Date(x.creado):null;return `<tr><td><b>${esc(u.nombre)}</b></td><td>${esc(u.cargo)}</td><td>${fd(x.fecha)}</td><td>${h?pad(h.getHours())+':'+pad(h.getMinutes()):'—'}</td></tr>`}),'stack','Nadie ha registrado asistencia.'):'')+
+ `<div class="sec-h"><h2>Pendientes por aprobar (${pend.length})</h2></div>`+tbl(['Nombre','Cargo','Área','Intentos usados'],pend.map(u=>`<tr><td><b>${esc(u.nombre)}</b></td><td>${esc(u.cargo)}</td><td>${esc(u.area)}</td><td>${tStatus(t,u).used} de ${esc(t.intentos)}</td></tr>`),'stack','Todos los colaboradores asignados aprobaron.')}
+function csvFor(id){const t=DB.trainings.find(x=>x.id===id),q=v=>'"'+String(v??'').replace(/"/g,'""')+'"';
+ return ['Actividad;Nombre;Cargo;Fecha;Calificación;Intento;Resultado',...DB.att.filter(x=>x.cap_id===id).map(x=>{const u=userBy(x.uid)||{};return [t.titulo,u.nombre,u.cargo,fdr(x.fecha),x.nota,x.intento,x.ok?'Aprobado':'No aprobado'].map(q).join(';')})].join('\n')}
+
+/* Wizard */
+const newDraft=()=>({titulo:'',descr:'',modulo:'Calidad',limite:'',cargos:['Todos'],minimo:80,intentos:2,asistencia:false,material:[{tipo:'Enlace',titulo:'',url:'',doc_id:''}],preg:[{q:'',o:['','','',''],ok:null}]});
+function vWizard(){const d=S.draft,s=S.wstep,N=['Datos generales','Material educativo','Cuestionario'];let body='';
+ const docs=[...DB.docs].filter(x=>x.est!=='Obsoleto').sort((a,b)=>String(a.cod).localeCompare(String(b.cod)));
+ if(s===1)body=`<div class="fgrid" style="padding:0"><label class="fld full"><span>Título de la actividad</span><input type="text" data-w="titulo" value="${esc(d.titulo)}" placeholder="Ej. Prevención de caídas"></label>
+ <label class="fld full"><span>Descripción breve</span><textarea data-w="descr" rows="2">${esc(d.descr)}</textarea></label>
+ <label class="fld"><span>Módulo relacionado</span><select data-w="modulo">${MODN.map(m=>`<option${d.modulo===m?' selected':''}>${esc(m)}</option>`).join('')}</select></label>
+ <label class="fld"><span>Fecha límite</span><input type="date" data-w="limite" value="${esc(d.limite)}"></label>
+ <label class="fld"><span>Nota mínima de aprobación (%)</span><input type="number" min="0" max="100" data-w="minimo" value="${esc(d.minimo)}"></label>
+ <label class="fld"><span>Intentos permitidos</span><input type="number" min="1" max="5" data-w="intentos" value="${esc(d.intentos)}"></label>
+ <div class="fld full"><span>Dirigida a</span><div class="cargos">${['Todos',...CARGOS()].map(c=>`<label class="chk"><input type="checkbox" data-wc value="${esc(c)}"${d.cargos.includes(c)?' checked':''}><span>${esc(c)}</span></label>`).join('')}</div>${CARGOS().length?'':'<span class="muted small">Cuando asigne cargos a los usuarios, podrá dirigir actividades a cargos específicos.</span>'}</div>
+ <label class="chk full"><input type="checkbox" data-w="asistencia"${d.asistencia?' checked':''}><span>Requiere registro de asistencia (sesión presencial)</span></label></div>`;
+ if(s===2)body=`<p class="muted small">Agregue enlaces (Google Drive, páginas web), videos (por ejemplo, de YouTube) o un documento ya cargado en la intranet.</p>${d.material.map((m,k)=>`<div class="wrow"><label class="fld"><span>Tipo</span><select data-wm="${k}|tipo">${[['Enlace','Enlace'],['Video','Video'],['Documento','Documento de la intranet']].map(([v,l])=>`<option value="${v}"${m.tipo===v?' selected':''}>${l}</option>`).join('')}</select></label>${m.tipo==='Documento'?`<label class="fld" style="grid-column:span 2"><span>Documento</span><select data-wm="${k}|doc_id"><option value="">Seleccione…</option>${docs.map(x=>`<option value="${x.id}"${m.doc_id===x.id?' selected':''}>${esc(x.cod+' – '+x.nom)}</option>`).join('')}</select></label>`:`<label class="fld"><span>Título</span><input type="text" data-wm="${k}|titulo" value="${esc(m.titulo)}"></label><label class="fld"><span>Enlace (URL)</span><input type="url" data-wm="${k}|url" value="${esc(m.url)}" placeholder="https://"></label>`}<button class="btn ghost" data-act="wiz-delmat" data-id="${k}" aria-label="Quitar material"${d.material.length<2?' disabled':''}>${ico('x')}</button></div>`).join('')}<div><button class="btn" data-act="wiz-addmat">${ico('plus')}Agregar material</button></div>`;
+ if(s===3)body=`${d.preg.map((p,k)=>`<div class="wq"><div class="sec-h"><b>Pregunta ${k+1}</b><button class="btn sm ghost" data-act="wiz-delq" data-id="${k}"${d.preg.length<2?' disabled':''}>${ico('x')}Quitar</button></div><label class="fld"><span>Enunciado</span><input type="text" data-wq="${k}|q" value="${esc(p.q)}"></label><span class="muted small">Escriba 4 opciones y marque la correcta:</span>${p.o.map((o,j)=>`<div class="wopt"><input type="radio" name="ok${k}" data-wq="${k}|ok" value="${j}"${p.ok===j?' checked':''} aria-label="Marcar opción ${j+1} como correcta" style="width:20px;height:20px;accent-color:var(--ok)"><input type="text" data-wq="${k}|o${j}" value="${esc(o)}" placeholder="Opción ${j+1}"></div>`).join('')}</div>`).join('')}<div><button class="btn" data-act="wiz-addq">${ico('plus')}Agregar pregunta</button></div>`;
+ return `<div><button class="btn ghost sm" data-act="cap-back">${ico('back')}Volver a capacitaciones</button></div>`+pageHead('Nueva actividad educativa','Complete los 3 pasos y publique la actividad para los colaboradores.')+
+ `<div class="wsteps">${N.map((n,k)=>`<span class="${k+1===s?'on':k+1<s?'done':''}">${k+1}. ${n}</span>`).join('')}</div><section class="card" style="display:grid;gap:14px">${body}</section>
+ <div class="acts" style="justify-content:space-between"><button class="btn" data-act="wiz-prev"${s===1?' disabled':''}>${ico('back')}Anterior</button>${s<3?`<button class="btn pri" data-act="wiz-next">Siguiente</button>`:`<button class="btn pri" data-act="wiz-pub">${ico('check')}Publicar actividad</button>`}</div>`;}
+const matOk=m=>m.tipo==='Documento'?!!m.doc_id:!!m.titulo.trim()&&!!m.url.trim();
+function wizValid(s){const d=S.draft;
+ if(s===1){if(!d.titulo.trim())return 'Escriba el título de la actividad.';if(!d.limite)return 'Seleccione la fecha límite.';if(!d.cargos.length)return 'Seleccione al menos un cargo.'}
+ if(s===2){if(!d.material.some(matOk))return 'Agregue al menos un material completo (título y enlace, o un documento).'}
+ if(s===3){for(const[k,p]of d.preg.entries()){if(!p.q.trim()||p.o.some(o=>!o.trim()))return `Complete el enunciado y las 4 opciones de la pregunta ${k+1}.`;if(p.ok===null)return `Marque la respuesta correcta de la pregunta ${k+1}.`}}
+ return '';}
+async function publishWizard(btn){const m=wizValid(1)||wizValid(2)||wizValid(3);if(m){toast(m,'bad');return}const d=S.draft;btn.disabled=true;
+ const row={titulo:d.titulo.trim(),descr:d.descr.trim(),modulo:d.modulo,limite:d.limite,cargos:d.cargos,minimo:Math.min(100,Math.max(0,Number(d.minimo)||80)),intentos:Math.max(1,Number(d.intentos)||1),asistencia:!!d.asistencia,
+  material:d.material.filter(matOk).map(x=>x.tipo==='Documento'?{tipo:'Documento',doc_id:x.doc_id}:{tipo:x.tipo,titulo:x.titulo.trim(),url:x.url.trim()}),preg:d.preg.map(p=>({q:p.q.trim(),o:p.o.map(o=>o.trim())}))};
+ const {data,error}=await sb.from('capacitaciones').insert(row).select('id').single();
+ if(error){btn.disabled=false;toast(errMsg(error),'bad');return}
+ const r2=await sb.from('capacitacion_claves').insert({cap_id:data.id,claves:d.preg.map(p=>p.ok)});
+ if(r2.error){await sb.from('capacitaciones').delete().eq('id',data.id);btn.disabled=false;toast(errMsg(r2.error),'bad');return}
+ await reload('trainings','claves');S.sub=null;S.draft=null;toast('Actividad publicada. Ya aparece en las pendientes de los colaboradores.');render();window.scrollTo(0,0);}
+
+/* ===== Usuarios ===== */
+function vUsuarios(){return pageHead('Usuarios','Personas con acceso a la intranet, su cargo y su rol.')+
+ `<div class="info">Para agregar una persona: en Supabase entre a <b>Authentication → Users → Add user → Create new user</b>, escriba su correo y una contraseña inicial y marque <b>Auto Confirm User</b>. Después aparecerá en esta lista y aquí le asigna nombre, cargo y rol. Para retirar el acceso, cambie su estado a <b>Inactivo</b>.</div>`+
+ entTable('users',[...DB.users].sort((a,b)=>String(a.nombre).localeCompare(String(b.nombre))))}
+
+/* ===== Navigation, shell, auth screens ===== */
+function crumbs(){const parts=[`<button data-act="nav" data-m="inicio">Inicio</button>`];
+ if(S.mod==='usuarios')parts.push('<b>Usuarios</b>');
+ else if(S.mod!=='inicio'){const m=modBy(S.mod),s=m.secs.find(x=>x[0]===S.sec);
+  if(m.secs.length>1){parts.push(`<button data-act="nav" data-m="${m.id}">${esc(m.nom)}</button>`);parts.push(`<b>${esc(s?s[1]:'')}</b>`)}else parts.push(`<b>${esc(m.nom)}</b>`)}
+ else parts[0]='<b>Inicio</b>';
+ return parts.join('<span aria-hidden="true">›</span>');}
+function navHTML(){let h=`<button class="nv ${S.mod==='inicio'?'on':''}" data-act="nav" data-m="inicio">${ico('home')}Inicio</button>`;
+ MODS.forEach(m=>{const on=S.mod===m.id;h+=`<button class="nv ${on?'on':''}" data-act="nav" data-m="${m.id}" aria-expanded="${on}">${ico(m.id)}${esc(m.nom)}</button>`;
+  if(on&&m.secs.length>1)h+=`<div class="subs">${m.secs.map(s=>`<button class="sb ${S.sec===s[0]?'on':''}" data-act="nav" data-m="${m.id}" data-s="${s[0]}">${esc(s[1])}</button>`).join('')}</div>`});
+ if(isAdmin())h+=`<button class="nv ${S.mod==='usuarios'?'on':''}" data-act="nav" data-m="usuarios">${ico('usuarios')}Usuarios</button>`;
+ return h;}
+const VIEWS={'calidad/listado':vListado,'calidad/planes':vPlanes,'calidad/pamec':vPamec,'calidad/indicadores':vIndicadores,'calidad/habilitacion':vHab,
+'seguridad/programa':vSPPrograma,'seguridad/paquetes':vPaquetes,'seguridad/rondas':vRondas,'seguridad/riesgos':vRiesgos,'seguridad/eventos':vEventos,
+'ambiental/pgirhs':()=>pageHead('PGIRHS','Plan de Gestión Integral de Residuos Hospitalarios y documentos relacionados.')+docRepo(d=>d.sec==='pgirhs',{def:'ambiental|pgirhs',title:'Documentos del PGIRHS'}),
+'ambiental/rh1':vRH1,'ambiental/limpieza':vLimpieza,
+'iaas/programa':()=>pageHead('Plan / Programa IAAS y PROA','Programas de prevención de infecciones y de uso racional de antimicrobianos.')+docRepo(d=>d.mod==='iaas'&&d.sec==='programa',{def:'iaas|programa',title:'Documentos de los programas'}),
+'iaas/protocolos':()=>pageHead('Protocolos de Bioseguridad','Manual y protocolos de bioseguridad vigentes.')+docRepo(d=>d.sec==='protocolos',{def:'iaas|protocolos',title:'Protocolos'}),
+'iaas/seguimiento':vSeguimiento,'sst/peligros':vPeligros,'sst/emergencias':vEmergencias,'sst/comites':vComites,'capacitaciones/actividades':vCap};
+function view(){S.repo=null;
+ if(S.mod==='inicio')return vInicio();
+ if(S.mod==='usuarios')return can('manage')?vUsuarios():vNoAuth();
+ const f=VIEWS[S.mod+'/'+S.sec];return f?f():vInicio();}
+function art(){let w='';for(let r=0;r<4;r++)for(let c=0;c<3;c++){if(r===3&&c===1)continue;w+=`<rect x="${96+c*62}" y="${150+r*48}" width="36" height="28" rx="4" fill="#BFD6F0"/><rect x="${96+c*62}" y="${150+r*48}" width="36" height="6" rx="3" fill="#fff" opacity=".7"/>`}
+ const ln=(x,y,wd)=>`<rect x="${x}" y="${y}" width="${wd}" height="7" rx="3.5" fill="#D5E2F1"/>`;
+ return `<svg class="art" viewBox="0 0 520 380" role="img" aria-label="Ilustración de la clínica junto a sus documentos controlados">
+ <ellipse cx="260" cy="352" rx="236" ry="16" fill="#000" opacity=".18"/>
+ <rect x="70" y="118" width="232" height="234" rx="10" fill="#F4F8FD"/><rect x="284" y="118" width="18" height="234" fill="#D3E1F2"/><rect x="70" y="118" width="232" height="18" rx="9" fill="#DCE8F6"/>
+ ${w}<rect x="160" y="294" width="52" height="58" rx="4" fill="#0B5CAD"/><rect x="185" y="294" width="2" height="58" fill="#E8F1FB" opacity=".6"/>
+ <rect x="182" y="96" width="8" height="24" fill="#DCE8F6"/><circle cx="186" cy="70" r="34" fill="#fff"/><circle cx="186" cy="70" r="34" fill="none" stroke="#BFD6F0" stroke-width="3"/><path d="M178 50h16v12h12v16h-12v12h-16V78h-12V62h12z" fill="#0B5CAD"/>
+ <g transform="rotate(-9 400 230)"><rect x="322" y="136" width="150" height="190" rx="10" fill="#5E95D1"/></g>
+ <g transform="rotate(5 400 230)"><rect x="326" y="132" width="150" height="190" rx="10" fill="#A9C8EA"/></g>
+ <rect x="318" y="140" width="152" height="196" rx="10" fill="#fff"/><rect x="318" y="140" width="152" height="40" rx="10" fill="#E8F1FB"/><rect x="318" y="168" width="152" height="12" fill="#E8F1FB"/>
+ <text x="334" y="166" font-family="Inter,sans-serif" font-size="13" font-weight="700" fill="#0B5CAD">CAL-PR-001 · V4</text>
+ ${ln(334,198,118)}${ln(334,214,96)}${ln(334,230,110)}${ln(334,246,70)}${ln(334,270,104)}${ln(334,286,84)}
+ <circle cx="440" cy="306" r="24" fill="#E2F4EA" stroke="#157F4A" stroke-width="2.5"/><path d="m429 306 7 7 14-15" fill="none" stroke="#157F4A" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>`}
+function artSide(){return `<section class="login-art"><div class="brand" style="border:0;padding:0">${logo()}<div><b>Clínica IPS Cabecera S.A.S.</b><span>Intranet institucional</span></div></div>
+ <h1>Gestión documental y capacitación</h1><p>Documentos vigentes, indicadores, seguridad del paciente y formación del personal en un solo lugar.</p>${art()}</section>`}
+function vLogin(){return `<div class="login">${artSide()}<section class="login-side"><form id="login" class="card" novalidate><h2>Iniciar sesión</h2><p class="muted small">Ingrese con el correo y la contraseña que le entregó el área de Calidad.</p>
+ <label class="fld"><span>Correo electrónico</span><input type="email" name="email" id="lg-email" autocomplete="username" required></label>
+ <label class="fld"><span>Contraseña</span><input type="password" name="pass" id="lg-pass" autocomplete="current-password" required></label>
+ <p class="err" id="lg-err"${S.msg?'':' hidden'}>${esc(S.msg)}</p>
+ <button class="btn pri block" type="submit">Ingresar</button><button class="linkbtn" type="button" data-act="forgot" style="justify-self:center;font-size:14px">¿Olvidó su contraseña?</button></form>
+ <p class="muted small" style="text-align:center">¿No tiene usuario? Solicítelo al área de Calidad.</p></section></div>`}
+function vSimple(title,body){return `<div class="login">${artSide()}<section class="login-side"><div class="card" style="display:grid;gap:12px"><h2>${esc(title)}</h2>${body}</div></section></div>`}
+function shell(c){const u=S.user;
+ return `<div class="layout"><aside class="side ${S.nav?'open':''}" aria-label="Menú principal"><div class="brand">${logo()}<div><b>Clínica IPS Cabecera</b><span>Intranet institucional</span></div></div><nav>${navHTML()}</nav><div class="side-foot">Sistema de Gestión de Calidad</div></aside>
+ <div class="scrim ${S.nav?'on':''}" data-act="menu"></div>
+ <div class="main"><header class="top"><button class="iconbtn only-m" data-act="menu" aria-label="Abrir menú">${ico('menu')}</button><nav class="crumbs" aria-label="Ruta">${crumbs()}</nav>
+ <div class="who"><div class="who-t"><b>${esc(u.nombre)}</b><span>${esc(u.cargo||'')}</span></div><span class="badge ${u.rol==='admin'?'':'neu'}">${u.rol==='admin'?'Administrador':'Colaborador'}</span><button class="btn ghost sm ic" data-act="account" title="Cambiar contraseña" aria-label="Cambiar contraseña">${ico('key')}</button><button class="btn ghost sm" data-act="logout" aria-label="Cerrar sesión">${ico('logout')}<span class="hide-s">Cerrar sesión</span></button></div></header>
+ <main class="content" id="content">${c}</main><footer class="foot">Clínica IPS Cabecera S.A.S. – Uso interno</footer></div></div>`}
+const RO=new ResizeObserver(es=>es.forEach(e=>drawInd(e.target)));
+function render(){const app=document.getElementById('app');RO.disconnect();
+ if(S.phase==='config'){app.innerHTML=vSimple('Falta configurar la conexión','<p>Abra el archivo <b>config.js</b> y pegue la dirección (Project URL) y la llave pública (Publishable key) de su proyecto de Supabase.</p>');return}
+ if(S.phase==='nolib'){app.innerHTML=vSimple('Sin conexión','<p>No se pudo cargar la intranet. Revise su conexión a internet y recargue la página.</p>');return}
+ if(S.phase==='boot'){app.innerHTML=vSimple('Cargando…','<p class="muted">Conectando con la intranet.</p>');return}
+ if(S.phase==='blocked'){app.innerHTML=vSimple('Acceso no disponible',`<p>${esc(S.msg)}</p><div><button class="btn pri" data-act="logout">Volver al inicio de sesión</button></div>`);return}
+ if(!S.user){app.innerHTML=vLogin();return}
+ app.innerHTML=shell(view());updateDocs();document.querySelectorAll('.fig[data-ind]').forEach(f=>RO.observe(f));}
+function go(m,s){S.mod=m;const md=modBy(m);S.sec=md?(s||md.secs[0][0]):null;S.sub=null;S.nav=S.nav&&!s&&!!md&&md.secs.length>1;S.last=null;S.fres='';render();window.scrollTo(0,0)}
+
+async function startSession(session){
+ if(!session){S.user=null;S.phase='ready';render();return}
+ S.phase='boot';render();
+ const {data,error}=await sb.from('perfiles').select('*').eq('id',session.user.id).maybeSingle();
+ if(error||!data){S.phase='blocked';S.msg=error?errMsg(error):'Su usuario no tiene un perfil creado. Comuníquese con el área de Calidad.';render();return}
+ if(data.estado!=='Activo'){S.phase='blocked';S.msg='Su usuario está inactivo. Comuníquese con el área de Calidad.';await sb.auth.signOut();render();return}
+ S.user=data;try{await loadAll()}catch(e){S.phase='blocked';S.msg='No se pudo cargar la información: '+errMsg(e);render();return}
+ S.user=DB.users.find(u=>u.id===data.id)||data;S.phase='ready';S.msg='';go('inicio');
+ if(S.recovery){S.recovery=false;askNewPassword(true)}}
+function askNewPassword(fromEmail){openForm(fromEmail?'Cree su nueva contraseña':'Cambiar contraseña',[['info','Mínimo 6 caracteres. No la comparta con nadie.','info'],['p1','Nueva contraseña','password'],['p2','Repita la nueva contraseña','password']],{},async v=>{
+ if(v.p1.length<6){toast('La contraseña debe tener al menos 6 caracteres.','bad');return false}
+ if(v.p1!==v.p2){toast('Las contraseñas no coinciden.','bad');return false}
+ const {error}=await sb.auth.updateUser({password:v.p1});if(error){toast(errMsg(error),'bad');return false}
+ toast('Contraseña actualizada.');return true},'Guardar contraseña')}
+
+/* ===== Events ===== */
+document.addEventListener('click',async e=>{const b=e.target.closest('[data-act]');if(!b)return;const a=b.dataset.act,id=b.dataset.id;
+ if(a==='mback'){if(e.target===b)closeModal();return}
+ switch(a){
+ case 'nav':go(b.dataset.m,b.dataset.s);break;
+ case 'menu':S.nav=!S.nav;render();break;
+ case 'logout':await sb?.auth.signOut();S.user=null;S.phase='ready';S.msg='';S.mod='inicio';S.sec=null;S.sub=null;DB=Object.fromEntries(Object.keys(T).map(k=>[k,[]]));render();break;
+ case 'account':askNewPassword(false);break;
+ case 'forgot':openForm('Recuperar contraseña',[['info','Le enviaremos un correo con un enlace para crear una nueva contraseña.','info'],['email','Correo electrónico','email']],{email:document.getElementById('lg-email')?.value||''},async v=>{
+   const {error}=await sb.auth.resetPasswordForEmail(v.email,{redirectTo:location.origin+location.pathname});
+   if(error){toast(errMsg(error),'bad');return false}toast('Si el correo está registrado, recibirá el enlace en unos minutos. Revise también la carpeta de spam.');return true},'Enviar enlace');break;
+ case 'modal-close':closeModal();break;
+ case 'confirm-yes':{const f=MF?.onYes;closeModal();if(f)f();break}
+ case 'doc-new':if(can('create'))docForm();break;
+ case 'doc-edit':if(can('edit'))docForm(id);break;
+ case 'doc-arch':if(can('archive')){const d=DB.docs.find(x=>x.id===id);openConfirm('Archivar documento',`"${d.cod} ${d.nom}" pasará a estado Obsoleto. Seguirá en el listado como registro histórico.`,async()=>{if(await dbSave('docs',{est:'Obsoleto'},d.id)){toast('Documento archivado.');render()}},'Archivar')}break;
+ case 'doc-view':openDoc(id,false);break;
+ case 'doc-dl':openDoc(id,true);break;
+ case 'ent-new':if(can('create'))entForm(b.dataset.e,null,b.dataset.c?{comite:b.dataset.c}:{});break;
+ case 'ent-edit':if(can('edit'))entForm(b.dataset.e,id);break;
+ case 'ind-upd':if(can('edit'))indForm(id);break;
+ case 'ev-new':if(can('report'))openForm('Reportar evento',EVF,{fecha:today()},async v=>{
+   const row=Object.assign({},v,{anon:!!v.anon,autor:v.anon?null:S.user.id});delete row.note;
+   const {error}=await sb.from('eventos').insert(row);if(error){toast(errMsg(error),'bad');return false}
+   await reload('eventos');toast('Reporte enviado. Gracias por contribuir a la seguridad del paciente.');render();return true},'Enviar reporte');break;
+ case 'tab':S.tab=id;render();break;
+ case 'ctab':S.ctab=id;render();break;
+ case 'cap-new':S.draft=newDraft();S.wstep=1;S.sub='new';render();window.scrollTo(0,0);break;
+ case 'cap-open':S.mod='capacitaciones';S.sec='actividades';S.sub='t:'+id;S.last=null;S.nav=false;render();window.scrollTo(0,0);break;
+ case 'cap-res':S.sub='r:'+id;S.fres='';render();window.scrollTo(0,0);break;
+ case 'cap-back':S.sub=null;S.last=null;render();window.scrollTo(0,0);break;
+ case 'att-reg':{b.disabled=true;const {error}=await sb.from('asistencias').insert({cap_id:id,uid:S.user.id});if(error){b.disabled=false;toast(errMsg(error),'bad');break}await reload('asis');toast('Asistencia registrada.');render();break}
+ case 'csv':{const txt=csvFor(id);const fb=()=>openForm('Resultados en formato CSV',[['info','Seleccione todo el texto, cópielo y péguelo en Excel.','info'],['csv','Resultados','textarea']],{csv:txt},async()=>true,'Cerrar');
+  try{navigator.clipboard.writeText(txt).then(()=>toast('Resultados copiados. Péguelos en Excel.'),fb)}catch(x){fb()}break}
+ case 'wiz-next':{const m=wizValid(S.wstep);if(m){toast(m,'bad');break}S.wstep++;render();break}
+ case 'wiz-prev':if(S.wstep>1){S.wstep--;render()}break;
+ case 'wiz-addmat':S.draft.material.push({tipo:'Enlace',titulo:'',url:'',doc_id:''});render();break;
+ case 'wiz-delmat':S.draft.material.splice(Number(id),1);render();break;
+ case 'wiz-addq':S.draft.preg.push({q:'',o:['','','',''],ok:null});render();break;
+ case 'wiz-delq':S.draft.preg.splice(Number(id),1);render();break;
+ case 'wiz-pub':publishWizard(b);break;
+ }});
+document.addEventListener('input',e=>{const t=e.target;
+ if(t.dataset.flt!==undefined&&S.repo){S.repo[t.dataset.flt]=t.value;updateDocs();return}
+ if(!S.draft)return;
+ if(t.dataset.w){S.draft[t.dataset.w]=t.type==='checkbox'?t.checked:t.value}
+ else if(t.dataset.wm){const [k,f]=t.dataset.wm.split('|');S.draft.material[k][f]=t.value;if(f==='tipo')render()}
+ else if(t.dataset.wq){const [k,f]=t.dataset.wq.split('|'),p=S.draft.preg[k];if(f==='q')p.q=t.value;else if(f==='ok')p.ok=Number(t.value);else p.o[Number(f.slice(1))]=t.value}
+ else if(t.dataset.wc!==undefined){const v=t.value;let c=S.draft.cargos.filter(x=>x!==v);if(t.checked){c=v==='Todos'?['Todos']:[...c.filter(x=>x!=='Todos'),v]}S.draft.cargos=c;document.querySelectorAll('[data-wc]').forEach(x=>x.checked=c.includes(x.value))}});
+document.addEventListener('change',async e=>{const t=e.target;
+ if(t.dataset.hab&&can('edit')){if(await dbSave('hab',{est:t.value},t.dataset.hab)){toast('Criterio actualizado.');render()}}
+ else if(t.dataset.evst&&can('edit')){if(await dbSave('eventos',{estado:t.value},t.dataset.evst))toast('Estado del reporte actualizado.')}
+ else if(t.dataset.fclas!==undefined){S.fclas=t.value;render()}
+ else if(t.dataset.fres!==undefined){S.fres=t.value;render()}});
+document.addEventListener('submit',async e=>{e.preventDefault();const f=e.target;
+ if(f.id==='login'){const err=document.getElementById('lg-err'),btn=f.querySelector('button[type=submit]');const em=f.email.value.trim(),pw=f.pass.value;
+  if(!em||!pw){err.textContent='Escriba su correo y contraseña.';err.hidden=false;return}
+  btn.disabled=true;btn.textContent='Ingresando…';const {data,error}=await sb.auth.signInWithPassword({email:em,password:pw});
+  if(error){btn.disabled=false;btn.textContent='Ingresar';err.textContent=errMsg(error);err.hidden=false;return}
+  await startSession(data.session);if(S.user)toast('Bienvenido(a), '+S.user.nombre+'.');return}
+ if(f.id==='mform'&&MF&&MF.fields){const v={};let miss=false;
+  for(const [k,,t,,opt] of MF.fields){if(t==='note'||t==='info')continue;const el=f.elements[k];if(!el)continue;
+   if(t==='check')v[k]=el.checked;else if(t==='file'){if(el.files&&el.files[0])v[k]=el.files[0]}
+   else if(t==='number'){if(el.value===''){if(!opt)miss=true;v[k]=null}else v[k]=Number(el.value)}
+   else if(t==='month'){if(!el.value)miss=true;v[k]=el.value?el.value+'-01':null}
+   else{v[k]=el.value.trim();if(el.required&&!v[k])miss=true;if((t==='date'||t==='url')&&!v[k])v[k]=null}}
+  if(miss){toast('Complete los campos obligatorios.','bad');return}
+  const sbtn=f.querySelector('button[type=submit]');sbtn.disabled=true;const fn=MF.onSave;
+  let r=false;try{r=await fn(v)}catch(x){toast(errMsg(x),'bad')}
+  if(r!==false)closeModal();else sbtn.disabled=false;return}
+ if(f.id==='quiz'){const t=DB.trainings.find(x=>x.id===f.dataset.tid),err=document.getElementById('quiz-err');
+  if(!f.leido.checked){err.textContent='Debe confirmar que revisó el material antes de enviar.';err.hidden=false;return}
+  const ans=(t.preg||[]).map((p,k)=>{const c=f.querySelector(`input[name="q${k}"]:checked`);return c?Number(c.value):null});
+  if(ans.includes(null)){err.textContent='Responda todas las preguntas antes de enviar.';err.hidden=false;return}
+  const btn=f.querySelector('button[type=submit]');btn.disabled=true;
+  const {data,error}=await sb.rpc('enviar_evaluacion',{p_cap:t.id,p_resp:ans});
+  if(error){btn.disabled=false;err.textContent=errMsg(error);err.hidden=false;return}
+  await reload('att');S.last={tid:t.id,nota:data.nota,ok:data.ok};render();window.scrollTo(0,0);}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&document.getElementById('modal').innerHTML)closeModal()});
+
+/* ===== Start ===== */
+if(!CFG_OK){S.phase='config';render()}
+else if(!sb){S.phase='nolib';render()}
+else{
+ if(/type=recovery/.test(location.hash))S.recovery=true;
+ sb.auth.onAuthStateChange((ev,session)=>{if(ev==='PASSWORD_RECOVERY'){S.recovery=true;if(S.user){S.recovery=false;askNewPassword(true)}}
+  if(ev==='SIGNED_OUT'&&S.user){S.user=null;S.phase='ready';render()}});
+ sb.auth.getSession().then(({data})=>startSession(data.session)).catch(()=>{S.phase='ready';render()});
+}
+}
+
+</script>
+</body>
+</html>
