@@ -163,7 +163,7 @@ textarea{min-height:88px;resize:vertical}
 .login{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(0,1fr);min-height:100vh;background:var(--card)}
 .l-photo{position:relative;overflow:hidden;background:#0C0C90;min-height:100vh}
 .l-photo>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 38%;transform:scale(1.02)}
-.l-photo::before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(12,12,144,0) 0%,rgba(12,12,144,.06) 42%,rgba(10,10,112,.72) 60%,rgba(8,8,96,.93) 76%,rgba(8,8,92,.97) 100%),linear-gradient(90deg,rgba(12,12,144,.22),rgba(12,12,144,0) 55%)}
+.l-photo::before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(12,12,144,0) 0%,rgba(12,12,144,.05) 55%,rgba(10,10,112,.70) 72%,rgba(8,8,96,.93) 86%,rgba(8,8,92,.97) 100%),linear-gradient(90deg,rgba(12,12,144,.22),rgba(12,12,144,0) 55%)}
 .l-curve{position:absolute;top:0;right:-1px;height:100%;width:clamp(70px,9vw,130px);z-index:2}
 .l-text{position:absolute;left:clamp(24px,4.5vw,64px);right:clamp(90px,12vw,170px);bottom:clamp(32px,6vh,72px);z-index:3;color:#fff;display:grid;gap:14px}
 .l-chip{justify-self:start;display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.28);backdrop-filter:blur(6px);padding:6px 14px;border-radius:99px;font-size:14px;font-weight:500}
@@ -193,7 +193,7 @@ textarea{min-height:88px;resize:vertical}
 .side{position:fixed;left:0;top:0;bottom:0;width:min(300px,86vw);z-index:50;transform:translateX(-105%);transition:transform .2s}
 .side.open{transform:none}.scrim.on{display:block;position:fixed;inset:0;background:rgba(8,20,36,.45);z-index:45}
 .iconbtn.only-m{display:grid}.who-t{display:none}.layout{background:none}
-.login{grid-template-columns:minmax(0,1fr)}.l-photo{min-height:250px;height:34vh;border-radius:0 0 28px 28px}.l-curve,.l-feats,.l-text p{display:none}.l-text{right:24px;bottom:22px;gap:10px}.l-text h1{font-size:23px}.l-photo::before{background:linear-gradient(180deg,rgba(12,12,144,0) 0%,rgba(12,12,144,.08) 38%,rgba(10,10,112,.86) 70%,rgba(8,8,92,.97) 100%)}.login-side{justify-content:flex-start;padding-top:28px}.l-stripe{display:none}
+.login{grid-template-columns:minmax(0,1fr)}.l-photo{min-height:250px;height:34vh;border-radius:0 0 28px 28px}.l-curve{display:none}.l-text{right:24px;bottom:22px;gap:10px}.l-text h1{font-size:23px}.l-photo::before{background:linear-gradient(180deg,rgba(12,12,144,0) 0%,rgba(12,12,144,.08) 38%,rgba(10,10,112,.86) 70%,rgba(8,8,92,.97) 100%)}.login-side{justify-content:flex-start;padding-top:28px}.l-stripe{display:none}
 }
 @media(max-width:600px){
 .hide-s{display:none}.fgrid{grid-template-columns:minmax(0,1fr)}.bar{grid-template-columns:minmax(0,1fr) 4.5em}.bar .lb{grid-column:1/-1}
@@ -649,8 +649,7 @@ function art(){let w='';for(let r=0;r<4;r++)for(let c=0;c<3;c++){if(r===3&&c===1
 function artSide(){return `<section class="l-photo" aria-label="Sede de la Clínica IPS Cabecera"><img src="img/clinica_hd.jpg" alt="Fachada de la sede de la Clínica IPS Cabecera">
  <svg class="l-curve" viewBox="0 0 120 800" preserveAspectRatio="none" aria-hidden="true"><defs><linearGradient id="lg-g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8AD95F"/><stop offset="1" stop-color="#3FA62E"/></linearGradient><linearGradient id="lg-b" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2B6FD6"/><stop offset="1" stop-color="#0C0C90"/></linearGradient></defs>
  <path d="M120 0H58C10 170 96 330 52 520 30 620 44 720 62 800H120Z" fill="url(#lg-b)" opacity=".9"/><path d="M120 0H74C30 170 112 330 70 520 50 620 62 720 80 800H120Z" fill="url(#lg-g)"/><path d="M120 0H90C48 170 128 330 86 520 66 620 78 720 96 800H120Z" style="fill:var(--card)"/></svg>
- <div class="l-text"><span class="l-chip"><i></i>Intranet institucional</span><h1>Bienvenido(a) a la Clínica IPS Cabecera</h1><p>Documentos vigentes, indicadores, seguridad del paciente y capacitación del personal en un solo lugar.</p>
- <div class="l-feats">${['Gestión documental','Capacitaciones','Seguridad del paciente'].map(t=>`<span>${ico('check')}${t}</span>`).join('')}</div></div></section>`}
+ <div class="l-text"><h1>Bienvenido(a) a la Clínica IPS Cabecera</h1></div></section>`}
 function vLogin(){return `<div class="login">${artSide()}<section class="login-side"><div class="l-box"><img class="l-logo" src="img/logo.png" alt="Clínica IPS Cabecera" width="466" height="268">
  <div class="l-head"><h2>Iniciar sesión</h2><p>Ingrese con el correo y la contraseña que le entregó el área de Calidad.</p></div>
  <form id="login" novalidate>
