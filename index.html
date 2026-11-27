@@ -73,6 +73,7 @@ svg.i{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-widt
 .iconbtn{width:44px;height:44px;display:grid;place-items:center;border-radius:10px;border:1px solid var(--line);background:var(--card);cursor:pointer}
 .badge{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:99px;font-size:13px;font-weight:600;background:var(--pri-soft);color:var(--pri);white-space:nowrap}
 .badge.ok{background:var(--ok-s);color:var(--ok)}.badge.warn{background:var(--warn-s);color:var(--warn)}.badge.bad{background:var(--bad-s);color:var(--bad)}.badge.neu{background:color-mix(in srgb,var(--mute) 14%,transparent);color:var(--mute)}
+.tchip{display:inline-block;vertical-align:2px;font-size:11.5px;font-weight:600;color:var(--pri);background:var(--pri-soft);border-radius:6px;padding:1px 7px;margin-left:8px;white-space:nowrap}
 .chip{font-size:12px;font-weight:600;color:var(--bad);background:var(--bad-s);border-radius:6px;padding:1px 7px;margin-left:6px;white-space:nowrap}
 .muted{color:var(--mute)}.small{font-size:14px}.ra{text-align:right;white-space:nowrap}.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
 .prog{display:flex;align-items:center;gap:8px;min-width:110px}.prog i{flex:1;height:8px;border-radius:9px;background:var(--line);overflow:hidden;display:block}.prog i b{display:block;height:100%;background:var(--pri);border-radius:9px}.prog span{font-size:13px;font-variant-numeric:tabular-nums;width:3.2em;text-align:right}
@@ -580,7 +581,9 @@ const pendPrev=yv=>{const m=new Date().getMonth();return S.year===curYear()&&m>0
 const canReg=i=>isAdmin()||(isSST()&&i.mod==='sst')||(isJefe()&&(i.resp_ids||[]).includes(S.user.id));
 const canMan=i=>isAdmin()||(isSST()&&i.mod==='sst');
 const indYears=()=>{const ys=new Set([curYear()]);DB.vals.forEach(v=>{const y=Number(String(v.periodo).slice(0,4));if(y)ys.add(y)});return [...ys].sort((a,b)=>b-a)};
-const yearSel=()=>`<div class="filters"><label class="fld" style="flex:0 0 150px"><span>Año</span><select data-year>${indYears().map(y=>`<option${y===S.year?' selected':''}>${y}</option>`).join('')}</select></label></div>`;
+const ITIPOS=['Estructura','Proceso','Resultado','Impacto'];
+const tipoChip=i=>i.tipo?`<span class="tchip">${esc(i.tipo)}</span>`:'';
+const yearSel=(extra='')=>`<div class="filters"><label class="fld" style="flex:0 0 150px"><span>Año</span><select data-year>${indYears().map(y=>`<option${y===S.year?' selected':''}>${y}</option>`).join('')}</select></label>${extra}</div>`;
 function vIndResumen(){const cats=Object.keys(IND_T);let tM=0,tO=0,tN=0,tLO=0,tL=0,tP=0;const inc=[];
  const R=cats.map(c=>{const L=DB.ind.filter(i=>(i.mod||'calidad')===c);let m=0,o=0,lo=0,ln=0,p=0;
   L.forEach(i=>{const yv=yearVals(i),me=measured(yv),last=me[me.length-1];m+=me.length;o+=me.filter(v=>indOk(i,v.valor)).length;
@@ -593,10 +596,13 @@ function vIndResumen(){const cats=Object.keys(IND_T);let tM=0,tO=0,tN=0,tLO=0,tL
  <div class="tile ${inc.length?'bad':'ok'}"><div class="v">${inc.length}</div><div class="l">Indicadores en incumplimiento</div></div>
  <div class="tile ${tP?'warn':'ok'}"><div class="v">${tP}</div><div class="l">Pendientes de reporte del mes anterior</div></div></div>
  <div class="grid">${R.map(r=>{const v=pc(r.o,r.m);return `<button class="card mod" data-act="nav" data-m="indicadores" data-s="${r.c}"><span class="ic">${ico('indicadores')}</span><h3>${esc(IND_T[r.c])}</h3>${r.m?prog(v,pcls(v)):'<span class="muted small">Sin mediciones en '+S.year+'</span>'}<p class="small">${r.n} indicador${r.n===1?'':'es'} · ${r.lo} de ${r.ln} cumplen en su último resultado${r.p?` · <b style="color:var(--warn)">${r.p} pendiente${r.p===1?'':'s'}</b>`:''}</p><small>Abrir →</small></button>`}).join('')}</div>
- <div class="sec-h"><h2>Indicadores en incumplimiento</h2></div>`+
- tbl(['Indicador','Carpeta','Último resultado','Meta','Mes','Plan de mejora'],inc.map(({i,last})=>{const pl=DB.planes.find(x=>x.id===last.plan_id);return `<tr><td><button class="linkbtn" style="font-size:15px;text-align:left" data-act="ind-ficha" data-id="${i.id}" data-c="${esc(i.mod)}">${esc(i.nom)}</button></td><td>${esc(IND_T[i.mod]||'')}</td><td><b style="color:var(--bad)">${esc(indF(i,last.valor))}</b></td><td>${esc(indMeta(i))}</td><td>${esc(mesL(last.periodo))}</td><td>${pl?badge(estPlan(pl)):last.plan_id?'Registrado':badge('Sin plan')}</td></tr>`}),'stack','Ningún indicador está en incumplimiento en su último resultado.')}
+ <div class="sec-h"><h2>Cumplimiento por tipo de indicador</h2></div>`+
+ tbl(['Tipo','#Indicadores','#Mediciones','#Cumplen','Cumplimiento'],[...ITIPOS,''].map(t=>{const L=DB.ind.filter(i=>(i.tipo||'')===t);if(!L.length&&!t)return '';let m=0,o=0;L.forEach(i=>{const me=measured(yearVals(i));m+=me.length;o+=me.filter(v=>indOk(i,v.valor)).length});const v=pc(o,m);
+  return `<tr><td><b>${esc(t||'Sin tipo definido')}</b></td><td class="num">${L.length}</td><td class="num">${m}</td><td class="num">${o}</td><td style="min-width:160px">${m?prog(v,pcls(v)):'<span class="muted small">Sin mediciones</span>'}</td></tr>`}).filter(Boolean),'stack')+
+ `<div class="sec-h"><h2>Indicadores en incumplimiento</h2></div>`+
+ tbl(['Indicador','Carpeta','Tipo','Último resultado','Meta','Mes','Plan de mejora'],inc.map(({i,last})=>{const pl=DB.planes.find(x=>x.id===last.plan_id);return `<tr><td><button class="linkbtn" style="font-size:15px;text-align:left" data-act="ind-ficha" data-id="${i.id}" data-c="${esc(i.mod)}">${esc(i.nom)}</button></td><td>${esc(IND_T[i.mod]||'')}</td><td>${esc(i.tipo||'—')}</td><td><b style="color:var(--bad)">${esc(indF(i,last.valor))}</b></td><td>${esc(indMeta(i))}</td><td>${esc(mesL(last.periodo))}</td><td>${pl?badge(estPlan(pl)):last.plan_id?'Registrado':badge('Sin plan')}</td></tr>`}),'stack','Ningún indicador está en incumplimiento en su último resultado.')}
 function indCard(i){const yv=yearVals(i),me=measured(yv),ok=me.filter(v=>indOk(i,v.valor)).length,last=me[me.length-1],st=last?indSt(i,last.valor):'';
- return `<article class="card ind"><div class="ind-h"><h3>${esc(i.nom)}</h3>${canReg(i)?`<button class="btn sm pri" data-act="ind-upd" data-id="${i.id}">${ico('plus')}Registrar</button>`:''}</div>
+ return `<article class="card ind"><div class="ind-h"><h3>${esc(i.nom)}${tipoChip(i)}</h3>${canReg(i)?`<button class="btn sm pri" data-act="ind-upd" data-id="${i.id}">${ico('plus')}Registrar</button>`:''}</div>
  ${i.formula?`<p class="muted small">${esc(i.formula)}</p>`:''}
  <div class="ind-v">${last?`<span class="big ${st}">${esc(indF(i,last.valor))}</span><span class="trend ${st}">${st==='ok'?'Cumple':'No cumple'} · ${esc(mesL(last.periodo))}</span>`:`<span class="muted">Sin resultados en ${S.year}</span>`}</div>
  <div class="ind-m"><span class="dot ${st}"></span>Meta ${esc(indMeta(i))}${me.length?` · ${ok} de ${me.length} meses cumplen`:''}</div>
@@ -604,10 +610,11 @@ function indCard(i){const yv=yearVals(i),me=measured(yv),ok=me.filter(v=>indOk(i
  ${me.length?`<div class="fig" data-ind="${i.id}"><svg role="img" aria-label="Resultados mensuales de ${S.year}"></svg></div><div class="legend"><span><i></i>Resultado mensual</span><span><i class="g"></i>Meta</span></div>`:''}
  <div><button class="btn sm ghost" data-act="ind-ficha" data-id="${i.id}">${ico('eye')}Ver ficha y datos del año</button></div></article>`}
 function vIndicadores(cat){if(S.sub&&S.sub.startsWith('i:'))return vIndFicha(S.sub.slice(2));
- const L=DB.ind.filter(i=>(i.mod||'calidad')===cat).sort((a,b)=>(a.orden||0)-(b.orden||0));
+ const all=DB.ind.filter(i=>(i.mod||'calidad')===cat).sort((a,b)=>(a.orden||0)-(b.orden||0)),L=all.filter(i=>!S.ftipo||i.tipo===S.ftipo);
+ const tsel=`<label class="fld" style="flex:0 0 190px"><span>Tipo de indicador</span><select data-ftipo><option value="">Todos</option>${ITIPOS.map(t=>`<option${S.ftipo===t?' selected':''}>${t}</option>`).join('')}</select></label>`;
  const nb=(isAdmin()||(isSST()&&cat==='sst'))?`<button class="btn pri" data-act="ind-new" data-id="${cat}">${ico('plus')}Nuevo indicador</button>`:'';
- return pageHead(IND_T[cat]||'Indicadores','Resultados mensuales frente a la meta. Abra la ficha de un indicador para ver y registrar sus datos.',nb)+yearSel()+
- (L.length?`<div class="grid w">${L.map(indCard).join('')}</div>`:`<div class="card empty">Aún no hay indicadores en esta carpeta.${nb?' Use "Nuevo indicador" para crear el primero.':''}</div>`)}
+ return pageHead(IND_T[cat]||'Indicadores','Resultados mensuales frente a la meta. Abra la ficha de un indicador para ver y registrar sus datos.',nb)+yearSel(tsel)+
+ (L.length?`<div class="grid w">${L.map(indCard).join('')}</div>`:all.length?`<div class="card empty">No hay indicadores de tipo ${esc(S.ftipo)} en esta carpeta.</div>`:`<div class="card empty">Aún no hay indicadores en esta carpeta.${nb?' Use "Nuevo indicador" para crear el primero.':''}</div>`)}
 function vIndFicha(id){const i=DB.ind.find(x=>x.id===id);if(!i){S.sub=null;return vIndicadores(S.sec)}
  const yv=yearVals(i),reg=canReg(i),man=canMan(i),nowP=`${curYear()}-${pad(new Date().getMonth()+1)}`;
  const resp=(i.resp_ids||[]).map(u=>userBy(u)?.nombre).filter(Boolean);
@@ -618,6 +625,7 @@ function vIndFicha(id){const i=DB.ind.find(x=>x.id===id);if(!i){S.sub=null;retur
  return `<div><button class="btn ghost sm" data-act="ind-back">${ico('back')}Volver a ${esc(IND_T[i.mod]||'indicadores')}</button></div>`+
  pageHead(i.nom,IND_T[i.mod]||'',man?`<button class="btn" data-act="ind-edit" data-id="${i.id}">${ico('edit')}Editar ficha</button><button class="btn ghost" data-act="ind-del" data-id="${i.id}">${ico('archive')}Eliminar</button>`:'')+
  `<section class="card ficha"><dl>
+  <div><dt>Tipo de indicador</dt><dd>${esc(i.tipo||'Sin definir')}</dd></div>
   <div><dt>Fórmula</dt><dd>${esc(i.formula||'—')}</dd></div>
   <div><dt>Meta</dt><dd>${esc(indMeta(i))}</dd></div>
   <div><dt>Unidad</dt><dd>${esc((UNITS.find(x=>x[0]===i.u)||[])[1]||'—')}</dd></div>
@@ -650,11 +658,13 @@ function drawInd(fig){const i=DB.ind.find(x=>x.id===fig.dataset.ind);const svg=f
  g+=MN.map((m,k)=>nar&&k%2?'':`<text class="tk" x="${x(k)}" y="${H-5}" text-anchor="${k===0?'start':k===11?'end':'middle'}">${m}</text>`).join('');
  svg.innerHTML=g;}
 function indFicha(id,cat){const i=id?DB.ind.find(x=>x.id===id):null;const jefes=DB.users.filter(u=>u.rol==='jefe'&&u.estado==='Activo');
- const fields=[...(isAdmin()?[['mod','Carpeta','select',Object.entries(IND_T)]]:[]),['nom','Nombre del indicador','text'],['formula','Fórmula (numerador / denominador)','textarea'],['meta','Meta','number'],
+ const fields=[...(isAdmin()?[['mod','Carpeta','select',Object.entries(IND_T)]]:[]),['nom','Nombre del indicador','text'],['tipo','Tipo de indicador','select',[['','Seleccione…'],...ITIPOS.map(t=>[t,t])]],
+  ['html','<p class="muted small" style="margin-top:-4px"><b>Estructura:</b> recursos con que se cuenta (talento humano, infraestructura, dotación). <b>Proceso:</b> cómo se hacen las actividades (adherencia, oportunidad). <b>Resultado:</b> efecto inmediato en el paciente o el servicio. <b>Impacto:</b> efecto a largo plazo en la salud de la población o la institución.</p>','html'],['formula','Fórmula (numerador / denominador)','textarea'],['meta','Meta','number'],
   ['sen','La meta se cumple cuando el resultado es','select',[['mayor','Mayor o igual a la meta'],['menor','Menor o igual a la meta']]],['u','Unidad','select',UNITS.map(x=>[x[0],x[1]])],
   jefes.length?['resp_ids','Jefes de área que pueden registrar el numerador','checks',jefes.map(u=>[u.id,u.nombre+(u.area?' · '+u.area:'')])]:['info','Para dar permiso de registro a un jefe de área, primero asígnele el rol "Jefe o coordinador" en Usuarios.','info'],
   ['obs','Observaciones de la ficha','textarea',null,OPT],['orden','Orden en la carpeta','number',null,OPT]];
  openForm(i?'Editar ficha del indicador':'Nuevo indicador',fields,i?Object.assign({},i):{mod:cat,sen:'mayor',u:'%',resp_ids:[]},async v=>{
+  if(!v.tipo){toast('Seleccione el tipo de indicador: Estructura, Proceso, Resultado o Impacto.','bad');return false}
   const un=UNITS.find(x=>x[0]===v.u);v.factor=un?un[2]:1;if(!isAdmin())v.mod=i?i.mod:cat;if(!v.resp_ids)v.resp_ids=i?.resp_ids||[];if(v.orden==null)delete v.orden;
   const ok=await dbSave('ind',v,i?.id);if(ok){await reload('vals');toast(i?'Ficha actualizada.':'Indicador creado.');render()}return ok},'Guardar')}
 function valForm(id,p){const i=DB.ind.find(x=>x.id===id);if(!i)return;p=(p||prevMonth()).slice(0,7);
@@ -1064,7 +1074,8 @@ document.addEventListener('change',async e=>{const t=e.target;
  else if(t.dataset.evst&&can('edit')){if(await dbSave('eventos',{estado:t.value},t.dataset.evst))toast('Estado del reporte actualizado.')}
  else if(t.dataset.fclas!==undefined){S.fclas=t.value;render()}
  else if(t.dataset.fres!==undefined){S.fres=t.value;render()}
- else if(t.dataset.year!==undefined){S.year=Number(t.value);render()}});
+ else if(t.dataset.year!==undefined){S.year=Number(t.value);render()}
+ else if(t.dataset.ftipo!==undefined){S.ftipo=t.value;render()}});
 document.addEventListener('submit',async e=>{e.preventDefault();const f=e.target;
  if(f.id==='login'){const err=document.getElementById('lg-err'),btn=f.querySelector('button[type=submit]');const em=f.email.value.trim(),pw=f.pass.value;
   if(!em||!pw){err.textContent='Escriba su correo y contraseña.';err.hidden=false;return}
