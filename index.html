@@ -218,7 +218,7 @@ pre,.scroll{overflow-x:auto}code{overflow-wrap:anywhere}
 .vw-b{flex:1;overflow:auto;padding:16px 12px 40px;display:flex;flex-direction:column;align-items:center;gap:16px;user-select:none;-webkit-user-select:none}
 .vw-p{position:relative;flex:none;background:#fff;box-shadow:0 8px 30px rgba(0,0,0,.4);overflow:hidden}.vw-p canvas{display:block;pointer-events:none}
 .vw-wm{position:absolute;inset:-60%;transform:rotate(-30deg);color:rgba(12,12,144,.11);font:600 17px/64px Inter,sans-serif;word-spacing:6px;pointer-events:none;overflow:hidden;white-space:normal}
-.vw-msg{color:#D5DAFA;margin-top:40px}.alertbox{display:flex;gap:12px;align-items:center;flex-wrap:wrap;padding:12px 16px;border-radius:12px;background:var(--bad-s);color:var(--bad);font-size:15px;margin-bottom:12px}.alertbox>div:first-of-type{flex:1 1 260px;color:var(--ink)}.alertbox>svg.i{width:22px;height:22px}.codebox{display:grid;gap:4px;padding:14px 16px;border-radius:12px;background:var(--pri-soft)}.codebig{font-size:28px;font-weight:700;letter-spacing:.04em;color:var(--pri);font-variant-numeric:tabular-nums}.codebig.bad{color:var(--bad)}.vw-tag{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;background:rgba(255,255,255,.16);color:#fff;padding:3px 10px;border-radius:99px}.vw-tag svg.i{width:14px;height:14px}
+.vw-msg{color:#D5DAFA;margin-top:40px}.alertbox{display:flex;gap:12px;align-items:center;flex-wrap:wrap;padding:12px 16px;border-radius:12px;background:var(--bad-s);color:var(--bad);font-size:15px;margin-bottom:12px}.alertbox>div:first-of-type{flex:1 1 260px;color:var(--ink)}.alertbox>svg.i{width:22px;height:22px}.ficha dl{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:14px 24px;margin:0}.ficha dt{font-size:13px;color:var(--mute);font-weight:500}.ficha dd{margin:2px 0 0;font-size:15px}.codebox{display:grid;gap:4px;padding:14px 16px;border-radius:12px;background:var(--pri-soft)}.codebig{font-size:28px;font-weight:700;letter-spacing:.04em;color:var(--pri);font-variant-numeric:tabular-nums}.codebig.bad{color:var(--bad)}.vw-tag{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;background:rgba(255,255,255,.16);color:#fff;padding:3px 10px;border-radius:99px}.vw-tag svg.i{width:14px;height:14px}
 @media print{body.noprint>*{display:none!important}body.noprint::before{content:"La impresión de este documento no está permitida.";display:block;padding:40px;font:20px sans-serif;color:#000}}
 </style><script>new MutationObserver(()=>{for(const c of document.querySelectorAll('.stack td:not([data-l])')){let i=0,p=c;while(p=p.previousElementSibling)i+=p.colSpan;c.dataset.l=c.closest('table').rows[0].cells[i]?.textContent||''}}).observe(document,{childList:true,subtree:true})</script></head><body>
 <div id="app"></div>
@@ -266,7 +266,7 @@ const logo=()=>`<span class="logo"><img src="img/simbolo.png" alt="" width="36" 
 
 const MODS=[
 {id:'calidad',nom:'Calidad',d:'Documentos controlados, planes de mejora, PAMEC, habilitación y codificación.',secs:[['listado','Listado Maestro de Documentos'],['planes','Planes de Mejora'],['pamec','PAMEC'],['habilitacion','Habilitación (Res. 3100)'],['codificacion','Codificación documental']]},
-{id:'indicadores',nom:'Indicadores de Gestión',d:'Indicadores de calidad, ambiental, seguridad del paciente, IAAS, SST y talento humano.',secs:[['calidad','Indicadores de Calidad'],['ambiental','Indicadores de Gestión Ambiental'],['seguridad','Indicadores de Seguridad del Paciente'],['iaas','Indicadores IAAS'],['sst','Indicadores SST'],['th','Indicadores de Talento Humano']]},
+{id:'indicadores',nom:'Indicadores de Gestión',d:'Indicadores de calidad, ambiental, seguridad del paciente, IAAS, SST y talento humano.',secs:[['resumen','Resumen de cumplimiento'],['calidad','Indicadores de Calidad'],['ambiental','Indicadores de Gestión Ambiental'],['seguridad','Indicadores de Seguridad del Paciente'],['iaas','Indicadores IAAS'],['sst','Indicadores SST'],['th','Indicadores de Talento Humano']]},
 {id:'seguridad',nom:'Seguridad del Paciente',d:'Programa, paquetes instruccionales, rondas, matriz de riesgos y reporte de eventos.',secs:[['programa','Programa de Seguridad del Paciente'],['paquetes','Paquetes Instruccionales'],['rondas','Rondas de Seguridad'],['riesgos','Matriz de Riesgos'],['eventos','Reporte de Eventos Adversos']]},
 {id:'ambiental',nom:'Ambiental',d:'PGIRHS, registro mensual RH1 y seguimiento de limpieza y desinfección.',secs:[['pgirhs','PGIRHS'],['rh1','Formulario RH1'],['limpieza','Limpieza y Desinfección de Áreas']]},
 {id:'iaas',nom:'IAAS y PROA',d:'Programas IAAS y PROA, protocolos de bioseguridad y adherencia.',secs:[['programa','Plan / Programa IAAS y PROA'],['protocolos','Protocolos de Bioseguridad'],['seguimiento','Seguimiento de Adherencia']]},
@@ -283,20 +283,21 @@ const PAQ=[['Detectar, prevenir y reducir infecciones asociadas a la atención e
 
 const T={users:'perfiles',docs:'documentos',planes:'planes',pamec:'pamec',hab:'habilitacion',ind:'indicadores',vals:'indicador_valores',rondas:'rondas',riesgos:'riesgos',eventos:'eventos',rh1:'rh1',limpieza:'limpieza',obs:'observaciones',peligros:'peligros',brigada:'brigada',comites:'comites',miembros:'comite_miembros',reuniones:'comite_reuniones',trainings:'capacitaciones',claves:'capacitacion_claves',att:'intentos',asis:'asistencias',evid:'plan_evidencias',acc:'accidentes',procs:'procesos',tdoc:'tipos_doc',nov:'novedades'};
 let DB=Object.fromEntries(Object.keys(T).map(k=>[k,[]]));
-const S={side:(()=>{try{return localStorage.getItem('ipsc-side')!=='0'}catch(e){return true}})(),novOpen:false,novPrev:null,user:null,phase:'boot',msg:'',mod:'inicio',sec:null,sub:null,nav:false,tab:'copasst',ctab:'pend',fclas:'',fres:'',repo:null,draft:null,wstep:1,last:null,recovery:false};
+const S={year:new Date().getFullYear(),side:(()=>{try{return localStorage.getItem('ipsc-side')!=='0'}catch(e){return true}})(),novOpen:false,novPrev:null,user:null,phase:'boot',msg:'',mod:'inicio',sec:null,sub:null,nav:false,tab:'copasst',ctab:'pend',fclas:'',fres:'',repo:null,draft:null,wstep:1,last:null,recovery:false};
 
 const ROLES={admin:'Administrador',jefe:'Jefe / Coordinador',aux:'Auxiliar',sst:'SST'};
 const ROLESL=[['aux','Auxiliar'],['jefe','Jefe o coordinador de área'],['sst','Seguridad y Salud en el Trabajo (SST)'],['admin','Administrador (Calidad)']];
 const ACCESS={aux:['calidad/listado','seguridad/eventos','sst/accidentes','capacitaciones/actividades'],
  jefe:['calidad/listado','calidad/planes','seguridad/eventos','sst/accidentes','capacitaciones/actividades'],
- sst:['calidad/listado','sst/peligros','sst/emergencias','sst/comites','indicadores/sst','sst/accidentes','seguridad/eventos','capacitaciones/actividades']};
+ sst:['calidad/listado','calidad/planes','sst/peligros','sst/emergencias','sst/comites','indicadores/sst','sst/accidentes','seguridad/eventos','capacitaciones/actividades']};
 const isAdmin=()=>S.user?.rol==='admin';
 const isSST=()=>S.user?.rol==='sst';
 const isJefe=()=>S.user?.rol==='jefe';
-const allowed=(m,s)=>isAdmin()||(ACCESS[S.user?.rol]||[]).includes(m+'/'+s);
+const accessList=()=>{const b=[...(ACCESS[S.user?.rol]||[])];if(isJefe()){const cats=[...new Set(DB.ind.map(i=>i.mod||'calidad'))];let at=b.indexOf('calidad/planes')+1;cats.forEach(c=>b.splice(at++,0,'indicadores/'+c))}return b};
+const allowed=(m,s)=>isAdmin()||accessList().includes(m+'/'+s);
 const can=a=>{if(!S.user)return false;if(isAdmin())return a!=='train';
  if(a==='report'||a==='train')return true;
- if(a==='create'||a==='edit')return (isSST()&&(S.mod==='sst'||(S.mod==='indicadores'&&S.sec==='sst')))||(isJefe()&&S.mod==='calidad'&&S.sec==='planes');
+ if(a==='create'||a==='edit')return (isSST()&&(S.mod==='sst'||(S.mod==='indicadores'&&S.sec==='sst')))||((isJefe()||isSST())&&S.mod==='calidad'&&S.sec==='planes');
  if(a==='archive')return isSST()&&S.mod==='sst';
  return false};
 const canDoc=()=>isAdmin()||(isSST()&&S.mod==='sst');
@@ -386,6 +387,7 @@ function fieldHTML(f,v){const [k,l,t,o,opt]=f;let val=v??'';
  if(t==='file')return `<label class="fld full"><span>${esc(l)}</span><input type="file" name="${k}" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.png,.jpg,.jpeg"></label>`;
  if(t==='note')return `<p class="note full">${esc(l)}</p>`;
  if(t==='html')return `<div class="full">${l}</div>`;
+ if(t==='checks')return `<div class="fld full"><span>${esc(l)}</span><div class="cargos">${o.map(([a,b2])=>`<label class="chk"><input type="checkbox" name="${k}" value="${esc(a)}"${(Array.isArray(val)?val:[]).includes(a)?' checked':''}><span>${esc(b2)}</span></label>`).join('')}</div></div>`;
  if(t==='info')return `<p class="info full">${esc(l)}</p>`;
  if(t==='month')val=String(val).slice(0,7);
  const req=(t==='url'||opt)?'':' required';
@@ -531,7 +533,7 @@ function vInicio(){const u=S.user,first=(u.nombre||'').split(' ')[0];let mid='';
    const nu=DB.acc.filter(x=>x.estado==='Recibido').length;mid=`<div class="tiles"><div class="tile ${nu?'bad':'ok'}"><div class="v">${nu}</div><div class="l">Accidentes sin gestionar</div></div><div class="tile pri"><div class="v">${DB.acc.filter(x=>String(x.fecha).slice(0,7)===today().slice(0,7)).length}</div><div class="l">Accidentes reportados este mes</div></div></div>`+mid}
  }
  const cards=isAdmin()?MODS.map(m=>`<button class="card mod" data-act="nav" data-m="${m.id}"><span class="ic">${ico(m.id)}</span><h3>${esc(m.nom)}</h3><p>${esc(m.d)}</p><small>${m.secs.length>1?m.secs.length+' secciones':'Abrir'} →</small></button>`).join('')
-  :(ACCESS[S.user.rol]||[]).map(k=>{const [m,sc]=k.split('/');return `<button class="card mod" data-act="nav" data-m="${m}" data-s="${sc}"><span class="ic">${ico(m)}</span><h3>${esc(secName(m,sc))}</h3><p>${esc(SECDESC[k]||'')}</p><small>Abrir →</small></button>`}).join('');
+  :accessList().map(k=>{const [m,sc]=k.split('/');return `<button class="card mod" data-act="nav" data-m="${m}" data-s="${sc}"><span class="ic">${ico(m)}</span><h3>${esc(secName(m,sc))}</h3><p>${esc(SECDESC[k]||(k.startsWith('indicadores/')?'Registre los resultados mensuales de sus indicadores.':''))}</p><small>Abrir →</small></button>`}).join('');
  return `<section class="card hello"><div><h1>Hola, ${esc(first)}</h1><p>${isAdmin()?'Panel de Calidad: revise el estado general y gestione la información institucional.':isSST()?'Panel de Seguridad y Salud en el Trabajo.':'Consulte los documentos vigentes, haga sus reportes y complete sus capacitaciones.'}</p></div></section>
  ${mid}<div class="sec-h"><h2>${isAdmin()?'Módulos':'Accesos'}</h2></div>
  <div class="grid">${cards}</div>`;}
@@ -544,7 +546,7 @@ function vPlanes(){const r=[...DB.planes].sort(byDate('limite')).reverse(),ven=r
  (isAdmin()?'':`<p class="info">Registre sus planes y suba las <b>evidencias</b> de cumplimiento con el botón de la columna "Evidencias". Cuando termine, cambie el estado a <b>Pendiente de verificación</b>: Calidad revisa y cierra el plan.</p>`)+
  `<div class="tiles"><div class="tile pri"><div class="v">${r.length}</div><div class="l">Planes registrados</div></div><div class="tile warn"><div class="v">${r.filter(p=>p.estado!=='Cerrado').length}</div><div class="l">Abiertos o en ejecución</div></div><div class="tile ${ven?'bad':'ok'}"><div class="v">${ven}</div><div class="l">Vencidos</div></div><div class="tile"><div class="v">${r.length?Math.round(r.reduce((s,p)=>s+Number(p.avance||0),0)/r.length)+'%':'—'}</div><div class="l">Avance promedio</div></div></div>`+entTable('planes',r)+(isAdmin()?docRepo(d=>d.sec==='planes',{def:'calidad|planes',title:'Soportes de planes de mejora'}):'')}
 function evidModal(id){const p=DB.planes.find(x=>x.id===id);if(!p)return;const ev=DB.evid.filter(e=>e.plan_id===id).sort(byDate('creado'));
- const canAdd=isAdmin()||(isJefe()&&p.estado!=='Cerrado');
+ const canAdd=isAdmin()||((isJefe()||isSST())&&p.estado!=='Cerrado');
  const list=`<div class="list">${ev.length?ev.map(e=>`<div class="li"><div><h3>${esc(e.descr||'Evidencia')}</h3><div class="meta">${fd(String(e.creado).slice(0,10))}${userBy(e.subido_por)?' · '+esc(userBy(e.subido_por).nombre):''}</div></div>${e.archivo||e.url?`<button class="btn sm" type="button" data-act="evid-open" data-id="${esc(e.id)}">${ico('eye')}Abrir</button>`:''}</div>`).join(''):'<p class="muted">Aún no hay evidencias cargadas.</p>'}</div>`;
  const head=`<p class="small"><b>${esc(p.hallazgo)}</b></p><p class="muted small" style="margin:4px 0 12px">${esc(p.accion)}</p>`+list+(canAdd?'<h3 style="margin-top:16px">Agregar evidencia</h3>':'');
  const fields=[['html',head,'html'],...(canAdd?[['descr','Descripción de la evidencia (ej. acta de socialización, registro fotográfico)','textarea'],['url','Enlace (opcional)','url'],['archivo','Archivo (PDF, foto, Word, Excel)','file']]:[])];
@@ -562,36 +564,116 @@ async function openEvid(id){const e=DB.evid.find(x=>x.id===id);if(!e)return;if(!
 function vPamec(){const st=[...DB.pamec].sort((a,b)=>a.orden-b.orden);
  return pageHead('PAMEC','Programa de Auditoría para el Mejoramiento de la Calidad: ruta crítica.')+
  `<section class="card" style="display:grid;gap:14px"><h2>Ruta crítica</h2><div class="steps">${st.map(p=>`<div class="step ${p.est==='Completado'?'ok':p.est==='En curso'?'warn':''}"><span class="n">${p.est==='Completado'?ico('check'):esc(p.orden)}</span><div><h3>${esc(p.nom)}</h3>${p.detalle?`<p>${esc(p.detalle)}</p>`:''}<div style="margin-top:6px;display:flex;gap:6px;align-items:center;flex-wrap:wrap">${badge(p.est)}${can('edit')?`<button class="btn sm ghost" data-act="ent-edit" data-e="pamec" data-id="${p.id}">${ico('edit')}Editar</button>`:''}</div></div></div>`).join('')}</div></section>`+docRepo(d=>d.sec==='pamec',{def:'calidad|pamec',title:'Documentos del PAMEC'})}
-const indSt=(i,v)=>{v=Number(v);const m=Number(i.meta);if(i.sen==='mayor')return v>=m?'ok':v>=m*0.9?'warn':'bad';return v<=m?'ok':v<=m*1.1?'warn':'bad'};
-const indF=(i,v)=>(Number(i.dec)?Number(v).toFixed(1).replace('.',','):Math.round(v))+(i.u||'');
-const serie=i=>DB.vals.filter(v=>v.ind_id===i.id).sort((a,b)=>String(a.periodo).localeCompare(String(b.periodo))).slice(-12);
-function vIndicadores(mod='calidad'){const L=DB.ind.filter(i=>(i.mod||'calidad')===mod).sort((a,b)=>(a.orden||0)-(b.orden||0));
- return pageHead(IND_T[mod]||'Indicadores de Gestión','Resultado mensual frente a la meta. Verde: cumple · Ámbar: cerca de la meta · Rojo: no cumple.',newBtn('ind','Nuevo indicador',` data-mod="${mod}"`))+
- (L.length?`<div class="grid w">${L.map(i=>{const s=serie(i),last=s[s.length-1],prev=s[s.length-2];
-  const ed=can('edit')?`<div class="acts"><button class="btn sm pri" data-act="ind-upd" data-id="${i.id}">${ico('plus')}Resultado</button><button class="btn sm ghost ic" data-act="ent-edit" data-e="ind" data-id="${i.id}" title="Editar indicador" aria-label="Editar indicador">${ico('edit')}</button></div>`:'';
-  if(!last)return `<article class="card ind"><div class="ind-h"><h3>${esc(i.nom)}</h3>${ed}</div><div class="ind-m">Meta ${i.sen==='mayor'?'≥':'≤'} ${esc(indF(i,i.meta))}</div><div class="empty">Sin resultados registrados todavía.</div></article>`;
-  const v=Number(last.valor),st=indSt(i,v),d=prev?v-Number(prev.valor):null,better=d!==null&&(i.sen==='mayor'?d>0:d<0);
-  return `<article class="card ind"><div class="ind-h"><h3>${esc(i.nom)}</h3>${ed}</div>
-  <div class="ind-v"><span class="big ${st}">${esc(indF(i,v))}</span>${d===null?'':`<span class="trend ${d===0?'neu':better?'ok':'bad'}">${d===0?'Sin cambio':(d>0?'▲ ':'▼ ')+esc(indF(i,Math.abs(d)))+' vs. mes anterior'}</span>`}</div>
-  <div class="ind-m"><span class="dot ${st}"></span>Meta ${i.sen==='mayor'?'≥':'≤'} ${esc(indF(i,i.meta))} · Corte ${esc(mesL(last.periodo).toLowerCase())}</div>
-  ${s.length>1?`<div class="fig" data-ind="${i.id}"><svg role="img" aria-label="Tendencia mensual"></svg></div><div class="legend"><span><i></i>Resultado mensual</span><span><i class="g"></i>Meta</span></div>`:'<p class="muted small">La gráfica aparece desde el segundo mes registrado.</p>'}</article>`}).join('')}</div>`:`<div class="card empty">Aún no hay indicadores.</div>`)}
+const UNITS=[['%','Porcentaje (%)',100],['x1000','Tasa por 1.000',1000],['x100','Tasa por 100',100],[' días','Días',1],['','Número o proporción',1]];
+const uSuf=u=>u==='%'?'%':u===' días'?' días':'';
+const nfmt=v=>Number(v).toLocaleString('es-CO',{maximumFractionDigits:2});
+const indF=(i,v)=>nfmt(v)+uSuf(i.u);
+const indOk=(i,v)=>i.sen==='mayor'?Number(v)>=Number(i.meta):Number(v)<=Number(i.meta);
+const indSt=(i,v)=>indOk(i,v)?'ok':'bad';
+const indMeta=i=>`${i.sen==='mayor'?'≥':'≤'} ${indF(i,i.meta)}${i.u==='x1000'?' por 1.000':i.u==='x100'?' por 100':''}`;
+const curYear=()=>new Date().getFullYear();
+const prevMonth=()=>{const d=new Date();d.setDate(1);d.setMonth(d.getMonth()-1);return `${d.getFullYear()}-${pad(d.getMonth()+1)}`};
+const yearVals=(i,y=S.year)=>{const out=Array(12).fill(null);DB.vals.filter(v=>v.ind_id===i.id&&String(v.periodo).startsWith(y+'-')).forEach(v=>{out[Number(String(v.periodo).slice(5,7))-1]=v});return out};
+const measured=yv=>yv.filter(v=>v&&v.valor!=null);
+const pendPrev=yv=>{const m=new Date().getMonth();return S.year===curYear()&&m>0&&!(yv[m-1]&&yv[m-1].valor!=null)};
+const canReg=i=>isAdmin()||(isSST()&&i.mod==='sst')||(isJefe()&&(i.resp_ids||[]).includes(S.user.id));
+const canMan=i=>isAdmin()||(isSST()&&i.mod==='sst');
+const indYears=()=>{const ys=new Set([curYear()]);DB.vals.forEach(v=>{const y=Number(String(v.periodo).slice(0,4));if(y)ys.add(y)});return [...ys].sort((a,b)=>b-a)};
+const yearSel=()=>`<div class="filters"><label class="fld" style="flex:0 0 150px"><span>Año</span><select data-year>${indYears().map(y=>`<option${y===S.year?' selected':''}>${y}</option>`).join('')}</select></label></div>`;
+function vIndResumen(){const cats=Object.keys(IND_T);let tM=0,tO=0,tN=0,tLO=0,tL=0,tP=0;const inc=[];
+ const R=cats.map(c=>{const L=DB.ind.filter(i=>(i.mod||'calidad')===c);let m=0,o=0,lo=0,ln=0,p=0;
+  L.forEach(i=>{const yv=yearVals(i),me=measured(yv),last=me[me.length-1];m+=me.length;o+=me.filter(v=>indOk(i,v.valor)).length;
+   if(last){ln++;if(indOk(i,last.valor))lo++;else inc.push({i,last})}if(pendPrev(yv))p++});
+  tM+=m;tO+=o;tN+=L.length;tLO+=lo;tL+=ln;tP+=p;return {c,n:L.length,m,o,lo,ln,p}});
+ const g=pc(tO,tM);
+ return pageHead('Indicadores de Gestión','Resumen de cumplimiento de todas las carpetas de indicadores.')+yearSel()+
+ `<div class="tiles"><div class="tile ${tM?pcls(g):''}"><div class="v">${tM?g+'%':'—'}</div><div class="l">Mediciones que cumplen la meta en ${S.year}</div></div>
+ <div class="tile ${tL&&tLO===tL?'ok':'warn'}"><div class="v">${tLO} / ${tL}</div><div class="l">Indicadores que cumplen en su último resultado</div></div>
+ <div class="tile ${inc.length?'bad':'ok'}"><div class="v">${inc.length}</div><div class="l">Indicadores en incumplimiento</div></div>
+ <div class="tile ${tP?'warn':'ok'}"><div class="v">${tP}</div><div class="l">Pendientes de reporte del mes anterior</div></div></div>
+ <div class="grid">${R.map(r=>{const v=pc(r.o,r.m);return `<button class="card mod" data-act="nav" data-m="indicadores" data-s="${r.c}"><span class="ic">${ico('indicadores')}</span><h3>${esc(IND_T[r.c])}</h3>${r.m?prog(v,pcls(v)):'<span class="muted small">Sin mediciones en '+S.year+'</span>'}<p class="small">${r.n} indicador${r.n===1?'':'es'} · ${r.lo} de ${r.ln} cumplen en su último resultado${r.p?` · <b style="color:var(--warn)">${r.p} pendiente${r.p===1?'':'s'}</b>`:''}</p><small>Abrir →</small></button>`}).join('')}</div>
+ <div class="sec-h"><h2>Indicadores en incumplimiento</h2></div>`+
+ tbl(['Indicador','Carpeta','Último resultado','Meta','Mes','Plan de mejora'],inc.map(({i,last})=>{const pl=DB.planes.find(x=>x.id===last.plan_id);return `<tr><td><button class="linkbtn" style="font-size:15px;text-align:left" data-act="ind-ficha" data-id="${i.id}" data-c="${esc(i.mod)}">${esc(i.nom)}</button></td><td>${esc(IND_T[i.mod]||'')}</td><td><b style="color:var(--bad)">${esc(indF(i,last.valor))}</b></td><td>${esc(indMeta(i))}</td><td>${esc(mesL(last.periodo))}</td><td>${pl?badge(estPlan(pl)):last.plan_id?'Registrado':badge('Sin plan')}</td></tr>`}),'stack','Ningún indicador está en incumplimiento en su último resultado.')}
+function indCard(i){const yv=yearVals(i),me=measured(yv),ok=me.filter(v=>indOk(i,v.valor)).length,last=me[me.length-1],st=last?indSt(i,last.valor):'';
+ return `<article class="card ind"><div class="ind-h"><h3>${esc(i.nom)}</h3>${canReg(i)?`<button class="btn sm pri" data-act="ind-upd" data-id="${i.id}">${ico('plus')}Registrar</button>`:''}</div>
+ ${i.formula?`<p class="muted small">${esc(i.formula)}</p>`:''}
+ <div class="ind-v">${last?`<span class="big ${st}">${esc(indF(i,last.valor))}</span><span class="trend ${st}">${st==='ok'?'Cumple':'No cumple'} · ${esc(mesL(last.periodo))}</span>`:`<span class="muted">Sin resultados en ${S.year}</span>`}</div>
+ <div class="ind-m"><span class="dot ${st}"></span>Meta ${esc(indMeta(i))}${me.length?` · ${ok} de ${me.length} meses cumplen`:''}</div>
+ ${pendPrev(yv)?`<p class="note" style="padding:6px 10px">Falta el dato de ${esc(mesL(prevMonth()+'-01').toLowerCase())}</p>`:''}
+ ${me.length?`<div class="fig" data-ind="${i.id}"><svg role="img" aria-label="Resultados mensuales de ${S.year}"></svg></div><div class="legend"><span><i></i>Resultado mensual</span><span><i class="g"></i>Meta</span></div>`:''}
+ <div><button class="btn sm ghost" data-act="ind-ficha" data-id="${i.id}">${ico('eye')}Ver ficha y datos del año</button></div></article>`}
+function vIndicadores(cat){if(S.sub&&S.sub.startsWith('i:'))return vIndFicha(S.sub.slice(2));
+ const L=DB.ind.filter(i=>(i.mod||'calidad')===cat).sort((a,b)=>(a.orden||0)-(b.orden||0));
+ const nb=(isAdmin()||(isSST()&&cat==='sst'))?`<button class="btn pri" data-act="ind-new" data-id="${cat}">${ico('plus')}Nuevo indicador</button>`:'';
+ return pageHead(IND_T[cat]||'Indicadores','Resultados mensuales frente a la meta. Abra la ficha de un indicador para ver y registrar sus datos.',nb)+yearSel()+
+ (L.length?`<div class="grid w">${L.map(indCard).join('')}</div>`:`<div class="card empty">Aún no hay indicadores en esta carpeta.${nb?' Use "Nuevo indicador" para crear el primero.':''}</div>`)}
+function vIndFicha(id){const i=DB.ind.find(x=>x.id===id);if(!i){S.sub=null;return vIndicadores(S.sec)}
+ const yv=yearVals(i),reg=canReg(i),man=canMan(i),nowP=`${curYear()}-${pad(new Date().getMonth()+1)}`;
+ const resp=(i.resp_ids||[]).map(u=>userBy(u)?.nombre).filter(Boolean);
+ const rows=yv.map((v,k)=>{const p=`${S.year}-${pad(k+1)}`,fut=p>nowP,pl=v&&v.plan_id?DB.planes.find(x=>x.id===v.plan_id):null;
+  const est=!v?(fut?'':'Sin datos'):v.valor==null?'Incompleto':(indOk(i,v.valor)?'Cumple':'No cumple');
+  return `<tr><td><b>${esc(ML[k])}</b></td><td class="num">${v&&v.num!=null?esc(nfmt(v.num)):'—'}</td><td class="num">${v&&v.den!=null?esc(nfmt(v.den)):'—'}</td><td class="num"><b>${v&&v.valor!=null?esc(indF(i,v.valor)):'—'}</b></td><td>${est?badge(est):''}</td><td>${esc(v?.obs||'')}</td><td>${pl?`<button class="linkbtn" style="font-size:14px;text-align:left" data-act="evid" data-id="${pl.id}">${esc(String(pl.accion||pl.hallazgo||'Plan').slice(0,60))}</button> ${badge(estPlan(pl))}`:v&&v.plan_id?'Registrado':''}</td><td class="ra">${reg&&!fut?`<button class="btn sm ghost" data-act="ind-val" data-id="${i.id}" data-p="${p}">${ico(v?'edit':'plus')}${v?'Editar':'Registrar'}</button>`:''}</td></tr>`});
+ const me=measured(yv),ok=me.filter(v=>indOk(i,v.valor)).length;
+ return `<div><button class="btn ghost sm" data-act="ind-back">${ico('back')}Volver a ${esc(IND_T[i.mod]||'indicadores')}</button></div>`+
+ pageHead(i.nom,IND_T[i.mod]||'',man?`<button class="btn" data-act="ind-edit" data-id="${i.id}">${ico('edit')}Editar ficha</button><button class="btn ghost" data-act="ind-del" data-id="${i.id}">${ico('archive')}Eliminar</button>`:'')+
+ `<section class="card ficha"><dl>
+  <div><dt>Fórmula</dt><dd>${esc(i.formula||'—')}</dd></div>
+  <div><dt>Meta</dt><dd>${esc(indMeta(i))}</dd></div>
+  <div><dt>Unidad</dt><dd>${esc((UNITS.find(x=>x[0]===i.u)||[])[1]||'—')}</dd></div>
+  <div><dt>Cumple cuando el resultado es</dt><dd>${i.sen==='mayor'?'Mayor o igual a la meta':'Menor o igual a la meta'}</dd></div>
+  <div><dt>Registro del numerador</dt><dd>${resp.length?esc(resp.join(', '))+' y Calidad':'Solo Calidad'}</dd></div>
+  <div><dt>Observaciones</dt><dd>${esc(i.obs||'—')}</dd></div></dl></section>`+
+ yearSel()+
+ `<div class="tiles"><div class="tile ${me.length?pcls(pc(ok,me.length)):''}"><div class="v">${me.length?pc(ok,me.length)+'%':'—'}</div><div class="l">Meses que cumplen en ${S.year} (${ok} de ${me.length})</div></div><div class="tile ${me.length-ok?'bad':'ok'}"><div class="v">${me.length-ok}</div><div class="l">Meses en incumplimiento</div></div></div>`+
+ (me.length?`<section class="card"><div class="fig" data-ind="${i.id}" style="min-height:220px"><svg role="img" aria-label="Resultados mensuales de ${S.year}"></svg></div><div class="legend"><span><i></i>Resultado mensual</span><span><i class="g"></i>Meta</span></div></section>`:'')+
+ tbl(['Mes','#Numerador','#Denominador','#Resultado','Estado','Observaciones','Plan de mejora','Acciones'],rows,'stack')}
 function drawInd(fig){const i=DB.ind.find(x=>x.id===fig.dataset.ind);const svg=fig.querySelector('svg');if(!i||!svg)return;
- const s=serie(i);if(s.length<2)return;const W=fig.clientWidth,H=fig.clientHeight;if(!W||!H)return;const nar=W<380;
- const L=36,R=12,T=10,B=22,vals=s.map(x=>Number(x.valor)),all=[...vals,Number(i.meta)];
- let lo=Math.min(...all),hi=Math.max(...all);const pd=(hi-lo)*0.18||1;lo-=pd;hi+=pd;
- const x=k=>L+(W-L-R)*k/(vals.length-1),y=v=>T+(H-T-B)*(1-(v-lo)/(hi-lo));
- const tk=[lo+(hi-lo)*0.15,(lo+hi)/2,hi-(hi-lo)*0.15],f=v=>Number(i.dec)?v.toFixed(1).replace('.',','):Math.round(v);
- const step=vals.length<=6?1:nar?3:2,lastK=vals.length-1;
- let g=tk.map(t=>`<line class="gl" x1="${L}" x2="${W-R}" y1="${y(t)}" y2="${y(t)}"/><text class="tk" x="${L-6}" y="${y(t)+4}" text-anchor="end">${f(t)}</text>`).join('');
- g+=`<line class="goal" x1="${L}" x2="${W-R}" y1="${y(i.meta)}" y2="${y(i.meta)}"/><polyline class="ln" points="${vals.map((v,k)=>x(k)+','+y(v)).join(' ')}"/>`;
- g+=vals.map((v,k)=>`<circle class="pt ${indSt(i,v)}" cx="${x(k)}" cy="${y(v)}" r="${k===lastK?5:3}"/>`).join('');
- g+=s.map((p,k)=>((lastK-k)%step===0)?`<text class="tk" x="${x(k)}" y="${H-5}" text-anchor="${k===lastK?'end':k===0?'start':'middle'}">${esc(mesC(p.periodo))}</text>`:'').join('');
+ const yv=yearVals(i).map(v=>v&&v.valor!=null?Number(v.valor):null),pts=yv.filter(v=>v!=null);if(!pts.length)return;
+ const W=fig.clientWidth,H=fig.clientHeight;if(!W||!H)return;const nar=W<420;
+ const L=40,R=12,T=10,B=22,all=[...pts,Number(i.meta)];let lo=Math.min(...all),hi=Math.max(...all);const pd=(hi-lo)*0.18||1;lo-=pd;hi+=pd;
+ const x=k=>L+(W-L-R)*k/11,y=v=>T+(H-T-B)*(1-(v-lo)/(hi-lo));
+ let g=[lo+(hi-lo)*0.15,(lo+hi)/2,hi-(hi-lo)*0.15].map(t=>`<line class="gl" x1="${L}" x2="${W-R}" y1="${y(t)}" y2="${y(t)}"/><text class="tk" x="${L-6}" y="${y(t)+4}" text-anchor="end">${nfmt(Math.round(t*10)/10)}</text>`).join('');
+ g+=`<line class="goal" x1="${L}" x2="${W-R}" y1="${y(i.meta)}" y2="${y(i.meta)}"/>`;
+ let d='',pen=false;yv.forEach((v,k)=>{if(v==null){pen=false;return}d+=(pen?'L':'M')+x(k)+' '+y(v)+' ';pen=true});
+ g+=`<path class="ln" d="${d}"/>`+yv.map((v,k)=>v==null?'':`<circle class="pt ${indSt(i,v)}" cx="${x(k)}" cy="${y(v)}" r="4"/>`).join('');
+ g+=MN.map((m,k)=>nar&&k%2?'':`<text class="tk" x="${x(k)}" y="${H-5}" text-anchor="${k===0?'start':k===11?'end':'middle'}">${m}</text>`).join('');
  svg.innerHTML=g;}
-function indForm(id){const i=DB.ind.find(x=>x.id===id),s=serie(i),d=new Date();
- const prevM=`${d.getMonth()===0?d.getFullYear()-1:d.getFullYear()}-${pad(d.getMonth()===0?12:d.getMonth())}`;
- openForm('Registrar resultado',[['info',i.nom,'info'],['periodo','Mes','month'],['valor','Resultado del mes','number']],{periodo:prevM},async v=>{
-  const {error}=await sb.from('indicador_valores').upsert({ind_id:i.id,periodo:v.periodo,valor:v.valor},{onConflict:'ind_id,periodo'});
-  if(error){toast(errMsg(error),'bad');return false}await reload('vals');toast('Resultado registrado.');render();return true},'Guardar resultado');}
+function indFicha(id,cat){const i=id?DB.ind.find(x=>x.id===id):null;const jefes=DB.users.filter(u=>u.rol==='jefe'&&u.estado==='Activo');
+ const fields=[...(isAdmin()?[['mod','Carpeta','select',Object.entries(IND_T)]]:[]),['nom','Nombre del indicador','text'],['formula','Fórmula (numerador / denominador)','textarea'],['meta','Meta','number'],
+  ['sen','La meta se cumple cuando el resultado es','select',[['mayor','Mayor o igual a la meta'],['menor','Menor o igual a la meta']]],['u','Unidad','select',UNITS.map(x=>[x[0],x[1]])],
+  jefes.length?['resp_ids','Jefes de área que pueden registrar el numerador','checks',jefes.map(u=>[u.id,u.nombre+(u.area?' · '+u.area:'')])]:['info','Para dar permiso de registro a un jefe de área, primero asígnele el rol "Jefe o coordinador" en Usuarios.','info'],
+  ['obs','Observaciones de la ficha','textarea',null,OPT],['orden','Orden en la carpeta','number',null,OPT]];
+ openForm(i?'Editar ficha del indicador':'Nuevo indicador',fields,i?Object.assign({},i):{mod:cat,sen:'mayor',u:'%',resp_ids:[]},async v=>{
+  const un=UNITS.find(x=>x[0]===v.u);v.factor=un?un[2]:1;if(!isAdmin())v.mod=i?i.mod:cat;if(!v.resp_ids)v.resp_ids=i?.resp_ids||[];if(v.orden==null)delete v.orden;
+  const ok=await dbSave('ind',v,i?.id);if(ok){await reload('vals');toast(i?'Ficha actualizada.':'Indicador creado.');render()}return ok},'Guardar')}
+function valForm(id,p){const i=DB.ind.find(x=>x.id===id);if(!i)return;p=(p||prevMonth()).slice(0,7);
+ const ex=DB.vals.find(v=>v.ind_id===id&&String(v.periodo).slice(0,7)===p),jefe=isJefe();
+ const planOpts=[['','Seleccione…'],['nuevo','Crear un plan de mejora nuevo'],...DB.planes.filter(x=>x.estado!=='Cerrado').map(x=>[x.id,`${x.origen||'Plan'}: ${String(x.hallazgo||'').slice(0,70)}`])];
+ const fields=[['info',`${i.nom} · Meta ${indMeta(i)}`,'info'],...(i.formula?[['html',`<p class="muted small">Fórmula: ${esc(i.formula)}</p>`,'html']]:[]),['periodo','Mes','month'],
+  ['num','Numerador','number',null,OPT],...(jefe?[['html',`<p class="small">Denominador: <b>${ex&&ex.den!=null?esc(nfmt(ex.den)):'pendiente (lo registra Calidad)'}</b></p>`,'html']]:[['den','Denominador','number',null,OPT]]),
+  ['html','<div id="val-prev" class="codebox"></div>','html'],['obs','Observaciones / análisis del resultado','textarea',null,OPT],
+  ['plan_sel','Plan de mejora (obligatorio cuando no se cumple la meta)','select',planOpts],['plan_accion','Acción de mejora','textarea',null,OPT],['plan_resp','Responsable del plan','text',null,OPT],['plan_limite','Fecha límite del plan','date',null,OPT]];
+ openForm(ex?'Editar resultado del mes':'Registrar resultado del mes',fields,{periodo:p,num:ex?.num??'',den:ex?.den??'',obs:ex?.obs||'',plan_sel:ex?.plan_id||''},async v=>{
+  const per=v.periodo,n=v.num,d=jefe?(ex&&ex.den!=null?Number(ex.den):null):v.den;
+  if(n==null&&(jefe||d==null)){toast(jefe?'Registre el numerador.':'Registre el numerador o el denominador.','bad');return false}
+  if(d===0){toast('El denominador no puede ser cero.','bad');return false}
+  let plan_id=v.plan_sel&&v.plan_sel!=='nuevo'?v.plan_sel:null;
+  if(n!=null&&d!=null){const r=n/d*Number(i.factor||1);if(!indOk(i,r)){
+   if(!v.plan_sel){toast('El resultado no cumple la meta: seleccione o cree un plan de mejora.','bad');return false}
+   if(v.plan_sel==='nuevo'){if(!v.plan_accion||!v.plan_limite){toast('Escriba la acción de mejora y la fecha límite del plan.','bad');return false}
+    const {data:pl,error:pe}=await sb.from('planes').insert(Object.assign({origen:'Indicador',hallazgo:`${i.nom}: resultado ${indF(i,Math.round(r*100)/100)} en ${mesL(per).toLowerCase()} (meta ${indMeta(i)})`,accion:v.plan_accion,resp:v.plan_resp||S.user.nombre,limite:v.plan_limite,avance:0,estado:'Abierto'},isAdmin()&&(i.resp_ids||[]).length?{resp_id:i.resp_ids[0]}:{})).select('id').single();
+    if(pe){toast(errMsg(pe),'bad');return false}plan_id=pl.id;await reload('planes')}}}
+  const row={ind_id:i.id,periodo:per,num:n,obs:v.obs||null,plan_id};if(!jefe)row.den=d;
+  const {error}=await sb.from('indicador_valores').upsert(row,{onConflict:'ind_id,periodo'});
+  if(error){toast(errMsg(error),'bad');return false}
+  await reload('vals');toast('Resultado guardado.');render();return true},'Guardar');
+ const f=document.getElementById('mform'),box=document.getElementById('val-prev'),fld=nm=>f.elements[nm]?.closest('.fld');
+ const upd=()=>{const nv=f.elements.num.value,dv=jefe?(ex&&ex.den!=null?String(ex.den):''):f.elements.den.value;let fail=false;
+  if(nv!==''&&dv!==''&&Number(dv)!==0){const r=Number(nv)/Number(dv)*Number(i.factor||1),ok=indOk(i,r);fail=!ok;box.innerHTML=`<span class="muted small">Resultado</span><div class="codebig ${ok?'':'bad'}">${esc(indF(i,Math.round(r*100)/100))}</div><span class="small" style="color:var(--${ok?'ok':'bad'})">${ok?'Cumple la meta':'No cumple la meta: registre un plan de mejora'} (${esc(indMeta(i))})</span>`}
+  else box.innerHTML=Number(dv)===0&&dv!==''?'<span class="err">El denominador no puede ser cero.</span>':'<span class="muted small">Ingrese el numerador y el denominador para calcular el resultado.</span>';
+  const showPlan=fail||!!f.elements.plan_sel.value;fld('plan_sel').style.display=showPlan?'':'none';
+  const nuevo=showPlan&&f.elements.plan_sel.value==='nuevo';['plan_accion','plan_resp','plan_limite'].forEach(k=>{fld(k).style.display=nuevo?'':'none'})};
+ f.addEventListener('input',upd);f.addEventListener('change',upd);upd()}
 function vHab(){const stds=[...new Set(DB.hab.map(h=>h.std))];const tot=DB.hab.filter(h=>h.est!=='NA'),tc=pc(tot.filter(h=>h.est==='C').length,tot.length);
  const L={C:'Cumple',NC:'No cumple',NA:'No aplica'};
  return pageHead('Habilitación (Res. 3100 de 2019)','Autoevaluación de las condiciones de habilitación por estándar.',newBtn('hab','Nuevo criterio'))+
@@ -810,13 +892,13 @@ function crumbs(){const parts=[`<button data-act="nav" data-m="inicio">Inicio</b
  else parts[0]='<b>Inicio</b>';
  return parts.join('<span aria-hidden="true">›</span>');}
 function navHTML(){let h=`<button class="nv ${S.mod==='inicio'?'on':''}" data-act="nav" data-m="inicio">${ico('home')}Inicio</button>`;
- if(!isAdmin()){(ACCESS[S.user.rol]||[]).forEach(k=>{const [m,s]=k.split('/'),on=S.mod===m&&S.sec===s;h+=`<button class="nv ${on?'on':''}" data-act="nav" data-m="${m}" data-s="${s}">${ico(m)}${esc(secName(m,s))}</button>`});return h}
+ if(!isAdmin()){accessList().forEach(k=>{const [m,s]=k.split('/'),on=S.mod===m&&S.sec===s;h+=`<button class="nv ${on?'on':''}" data-act="nav" data-m="${m}" data-s="${s}">${ico(m)}${esc(secName(m,s))}</button>`});return h}
  MODS.forEach(m=>{const on=S.mod===m.id;h+=`<button class="nv ${on?'on':''}" data-act="nav" data-m="${m.id}" aria-expanded="${on}">${ico(m.id)}${esc(m.nom)}</button>`;
   if(on&&m.secs.length>1)h+=`<div class="subs">${m.secs.map(s=>`<button class="sb ${S.sec===s[0]?'on':''}" data-act="nav" data-m="${m.id}" data-s="${s[0]}">${esc(s[1])}</button>`).join('')}</div>`});
  h+=`<button class="nv ${S.mod==='usuarios'?'on':''}" data-act="nav" data-m="usuarios">${ico('usuarios')}Usuarios</button>`;
  return h;}
 const IND_T={calidad:'Indicadores de Calidad',ambiental:'Indicadores de Gestión Ambiental',seguridad:'Indicadores de Seguridad del Paciente',iaas:'Indicadores IAAS',sst:'Indicadores SST',th:'Indicadores de Talento Humano'};
-const VIEWS={...Object.fromEntries(Object.keys(IND_T).map(k=>['indicadores/'+k,()=>vIndicadores(k)])),'calidad/listado':vListado,'calidad/planes':vPlanes,'calidad/pamec':vPamec,'calidad/habilitacion':vHab,'calidad/codificacion':vCodif,
+const VIEWS={'indicadores/resumen':vIndResumen,...Object.fromEntries(Object.keys(IND_T).map(k=>['indicadores/'+k,()=>vIndicadores(k)])),'calidad/listado':vListado,'calidad/planes':vPlanes,'calidad/pamec':vPamec,'calidad/habilitacion':vHab,'calidad/codificacion':vCodif,
 'seguridad/programa':vSPPrograma,'seguridad/paquetes':vPaquetes,'seguridad/rondas':vRondas,'seguridad/riesgos':vRiesgos,'seguridad/eventos':vEventos,
 'ambiental/pgirhs':()=>pageHead('PGIRHS','Plan de Gestión Integral de Residuos Hospitalarios y documentos relacionados.')+docRepo(d=>d.sec==='pgirhs',{def:'ambiental|pgirhs',title:'Documentos del PGIRHS'}),
 'ambiental/rh1':vRH1,'ambiental/limpieza':vLimpieza,
@@ -918,7 +1000,13 @@ document.addEventListener('click',async e=>{if(S.novOpen&&!e.target.closest('.no
  case 'evid-open':openEvid(id);break;
  case 'acc-new':accForm();break;
  case 'ent-edit':if(can('edit'))entForm(b.dataset.e,id);break;
- case 'ind-upd':if(can('edit'))indForm(id);break;
+ case 'ind-upd':valForm(id);break;
+ case 'ind-val':valForm(id,b.dataset.p);break;
+ case 'ind-ficha':{const it=DB.ind.find(x=>x.id===id);if(it){if(S.mod!=='indicadores'||S.sec!==(it.mod||'calidad')){S.mod='indicadores';S.sec=it.mod||'calidad';S.nav=false}S.sub='i:'+id;render();window.scrollTo(0,0)}break}
+ case 'ind-back':S.sub=null;render();window.scrollTo(0,0);break;
+ case 'ind-new':indFicha(null,id);break;
+ case 'ind-edit':indFicha(id);break;
+ case 'ind-del':{const it=DB.ind.find(x=>x.id===id);openConfirm('Eliminar indicador',`Se eliminará "${it?.nom||''}" con todos sus resultados registrados. Esta acción no se puede deshacer.`,async()=>{const {error}=await sb.from('indicadores').delete().eq('id',id);if(error){toast(errMsg(error),'bad');return}await reload('ind','vals');S.sub=null;toast('Indicador eliminado.');render()},'Eliminar')}break;
  case 'ev-new':if(can('report'))openForm('Reportar evento',EVF,{fecha:today()},async v=>{
    const row=Object.assign({},v,{anon:!!v.anon,autor:v.anon?null:S.user.id});delete row.note;
    const {error}=await sb.from('eventos').insert(row);if(error){toast(errMsg(error),'bad');return false}
@@ -953,7 +1041,8 @@ document.addEventListener('change',async e=>{const t=e.target;
  if(t.dataset.hab&&can('edit')){if(await dbSave('hab',{est:t.value},t.dataset.hab)){toast('Criterio actualizado.');render()}}
  else if(t.dataset.evst&&can('edit')){if(await dbSave('eventos',{estado:t.value},t.dataset.evst))toast('Estado del reporte actualizado.')}
  else if(t.dataset.fclas!==undefined){S.fclas=t.value;render()}
- else if(t.dataset.fres!==undefined){S.fres=t.value;render()}});
+ else if(t.dataset.fres!==undefined){S.fres=t.value;render()}
+ else if(t.dataset.year!==undefined){S.year=Number(t.value);render()}});
 document.addEventListener('submit',async e=>{e.preventDefault();const f=e.target;
  if(f.id==='login'){const err=document.getElementById('lg-err'),btn=f.querySelector('button[type=submit]');const em=f.email.value.trim(),pw=f.pass.value;
   if(!em||!pw){err.textContent='Escriba su correo y contraseña.';err.hidden=false;return}
@@ -961,7 +1050,7 @@ document.addEventListener('submit',async e=>{e.preventDefault();const f=e.target
   if(error){btn.disabled=false;btn.textContent='Ingresar';err.textContent=errMsg(error);err.hidden=false;return}
   await startSession(data.session);if(S.user)toast('Bienvenido(a), '+S.user.nombre+'.');return}
  if(f.id==='mform'&&MF&&MF.fields){const v={};let miss=false;
-  for(const [k,,t,,opt] of MF.fields){if(t==='note'||t==='info'||t==='html')continue;const el=f.elements[k];if(!el)continue;
+  for(const [k,,t,,opt] of MF.fields){if(t==='note'||t==='info'||t==='html')continue;if(t==='checks'){v[k]=[...f.querySelectorAll(`input[name="${k}"]:checked`)].map(x=>x.value);continue}const el=f.elements[k];if(!el)continue;
    if(t==='check')v[k]=el.checked;else if(t==='file'){if(el.files&&el.files[0])v[k]=el.files[0]}
    else if(t==='number'){if(el.value===''){if(!opt)miss=true;v[k]=null}else v[k]=Number(el.value)}
    else if(t==='month'){if(!el.value)miss=true;v[k]=el.value?el.value+'-01':null}
