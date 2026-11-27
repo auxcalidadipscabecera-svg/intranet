@@ -209,7 +209,7 @@ pre,.scroll{overflow-x:auto}code{overflow-wrap:anywhere}
 .vw-b{flex:1;overflow:auto;padding:16px 12px 40px;display:flex;flex-direction:column;align-items:center;gap:16px;user-select:none;-webkit-user-select:none}
 .vw-p{position:relative;flex:none;background:#fff;box-shadow:0 8px 30px rgba(0,0,0,.4);overflow:hidden}.vw-p canvas{display:block;pointer-events:none}
 .vw-wm{position:absolute;inset:-50%;transform:rotate(-30deg);color:rgba(12,12,144,.11);font:600 17px/64px Inter,sans-serif;word-spacing:6px;pointer-events:none;overflow:hidden;white-space:normal}
-.vw-msg{color:#D5DAFA;margin-top:40px}.vw-tag{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;background:rgba(255,255,255,.16);color:#fff;padding:3px 10px;border-radius:99px}.vw-tag svg.i{width:14px;height:14px}
+.vw-msg{color:#D5DAFA;margin-top:40px}.codebox{display:grid;gap:4px;padding:14px 16px;border-radius:12px;background:var(--pri-soft)}.codebig{font-size:28px;font-weight:700;letter-spacing:.04em;color:var(--pri);font-variant-numeric:tabular-nums}.codebig.bad{color:var(--bad)}.vw-tag{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;background:rgba(255,255,255,.16);color:#fff;padding:3px 10px;border-radius:99px}.vw-tag svg.i{width:14px;height:14px}
 @media print{body.noprint>*{display:none!important}body.noprint::before{content:"La impresión de este documento no está permitida.";display:block;padding:40px;font:20px sans-serif;color:#000}}
 </style><script>new MutationObserver(()=>{for(const c of document.querySelectorAll('.stack td:not([data-l])')){let i=0,p=c;while(p=p.previousElementSibling)i+=p.colSpan;c.dataset.l=c.closest('table').rows[0].cells[i]?.textContent||''}}).observe(document,{childList:true,subtree:true})</script></head><body>
 <div id="app"></div>
@@ -254,7 +254,7 @@ const ico=n=>`<svg class="i" viewBox="0 0 24 24" aria-hidden="true">${IC[n]||''}
 const logo=()=>`<span class="logo"><img src="img/simbolo.png" alt="" width="36" height="36"></span>`;
 
 const MODS=[
-{id:'calidad',nom:'Calidad',d:'Documentos controlados, planes de mejora, PAMEC, indicadores y habilitación.',secs:[['listado','Listado Maestro de Documentos'],['planes','Planes de Mejora'],['pamec','PAMEC'],['indicadores','Indicadores de Gestión'],['habilitacion','Habilitación (Res. 3100)']]},
+{id:'calidad',nom:'Calidad',d:'Documentos controlados, planes de mejora, PAMEC, indicadores y habilitación.',secs:[['listado','Listado Maestro de Documentos'],['planes','Planes de Mejora'],['pamec','PAMEC'],['indicadores','Indicadores de Gestión'],['habilitacion','Habilitación (Res. 3100)'],['codificacion','Codificación documental']]},
 {id:'seguridad',nom:'Seguridad del Paciente',d:'Programa, paquetes instruccionales, rondas, matriz de riesgos y reporte de eventos.',secs:[['programa','Programa de Seguridad del Paciente'],['paquetes','Paquetes Instruccionales'],['rondas','Rondas de Seguridad'],['riesgos','Matriz de Riesgos'],['eventos','Reporte de Eventos Adversos']]},
 {id:'ambiental',nom:'Ambiental',d:'PGIRHS, registro mensual RH1 y seguimiento de limpieza y desinfección.',secs:[['pgirhs','PGIRHS'],['rh1','Formulario RH1'],['limpieza','Limpieza y Desinfección de Áreas']]},
 {id:'iaas',nom:'IAAS y PROA',d:'Programas IAAS y PROA, protocolos de bioseguridad y adherencia.',secs:[['programa','Plan / Programa IAAS y PROA'],['protocolos','Protocolos de Bioseguridad'],['seguimiento','Seguimiento de Adherencia']]},
@@ -269,7 +269,7 @@ const RCAT=[['apr','Aprovechables','np'],['noa','No aprovechables','np'],['org',
 const RCOL={apr:'#8DB4DE',noa:'#5B87B8',org:'#2E5F94',bio:'#D9534A',cor:'#B42318',ana:'#E8875A',qui:'#F2B65E'};
 const PAQ=[['Detectar, prevenir y reducir infecciones asociadas a la atención en salud','Higiene de manos, aislamientos y prevención de infecciones asociadas a dispositivos.'],['Mejorar la seguridad en la utilización de medicamentos','Prescripción, dispensación y administración segura; medicamentos de alto riesgo y LASA.'],['Procesos para la prevención y reducción de la frecuencia de caídas','Valoración del riesgo, medidas de prevención y seguimiento.'],['Prevenir úlceras por presión','Valoración con escala de riesgo, cambios de posición y cuidado de la piel.'],['Asegurar la correcta identificación del paciente en los procesos asistenciales','Manilla con dos identificadores y verificación en cada procedimiento.'],['Evaluación de la frecuencia con la cual ocurren los eventos adversos','Reporte, análisis y gestión de incidentes y eventos adversos.']];
 
-const T={users:'perfiles',docs:'documentos',planes:'planes',pamec:'pamec',hab:'habilitacion',ind:'indicadores',vals:'indicador_valores',rondas:'rondas',riesgos:'riesgos',eventos:'eventos',rh1:'rh1',limpieza:'limpieza',obs:'observaciones',peligros:'peligros',brigada:'brigada',comites:'comites',miembros:'comite_miembros',reuniones:'comite_reuniones',trainings:'capacitaciones',claves:'capacitacion_claves',att:'intentos',asis:'asistencias',evid:'plan_evidencias',acc:'accidentes'};
+const T={users:'perfiles',docs:'documentos',planes:'planes',pamec:'pamec',hab:'habilitacion',ind:'indicadores',vals:'indicador_valores',rondas:'rondas',riesgos:'riesgos',eventos:'eventos',rh1:'rh1',limpieza:'limpieza',obs:'observaciones',peligros:'peligros',brigada:'brigada',comites:'comites',miembros:'comite_miembros',reuniones:'comite_reuniones',trainings:'capacitaciones',claves:'capacitacion_claves',att:'intentos',asis:'asistencias',evid:'plan_evidencias',acc:'accidentes',procs:'procesos',tdoc:'tipos_doc'};
 let DB=Object.fromEntries(Object.keys(T).map(k=>[k,[]]));
 const S={user:null,phase:'boot',msg:'',mod:'inicio',sec:null,sub:null,nav:false,tab:'copasst',ctab:'pend',fclas:'',fres:'',repo:null,draft:null,wstep:1,last:null,recovery:false};
 
@@ -303,7 +303,7 @@ function errMsg(e){const m=String(e?.message||e||'');
 async function loadT(k){const {data,error}=await sb.from(T[k]).select('*');if(error)throw error;DB[k]=data||[]}
 async function loadAll(){await Promise.all(Object.keys(T).filter(k=>k!=='claves'||manager()).map(loadT))}
 async function reload(...ks){try{await Promise.all(ks.map(loadT))}catch(e){toast(errMsg(e),'bad')}}
-async function dbSave(k,row,id){const q=id?sb.from(T[k]).update(row).eq('id',id):sb.from(T[k]).insert(row);const {error}=await q;
+async function dbSave(k,row,id,key='id'){const q=id?sb.from(T[k]).update(row).eq(key,id):sb.from(T[k]).insert(row);const {error}=await q;
  if(error){toast(errMsg(error),'bad');return false}await reload(k);return true}
 
 const BM={ok:['Vigente','Cumple','Cerrado','Realizada','Aprobado','Completado','Activo','Bajo','IV – Aceptable','Asistencia registrada'],warn:['En revisión','Pendiente de verificación','En investigación','En ejecución','En análisis','Programada','Abierto','Recibido','Moderado','Leve','III – Mejorable','II – No aceptable o aceptable con control específico','En curso','Alto'],bad:['Obsoleto','Vencido','Vencida','No cumple','No aprobado','Extremo','Grave','Centinela','I – No aceptable','Inactivo']};
@@ -352,17 +352,23 @@ brigada:{one:'brigadista',k:'brigada',cols:[['Nombre',r=>`<b>${esc(r.nombre)}</b
 miembros:{one:'integrante',k:'miembros',cols:[['Nombre',r=>`<b>${esc(r.nombre)}</b>`],['Rol',r=>esc(r.rol)]],f:[['nombre','Nombre','text'],['rol','Rol en el comité','text']]},
 reuniones:{one:'reunión',k:'reuniones',cols:[['Fecha',r=>fd(r.fecha)],['Tema',r=>esc(r.tema)]],f:[['fecha','Fecha','date'],['tema','Tema o tipo de reunión','text']]},
 acc:{one:'reporte de accidente',k:'acc',f:[['estado','Estado','select',['Recibido','En investigación','Reportado a ARL','Cerrado']],['obs_sst','Seguimiento de SST (investigación, reporte a la ARL, acciones)','textarea',null,OPT]]},
+procs:{one:'proceso',k:'procs',cols:[['Sigla',r=>r.sigla?`<span class="code">${esc(r.sigla)}</span>`:'<span class="chip">Sin sigla</span>'],['Proceso / área',r=>esc(r.nombre)],['#Documentos',r=>String(DB.docs.filter(d=>d.proceso===r.nombre).length)]],
+ f:row=>[...(row&&row.sigla?[]:[['sigla','Sigla (2 o 3 letras, ej. FA)','text']]),['nombre','Nombre del proceso o área','text'],['orden','Orden en la lista','number',null,OPT]],
+ pre:(v,row)=>{if('sigla' in v){v.sigla=String(v.sigla).trim().toUpperCase();if(!/^[A-Z]{2,3}$/.test(v.sigla))return 'La sigla debe tener 2 o 3 letras.';if(DB.procs.some(p=>p.sigla===v.sigla&&p.id!==row?.id))return 'Esa sigla ya está asignada a otro proceso.'}if(row&&row.nombre!==v.nombre&&DB.docs.some(d=>d.proceso===row.nombre))return 'Este proceso ya tiene documentos: no se puede cambiar el nombre.';return ''}},
+tdoc:{one:'tipo de documento',k:'tdoc',key:'sigla',cols:[['Sigla',r=>`<span class="code">${esc(r.sigla)}</span>`],['Tipo de documento',r=>esc(r.nombre)],['#Vigencia (años)',r=>esc(r.vigencia)]],
+ f:row=>[...(row?[]:[['sigla','Sigla (2 o 3 letras, ej. MN)','text']]),['nombre','Nombre del tipo','text'],['vigencia','Vigencia en años','number'],['orden','Orden en la lista','number',null,OPT]],
+ pre:(v,row)=>{if('sigla' in v){v.sigla=String(v.sigla).trim().toUpperCase();if(!/^[A-Z]{2,3}$/.test(v.sigla))return 'La sigla debe tener 2 o 3 letras.';if(DB.tdoc.some(t=>t.sigla===v.sigla))return 'Esa sigla ya existe.'}if(!(v.vigencia>=1&&v.vigencia<=50))return 'La vigencia debe estar entre 1 y 50 años.';return ''}},
 users:{one:'usuario',k:'users',cols:[['Nombre',r=>`<b>${esc(r.nombre)}</b>`],['Correo',r=>esc(r.correo)],['Cargo',r=>esc(r.cargo||'—')],['Área',r=>esc(r.area||'—')],['Rol',r=>`<span class="badge ${r.rol==='admin'?'':'neu'}">${esc(ROLES[r.rol]||r.rol)}</span>`],['Estado',r=>badge(r.estado)]],
  f:[['nombre','Nombre completo','text'],['cargo','Cargo','text'],['area','Área','text'],['rol','Rol','select',ROLESL],['estado','Estado','select',['Activo','Inactivo']]]}
 };
 function entTable(key,rows){const c=ENT[key],ed=can('edit'),re=r=>ed&&(!c.rowEdit||c.rowEdit(r));
- return tbl([...c.cols.map(x=>x[0]),...(ed?['Acciones']:[])],rows.map(r=>`<tr>${c.cols.map(x=>`<td${x[0].startsWith('#')?' class="num"':''}>${x[1](r)}</td>`).join('')}${ed?`<td class="ra">${re(r)?`<button class="btn sm ghost" data-act="ent-edit" data-e="${key}" data-id="${esc(r.id)}">${ico('edit')}Editar</button>`:''}</td>`:''}</tr>`),c.wide?'wide':'stack');}
+ return tbl([...c.cols.map(x=>x[0]),...(ed?['Acciones']:[])],rows.map(r=>`<tr>${c.cols.map(x=>`<td${x[0].startsWith('#')?' class="num"':''}>${x[1](r)}</td>`).join('')}${ed?`<td class="ra">${re(r)?`<button class="btn sm ghost" data-act="ent-edit" data-e="${key}" data-id="${esc(r[c.key||'id'])}">${ico('edit')}Editar</button>`:''}</td>`:''}</tr>`),c.wide?'wide':'stack');}
 const newBtn=(key,l,extra='')=>can('create')?`<button class="btn pri" data-act="ent-new" data-e="${key}"${extra}>${ico('plus')}${esc(l)}</button>`:'';
 
 /* ===== Forms / modal ===== */
 let MF=null;
 function fieldHTML(f,v){const [k,l,t,o,opt]=f;let val=v??'';
- if(t==='select')return `<label class="fld"><span>${esc(l)}</span><select name="${k}">${o.map(x=>{const [a,b]=Array.isArray(x)?x:[x,x];return `<option value="${esc(a)}"${String(val)===String(a)?' selected':''}>${esc(b)}</option>`}).join('')}</select></label>`;
+ if(t==='select')return `<label class="fld"><span>${esc(l)}</span><select name="${k}">${o.map(x=>{const [a,b,dis]=Array.isArray(x)?x:[x,x];return `<option value="${esc(a)}"${String(val)===String(a)?' selected':''}${dis?' disabled':''}>${esc(b)}</option>`}).join('')}</select></label>`;
  if(t==='textarea')return `<label class="fld full"><span>${esc(l)}${opt?' <small>(opcional)</small>':''}</span><textarea name="${k}" rows="3"${opt?'':' required'}>${esc(val)}</textarea></label>`;
  if(t==='check')return `<label class="chk full"><input type="checkbox" name="${k}"${val?' checked':''}><span>${esc(l)}</span></label>`;
  if(t==='file')return `<label class="fld full"><span>${esc(l)}</span><input type="file" name="${k}" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.png,.jpg,.jpeg"></label>`;
@@ -382,52 +388,86 @@ function openConfirm(title,msg,onYes,yes='Confirmar'){MF={onYes};
 function closeModal(){document.getElementById('modal').innerHTML='';MF=null}
 function toast(m,k=''){const t=document.createElement('div');t.className='toast '+k;t.textContent=m;document.getElementById('toasts').appendChild(t);setTimeout(()=>t.remove(),k==='bad'?6000:3600)}
 
-function entForm(key,id,extra={}){const c=ENT[key],row=id?DB[c.k].find(r=>r.id===id):null;
- openForm((row?'Editar ':'Nuevo ')+c.one,typeof c.f==='function'?c.f():c.f,row||{},async v=>{
+function entForm(key,id,extra={}){const c=ENT[key],kf=c.key||'id',row=id?DB[c.k].find(r=>String(r[kf])===String(id)):null;
+ openForm((row?'Editar ':'Nuevo ')+c.one,typeof c.f==='function'?c.f(row):c.f,row||{},async v=>{
+  if(c.pre){const m=c.pre(v,row);if(m){toast(m,'bad');return false}}
   if(key==='planes'){if('resp_id' in v&&!v.resp_id)v.resp_id=null;if(!v.resp)v.resp=v.resp_id?(userBy(v.resp_id)?.nombre||''):(isJefe()?S.user.nombre:'');}
-  const ok=await dbSave(c.k,Object.assign(v,extra),row?.id);if(ok){toast(row?'Cambios guardados.':'Registro creado.');render()}return ok});}
+  const ok=await dbSave(c.k,Object.assign(v,extra),row?row[kf]:null,kf);if(ok){toast(row?'Cambios guardados.':'Registro creado.');render()}return ok});}
 
 /* ===== Documents ===== */
-const vencida=d=>d.rev&&d.rev<today()&&d.est!=='Obsoleto';
+const pad3=n=>String(n).padStart(3,'0');
+const tdBy=x=>DB.tdoc.find(t=>t.sigla===x);
+const procsOrd=()=>[...DB.procs].sort((a,b)=>(a.orden||0)-(b.orden||0));
+const tdocOrd=()=>[...DB.tdoc].sort((a,b)=>(a.orden||0)-(b.orden||0));
+const vigHasta=d=>{const t=tdBy(d.tipo_sigla),base=d.f_actualizacion||d.apr;if(!t||!base)return d.rev||null;const p=String(base).slice(0,10).split('-').map(Number);return `${p[0]+Number(t.vigencia)}-${pad(p[1])}-${pad(p[2])}`};
+const estDoc=d=>{if(d.est==='Obsoleto')return 'Obsoleto';const h=vigHasta(d);return h&&h<today()?'Vencido':'Vigente'};
+const vencida=d=>estDoc(d)==='Vencido';
+const nextCons=(p,t)=>{const used=DB.docs.filter(d=>d.cod&&d.cod.toUpperCase().startsWith(`${p}-${t}-`)).map(d=>Number(d.cod.split('-').pop())||0);return Math.min(999,(used.length?Math.max(...used):0)+1)};
+const codTaken=c=>DB.docs.some(d=>String(d.cod).trim().toUpperCase()===c.toUpperCase());
 function docRepo(base,opt={}){
- S.repo={base,q:'',tipo:'',est:'',mod:'',showMod:!!opt.showMod,def:opt.def||'calidad|general'};
+ S.repo={base,q:'',tipo:'',vig:'',proc:'',showMod:!!opt.showMod,def:opt.def||'calidad|general'};
  return `<section class="card" style="display:grid;gap:14px">
- <div class="sec-h"><h2>${esc(opt.title||'Documentos')}</h2>${canDoc()?`<button class="btn pri" data-act="doc-new">${ico('plus')}Nuevo documento</button>`:''}</div>
+ <div class="sec-h"><h2>${esc(opt.title||'Documentos')}</h2><div class="acts">${opt.showMod&&isAdmin()?`<button class="btn ghost" data-act="nav" data-m="calidad" data-s="codificacion">Codificación</button>`:''}${canDoc()?`<button class="btn pri" data-act="doc-new">${ico('plus')}Nuevo documento</button>`:''}</div></div>
  <div class="filters">
   <label class="fld fq"><span>Buscar</span><input type="search" data-flt="q" placeholder="Código o nombre del documento"></label>
-  ${opt.showMod?`<label class="fld"><span>Módulo</span><select data-flt="mod"><option value="">Todos</option>${MODS.filter(m=>m.id!=='capacitaciones').map(m=>`<option value="${m.id}">${esc(m.nom)}</option>`).join('')}</select></label>`:''}
-  <label class="fld"><span>Tipo</span><select data-flt="tipo"><option value="">Todos</option>${TIPOS.map(t=>`<option>${t}</option>`).join('')}</select></label>
-  <label class="fld"><span>Estado</span><select data-flt="est"><option value="">Todos</option>${ESTD.map(t=>`<option>${t}</option>`).join('')}</select></label>
+  ${opt.showMod?`<label class="fld"><span>Proceso / área</span><select data-flt="proc"><option value="">Todos</option>${procsOrd().map(p=>`<option value="${esc(p.nombre)}">${esc((p.sigla?p.sigla+' – ':'')+p.nombre)}</option>`).join('')}</select></label>`:''}
+  <label class="fld"><span>Tipo</span><select data-flt="tipo"><option value="">Todos</option>${tdocOrd().map(t=>`<option value="${esc(t.sigla)}">${esc(t.sigla+' – '+t.nombre)}</option>`).join('')}</select></label>
+  <label class="fld"><span>Vigencia</span><select data-flt="vig"><option value="">Todos</option><option>Vigente</option><option>Vencido</option><option>Obsoleto</option></select></label>
  </div><div id="repo-body"></div></section>`;}
 function updateDocs(){const el=document.getElementById('repo-body');if(!el||!S.repo)return;const R=S.repo,q=R.q.toLowerCase();
- const rows=DB.docs.filter(R.base).filter(d=>(!q||(d.cod+' '+d.nom).toLowerCase().includes(q))&&(!R.tipo||d.tipo===R.tipo)&&(!R.est||d.est===R.est)&&(!R.mod||d.mod===R.mod)).sort((a,b)=>String(a.cod).localeCompare(String(b.cod)));
+ const rows=DB.docs.filter(R.base).filter(d=>(!q||(d.cod+' '+d.nom).toLowerCase().includes(q))&&(!R.tipo||d.tipo_sigla===R.tipo)&&(!R.vig||estDoc(d)===R.vig)&&(!R.proc||d.proceso===R.proc)).sort((a,b)=>String(a.cod).localeCompare(String(b.cod)));
  const ed0=canDoc(),edr=d=>ed0&&(isAdmin()||d.mod==='sst');
- el.innerHTML=`<p class="muted small" style="margin-bottom:10px">${rows.length} documento${rows.length===1?'':'s'}</p>`+tbl(['Documento',...(R.showMod?['Módulo']:[]),'Tipo','Vigencia','Estado','Acciones'],rows.map(d=>`<tr>
-  <td><span class="code">${esc(d.cod)}</span> <span class="muted small">· V${esc(d.ver)}</span><div><b>${esc(d.nom)}</b>${vencida(d)?'<span class="chip">Revisión vencida</span>':''}${d.descarga===false?`<span class="chip lock">${ico('lock')}Solo lectura</span>`:''}</div><div class="muted small">${esc(d.resp)}</div></td>${R.showMod?`<td>${esc(modBy(d.mod)?.nom)}</td>`:''}
-  <td>${esc(d.tipo)}</td><td class="small" style="white-space:nowrap">Aprobado ${fd(d.apr)}<br><span class="muted">Revisión ${fd(d.rev)}</span></td><td>${badge(d.est)}</td>
-  <td class="ra"><div class="rowacts"><button class="btn sm ghost ic" data-act="doc-view" data-id="${d.id}" title="Ver" aria-label="Ver">${ico('eye')}</button>${d.archivo&&canDL(d)?`<button class="btn sm ghost ic" data-act="doc-dl" data-id="${d.id}" title="Descargar" aria-label="Descargar">${ico('dl')}</button>`:''}${edr(d)?`<button class="btn sm ghost ic" data-act="doc-edit" data-id="${d.id}" title="Editar" aria-label="Editar">${ico('edit')}</button>${d.est!=='Obsoleto'?`<button class="btn sm ghost ic" data-act="doc-arch" data-id="${d.id}" title="Archivar" aria-label="Archivar">${ico('archive')}</button>`:''}`:''}</div></td></tr>`),'stack',DB.docs.some(R.base)?'No hay documentos con esos filtros.':(canDoc()?'Aún no hay documentos. Use "Nuevo documento" para agregar el primero.':'Aún no hay documentos publicados en esta sección.'));}
-const DOCF=[['cod','Código (ej. CAL-PR-001)','text'],['ubic','Sección','select',DOCSECS],['nom','Nombre del documento','text'],['tipo','Tipo','select',TIPOS],['ver','Versión','number'],['est','Estado','select',ESTD],['descarga','Permiso para los colaboradores','select',[['true','Pueden descargar e imprimir'],['false','Solo lectura (no pueden descargar ni imprimir)']]],['apr','Fecha de aprobación','date'],['rev','Próxima revisión','date',null,OPT],['resp','Responsable','text'],['info','Agregue un enlace (por ejemplo de Google Drive) o suba el archivo. Tamaño máximo del archivo: 50 MB.','info'],['url','Enlace al documento','url'],['archivo','Archivo (PDF, Word, Excel…)','file']];
+ el.innerHTML=`<p class="muted small" style="margin-bottom:10px">${rows.length} documento${rows.length===1?'':'s'}</p>`+tbl(['Código','Nombre del documento','Tipo','Fechas','Vigencia','Acciones'],rows.map(d=>{const st=estDoc(d),h=vigHasta(d);return `<tr>
+  <td><span class="code">${esc(d.cod)}</span>${d.ver?`<div class="muted small">Versión ${esc(d.ver)}</div>`:''}</td>
+  <td><b>${esc(d.nom)}</b>${d.descarga===false?`<span class="chip lock">${ico('lock')}Solo consulta</span>`:''}<div class="muted small">${esc(d.proceso||modBy(d.mod)?.nom||'')}${d.resp?' · '+esc(d.resp):''}</div></td>
+  <td>${esc(d.tipo)}</td>
+  <td class="small" style="white-space:nowrap">Creación ${fd(d.f_creacion||d.apr)}<br><span class="muted">Actualización ${fd(d.f_actualizacion||d.apr)}</span></td>
+  <td>${badge(st)}${h&&st!=='Obsoleto'?`<div class="muted small" style="margin-top:4px;white-space:nowrap">Hasta ${fd(h)}</div>`:''}</td>
+  <td class="ra"><div class="rowacts"><button class="btn sm ghost ic" data-act="doc-view" data-id="${d.id}" title="Ver" aria-label="Ver">${ico('eye')}</button>${d.archivo&&canDL(d)?`<button class="btn sm ghost ic" data-act="doc-dl" data-id="${d.id}" title="Descargar" aria-label="Descargar">${ico('dl')}</button>`:''}${edr(d)?`<button class="btn sm ghost ic" data-act="doc-edit" data-id="${d.id}" title="Editar" aria-label="Editar">${ico('edit')}</button>${d.est!=='Obsoleto'?`<button class="btn sm ghost ic" data-act="doc-arch" data-id="${d.id}" title="Archivar" aria-label="Archivar">${ico('archive')}</button>`:''}`:''}</div></td></tr>`}),'stack',DB.docs.some(R.base)?'No hay documentos con esos filtros.':(canDoc()?'Aún no hay documentos. Use "Nuevo documento" para agregar el primero.':'Aún no hay documentos publicados en esta sección.'));}
+const PERMF=['descarga','Permiso para los colaboradores','select',[['true','Pueden descargar e imprimir'],['false','Solo consulta (no pueden descargar ni imprimir)']]];
+function updCodPrev(){const f=document.getElementById('mform'),box=document.getElementById('cod-prev');if(!f||!box||!f.elements.proc)return;
+ const p=f.elements.proc.value,t=f.elements.tsig.value,n=Number(f.elements.consecutivo.value);
+ if(!p||!t||!(n>=1&&n<=999)){box.innerHTML='<span class="muted">Seleccione proceso, tipo y consecutivo (1 a 999).</span>';return}
+ const c=`${p}-${t}-${pad3(n)}`,taken=codTaken(c),td=tdBy(t);
+ box.innerHTML=`<span class="muted small">Código asignado</span><div class="codebig ${taken?'bad':''}">${esc(c)}</div>${taken?'<span class="err">Este código ya está asignado a otro documento. Cambie el consecutivo.</span>':`<span class="muted small">Vigencia del tipo ${esc(td?.nombre||'')}: ${esc(td?.vigencia||'—')} años</span>`}`;}
 async function docForm(id){const d=id?DB.docs.find(x=>x.id===id):null;
- const vals=d?Object.assign({},d,{ubic:d.mod+'|'+d.sec,descarga:String(d.descarga!==false)}):{ubic:S.repo?.def,ver:1,est:'Vigente',apr:today(),descarga:'true'};
- let fields=d&&d.archivo?DOCF.map(f=>f[0]==='archivo'?['archivo','Reemplazar archivo (ya tiene uno cargado)','file']:f):DOCF;
- if(!isAdmin())fields=fields.map(f=>f[0]==='ubic'?['ubic','Sección','select',DOCSECS.filter(x=>x[0].startsWith('sst|'))]:f);
+ const secs=isAdmin()?DOCSECS:DOCSECS.filter(x=>x[0].startsWith('sst|'));
+ const procOpts=procsOrd().filter(p=>isAdmin()||p.sigla==='SS').map(p=>p.sigla?[p.sigla,`${p.sigla} – ${p.nombre}`]:['',`${p.nombre} (sin sigla: asígnela en Codificación)`,true]);
+ const tOpts=tdocOrd().map(t=>[t.sigla,`${t.sigla} – ${t.nombre} (${t.vigencia} años)`]);
+ const archF=d&&d.archivo?['archivo','Reemplazar archivo (si sube una nueva versión)','file']:['archivo','Archivo (PDF, Word, Excel…)','file'];
+ const fields=d?[
+  ['html',`<div class="codebox"><span class="muted small">Código</span><div class="codebig">${esc(d.cod)}</div><span class="muted small">${esc(d.proceso||'')} · ${esc(d.tipo)} · Creado el ${fd(d.f_creacion||d.apr)} (la fecha de creación no se modifica)</span></div>`,'html'],
+  ['nom','Nombre del documento','text'],['f_actualizacion','Fecha de actualización','date'],['ver','Versión','number'],PERMF,['ubic','Sección de la intranet donde se muestra','select',secs],['resp','Responsable','text',null,OPT],
+  ['info','Si sube un archivo nuevo, la fecha de actualización y la versión se ajustan solas (puede cambiarlas). Para "Solo consulta" el archivo debe ser PDF.','info'],['url','Enlace al documento','url'],archF]
+ :[['html','<div class="codebox" id="cod-prev"></div>','html'],['proc','Proceso / área','select',[['','Seleccione…'],...procOpts]],['tsig','Tipo de documento','select',[['','Seleccione…'],...tOpts]],['consecutivo','Consecutivo (3 números)','number'],
+  ['nom','Nombre del documento','text'],['f_creacion','Fecha de creación','date'],['f_actualizacion','Fecha de actualización','date'],PERMF,['ubic','Sección de la intranet donde se muestra','select',secs],['resp','Responsable','text',null,OPT],['ver','Versión','number'],
+  ['info','Agregue un enlace (por ejemplo de Google Drive) o suba el archivo. Tamaño máximo: 50 MB. Para "Solo consulta" el archivo debe ser PDF.','info'],['url','Enlace al documento','url'],archF];
+ const vals=d?Object.assign({},d,{ubic:d.mod+'|'+d.sec,descarga:String(d.descarga!==false),f_actualizacion:d.f_actualizacion||d.apr}):{ubic:S.repo?.def||secs[0][0],ver:1,f_creacion:today(),f_actualizacion:today(),descarga:'true',proc:isAdmin()?'':'SS'};
  openForm(d?'Editar documento':'Nuevo documento',fields,vals,async v=>{
-  const [mod,sec]=String(v.ubic).split('|');delete v.ubic;delete v.info;v.mod=mod;v.sec=sec;
+  const [mod,sec]=String(v.ubic).split('|');delete v.ubic;v.mod=mod;v.sec=sec;
+  if(!d){const p=v.proc,t=v.tsig,n=Number(v.consecutivo);delete v.proc;delete v.tsig;
+   if(!p||!t){toast('Seleccione el proceso y el tipo de documento.','bad');return false}
+   if(!(Number.isInteger(n)&&n>=1&&n<=999)){toast('El consecutivo debe ser un número entre 1 y 999.','bad');return false}
+   const c=`${p}-${t}-${pad3(n)}`;if(codTaken(c)){toast(`El código ${c} ya está asignado. Cambie el consecutivo.`,'bad');return false}
+   const pr=DB.procs.find(x=>x.sigla===p),td=tdBy(t);Object.assign(v,{cod:c,consecutivo:n,proceso:pr?.nombre||p,tipo_sigla:t,tipo:td?.nombre||t,est:'Vigente',apr:v.f_creacion});}
   const file=v.archivo;delete v.archivo;v.descarga=v.descarga!=='false';
   if(!v.descarga){const fn=file instanceof File?file.name:(d&&d.archivo||'');
-   if(fn&&!isPdf(fn)){toast('Para "Solo lectura" el archivo debe estar en PDF. Guárdelo como PDF y vuelva a subirlo.','bad');return false}
+   if(fn&&!isPdf(fn)){toast('Para "Solo consulta" el archivo debe estar en PDF. Guárdelo como PDF y vuelva a subirlo.','bad');return false}
    if(!fn&&v.url)toast('Es un enlace: configure también en Google Drive que los lectores no puedan descargar ni imprimir.');}
+  if(d&&file instanceof File){if(v.f_actualizacion===(d.f_actualizacion||d.apr))v.f_actualizacion=today();if(Number(v.ver)===Number(d.ver))v.ver=(Number(d.ver)||0)+1}
   if(file instanceof File){if(file.size>50*1024*1024){toast('El archivo supera 50 MB. Súbalo a Google Drive y pegue el enlace.','bad');return false}
    const path=`${mod}/${Date.now()}-${file.name.normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^\w.\-]+/g,'_')}`;
    toast('Subiendo archivo…');const {error}=await sb.storage.from('documentos').upload(path,file,{upsert:false});
    if(error){toast('No se pudo subir el archivo: '+errMsg(error),'bad');return false}v.archivo=path;}
-  const ok=await dbSave('docs',v,d?.id);if(ok){toast(d?'Documento actualizado.':'Documento creado.');render()}return ok});}
+  const ok=await dbSave('docs',v,d?.id);if(ok){toast(d?'Documento actualizado.':`Documento ${v.cod} creado.`);render()}return ok});
+ if(!d){const f=document.getElementById('mform');const sug=()=>{const p=f.elements.proc.value,t=f.elements.tsig.value;if(p&&t)f.elements.consecutivo.value=nextCons(p,t);updCodPrev()};
+  f.elements.proc.addEventListener('change',sug);f.elements.tsig.addEventListener('change',sug);f.elements.consecutivo.addEventListener('input',updCodPrev);f.elements.consecutivo.setAttribute('max','999');f.elements.consecutivo.setAttribute('min','1');updCodPrev()}}
 const isPdf=p=>/\.pdf$/i.test(p||'');
 const canDL=d=>d.descarga!==false||isAdmin()||(isSST()&&d.mod==='sst');
 async function openDoc(id,download=false){const d=DB.docs.find(x=>x.id===id);if(!d)return;
  if(!d.archivo&&!d.url){toast('Este documento todavía no tiene archivo ni enlace.','bad');return}
- if(!canDL(d)){if(download){toast('Este documento es de solo lectura: no se puede descargar.','bad');return}
-  if(d.archivo){if(!isPdf(d.archivo)){toast('Este documento de solo lectura no está en PDF. Pida a Calidad que lo cargue en PDF.','bad');return}return viewPdf(d)}
+ if(!canDL(d)){if(download){toast('Este documento es de solo consulta: no se puede descargar.','bad');return}
+  if(d.archivo){if(!isPdf(d.archivo)){toast('Este documento de solo consulta no está en PDF. Pida a Calidad que lo cargue en PDF.','bad');return}return viewPdf(d)}
   window.open(d.url,'_blank','noopener');return}
  if(d.url&&(!d.archivo||!download)){window.open(d.url,'_blank','noopener');return}
  const w=window.open('','_blank');
@@ -437,7 +477,7 @@ async function openDoc(id,download=false){const d=DB.docs.find(x=>x.id===id);if(
 function closeViewer(){const v=document.getElementById('viewer');if(v)v.innerHTML='';document.body.classList.remove('noprint')}
 async function viewPdf(d){
  const v=document.getElementById('viewer');document.body.classList.add('noprint');
- v.innerHTML=`<div class="vw" role="dialog" aria-modal="true" aria-label="${esc(d.nom)}"><div class="vw-h"><div class="vw-t"><b>${esc(d.cod)} · ${esc(d.nom)}</b><span class="vw-tag">${ico('lock')}Solo lectura</span></div><button class="iconbtn" data-act="vw-close" aria-label="Cerrar">${ico('x')}</button></div><div class="vw-b" id="vw-b"><p class="vw-msg">Cargando documento…</p></div></div>`;
+ v.innerHTML=`<div class="vw" role="dialog" aria-modal="true" aria-label="${esc(d.nom)}"><div class="vw-h"><div class="vw-t"><b>${esc(d.cod)} · ${esc(d.nom)}</b><span class="vw-tag">${ico('lock')}Solo consulta</span></div><button class="iconbtn" data-act="vw-close" aria-label="Cerrar">${ico('x')}</button></div><div class="vw-b" id="vw-b"><p class="vw-msg">Cargando documento…</p></div></div>`;
  try{const {data,error}=await sb.storage.from('documentos').createSignedUrl(d.archivo,300);if(error||!data)throw error||new Error('Sin acceso');
   const pdfjs=await import('./lib/pdfjs/pdf.min.mjs');pdfjs.GlobalWorkerOptions.workerSrc='lib/pdfjs/pdf.worker.min.mjs';
   const doc=await pdfjs.getDocument({url:data.signedUrl}).promise;let box=document.getElementById('vw-b');if(!box)return;box.innerHTML='';
@@ -455,7 +495,7 @@ async function viewPdf(d){
 function vInicio(){const u=S.user,first=(u.nombre||'').split(' ')[0];let mid='';
  if(isAdmin()){const st=capStats(),venc=DB.docs.filter(vencida).length,abiertos=DB.planes.filter(p=>p.estado!=='Cerrado').length,ev=DB.eventos.filter(e=>String(e.fecha).slice(0,7)===today().slice(0,7)).length;
   mid=`<div class="tiles"><div class="tile ${st.tot?pcls(st.pct):''}"><div class="v">${st.tot?st.pct+'%':'—'}</div><div class="l">Cumplimiento de capacitaciones</div></div>
-  <div class="tile ${venc?'bad':'ok'}"><div class="v">${venc}</div><div class="l">Documentos con revisión vencida</div></div>
+  <div class="tile ${venc?'bad':'ok'}"><div class="v">${venc}</div><div class="l">Documentos vencidos</div></div>
   <div class="tile warn"><div class="v">${abiertos}</div><div class="l">Planes de mejora abiertos</div></div>
   <div class="tile pri"><div class="v">${ev}</div><div class="l">Eventos reportados este mes</div></div></div>`;
   const sinCargo=DB.users.filter(x=>x.rol!=='admin'&&x.estado==='Activo'&&!x.cargo).length;
@@ -475,7 +515,7 @@ function vInicio(){const u=S.user,first=(u.nombre||'').split(' ')[0];let mid='';
 function vNoAuth(){return `<section class="card" style="text-align:center;display:grid;gap:12px;justify-items:center;padding:48px 20px"><span class="badge bad">${ico('alert')}Acceso no autorizado</span><h1>No tiene permisos para ver esta página</h1><p class="muted">Esta sección es solo para el rol Administrador (Calidad).</p><button class="btn pri" data-act="nav" data-m="inicio">Volver a Inicio</button></section>`}
 
 /* Calidad */
-function vListado(){return pageHead('Listado Maestro de Documentos','Todos los documentos controlados de la institución, con su versión y fecha de revisión.')+docRepo(()=>true,{showMod:true,title:'Documentos de todos los módulos'})}
+function vListado(){return pageHead('Listado Maestro de Documentos','Documentos controlados de la institución con su código, fechas de creación y actualización, y vigencia.')+docRepo(()=>true,{showMod:true,title:'Documentos de todos los módulos'})}
 function vPlanes(){const r=[...DB.planes].sort(byDate('limite')).reverse(),ven=r.filter(p=>estPlan(p)==='Vencido').length;
  return pageHead('Planes de Mejora',isAdmin()?'Acciones derivadas de auditorías, PAMEC, eventos adversos, habilitación y PQRS.':'Sus planes de mejora: los que usted registró y los que Calidad le asignó.',newBtn('planes','Nuevo plan de mejora'))+
  (isAdmin()?'':`<p class="info">Registre sus planes y suba las <b>evidencias</b> de cumplimiento con el botón de la columna "Evidencias". Cuando termine, cambie el estado a <b>Pendiente de verificación</b>: Calidad revisa y cierra el plan.</p>`)+
@@ -536,6 +576,11 @@ function vHab(){const stds=[...new Set(DB.hab.map(h=>h.std))];const tot=DB.hab.f
  <div class="grid w">${stds.map(s=>{const it=DB.hab.filter(h=>h.std===s).sort((a,b)=>(a.orden||0)-(b.orden||0)),ap=it.filter(h=>h.est!=='NA'),v=pc(ap.filter(h=>h.est==='C').length,ap.length);
  return `<section class="card" style="display:grid;gap:12px;align-content:start"><h3>${esc(s)}</h3>${prog(v,pcls(v))}<div class="list">${it.map(h=>`<div style="display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap;font-size:14px;border-top:1px solid var(--line);padding-top:10px"><span style="flex:1 1 180px">${esc(h.item)}</span>${can('edit')?`<span style="display:flex;gap:4px"><select data-hab="${h.id}" style="width:auto;min-height:38px;font-size:14px" aria-label="Estado del criterio">${Object.entries(L).map(([k,l])=>`<option value="${k}"${h.est===k?' selected':''}>${l}</option>`).join('')}</select><button class="btn sm ghost ic" data-act="ent-edit" data-e="hab" data-id="${h.id}" title="Editar criterio" aria-label="Editar criterio">${ico('edit')}</button></span>`:badge(L[h.est])}</div>`).join('')}</div></section>`}).join('')}</div>`+docRepo(d=>d.sec==='habilitacion',{def:'calidad|habilitacion',title:'Documentos de habilitación'})}
 
+function vCodif(){const sin=DB.procs.filter(p=>!p.sigla).length;
+ return pageHead('Codificación documental','Siglas de procesos y tipos de documento usadas para generar el código: PROCESO-TIPO-CONSECUTIVO (ej. FA-MN-001).')+
+ (sin?`<p class="note">${sin} proceso${sin===1?'':'s'} sin sigla. Asígnele${sin===1?'':'s'} una sigla con "Editar" para poder crear sus documentos.</p>`:'')+
+ `<div class="grid w"><section class="card" style="display:grid;gap:12px;align-content:start"><div class="sec-h"><h2>Procesos y áreas</h2>${newBtn('procs','Nuevo proceso')}</div>${entTable('procs',procsOrd())}</section>
+ <section class="card" style="display:grid;gap:12px;align-content:start"><div class="sec-h"><h2>Tipos de documento y vigencia</h2>${newBtn('tdoc','Nuevo tipo')}</div>${entTable('tdoc',tdocOrd())}<p class="muted small">La vigencia se cuenta desde la fecha de actualización del documento.</p></section></div>`}
 /* Seguridad del paciente */
 function vSPPrograma(){return pageHead('Programa de Seguridad del Paciente','Política, objetivos y documentos del programa institucional.')+docRepo(d=>d.mod==='seguridad'&&d.sec==='programa',{def:'seguridad|programa',title:'Documentos del programa'})}
 function vPaquetes(){return pageHead('Paquetes Instruccionales','Buenas prácticas para la seguridad del paciente adoptadas por la institución.')+
@@ -724,7 +769,7 @@ function navHTML(){let h=`<button class="nv ${S.mod==='inicio'?'on':''}" data-ac
   if(on&&m.secs.length>1)h+=`<div class="subs">${m.secs.map(s=>`<button class="sb ${S.sec===s[0]?'on':''}" data-act="nav" data-m="${m.id}" data-s="${s[0]}">${esc(s[1])}</button>`).join('')}</div>`});
  h+=`<button class="nv ${S.mod==='usuarios'?'on':''}" data-act="nav" data-m="usuarios">${ico('usuarios')}Usuarios</button>`;
  return h;}
-const VIEWS={'calidad/listado':vListado,'calidad/planes':vPlanes,'calidad/pamec':vPamec,'calidad/indicadores':()=>vIndicadores('calidad'),'calidad/habilitacion':vHab,
+const VIEWS={'calidad/listado':vListado,'calidad/planes':vPlanes,'calidad/pamec':vPamec,'calidad/indicadores':()=>vIndicadores('calidad'),'calidad/habilitacion':vHab,'calidad/codificacion':vCodif,
 'seguridad/programa':vSPPrograma,'seguridad/paquetes':vPaquetes,'seguridad/rondas':vRondas,'seguridad/riesgos':vRiesgos,'seguridad/eventos':vEventos,
 'ambiental/pgirhs':()=>pageHead('PGIRHS','Plan de Gestión Integral de Residuos Hospitalarios y documentos relacionados.')+docRepo(d=>d.sec==='pgirhs',{def:'ambiental|pgirhs',title:'Documentos del PGIRHS'}),
 'ambiental/rh1':vRH1,'ambiental/limpieza':vLimpieza,
@@ -879,7 +924,7 @@ document.addEventListener('submit',async e=>{e.preventDefault();const f=e.target
   if(error){btn.disabled=false;err.textContent=errMsg(error);err.hidden=false;return}
   await reload('att');S.last={tid:t.id,nota:data.nota,ok:data.ok};render();window.scrollTo(0,0);}});
 document.addEventListener('keydown',e=>{const vw=document.getElementById('viewer');
- if(vw&&vw.innerHTML){if(e.key==='Escape'){closeViewer();return}if((e.ctrlKey||e.metaKey)&&['p','s'].includes(e.key.toLowerCase())){e.preventDefault();toast('Este documento es de solo lectura: no se puede imprimir ni descargar.','bad');return}}
+ if(vw&&vw.innerHTML){if(e.key==='Escape'){closeViewer();return}if((e.ctrlKey||e.metaKey)&&['p','s'].includes(e.key.toLowerCase())){e.preventDefault();toast('Este documento es de solo consulta: no se puede imprimir ni descargar.','bad');return}}
  if(e.key==='Escape'&&document.getElementById('modal').innerHTML)closeModal()});
 document.addEventListener('contextmenu',e=>{if(e.target.closest&&e.target.closest('#viewer'))e.preventDefault()});
 
