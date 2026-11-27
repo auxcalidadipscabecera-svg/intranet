@@ -5,20 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
 <title>Intranet IPS Cabecera</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='5' fill='%230B5CAD'/%3E%3Cpath d='M10 5h4v5h5v4h-5v5h-4v-5H5v-4h5z' fill='%23fff'/%3E%3C/svg%3E">
+<link rel="icon" type="image/png" href="img/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 /* VOICE: clinical, calm and institutional; the quality office's own control register, not a marketing site
    IDEA: the controlled-document register of a Colombian IPS: código, versión, vigencia, all stamped and traceable
-   PICTURE: the working intranet itself; the login shows a drawn clinic beside a stamped document stack
-   COLOUR and TYPE: deep clinical-blue navigation, white cards on soft gray, #0B5CAD accent, status green/amber/red; Inter
+   PICTURE: the working intranet itself; the login shows the clinic's own logo and its building facade
+   COLOUR and TYPE: institutional colours from the logo: royal blue #0C0C90 navigation, #1A22A6 accent, lime green #5BBF3C highlights; Inter
    LAYOUT: fixed left navigation, sticky header, content to 1240px; drawer and stacked tables below 900px */
 :root{color-scheme:light dark;
---bg:light-dark(#F3F6FA,#0D1620);--card:light-dark(#FFFFFF,#15202C);--ink:light-dark(#1F2937,#E5ECF4);--mute:light-dark(#5B6676,#9CAABA);
---line:light-dark(#E1E7EF,#263443);--pri:light-dark(#0B5CAD,#62A8F0);--on-pri:light-dark(#FFFFFF,#06192E);--pri-soft:light-dark(#E8F1FB,#16324F);
---nav:light-dark(#0A3E78,#0A1928);--nav-ink:#E6F0FB;--nav-mute:#A9C3E2;--nav-act:light-dark(#0F5299,#15314F);
---ok:light-dark(#157F4A,#58C890);--ok-s:light-dark(#E2F4EA,#123526);--warn:light-dark(#995400,#F2B65E);--warn-s:light-dark(#FFF1D9,#3B2A10);
+--bg:light-dark(#F4F6FB,#0B0F24);--card:light-dark(#FFFFFF,#141A36);--ink:light-dark(#1C2133,#E6E9F7);--mute:light-dark(#596178,#A3AACB);
+--line:light-dark(#E0E4F0,#272F55);--pri:light-dark(#1A22A6,#8F98FF);--on-pri:light-dark(#FFFFFF,#0A0D33);--pri-soft:light-dark(#ECEEFC,#1C2356);
+--nav:light-dark(#0C0C90,#0A0C3A);--nav-ink:#EEF0FF;--nav-mute:#BEC3F2;--nav-act:light-dark(#2128B0,#1C2366);--acc:#5BBF3C;
+--ok:light-dark(#257A1B,#7CD957);--ok-s:light-dark(#E6F5E1,#15361A);--warn:light-dark(#995400,#F2B65E);--warn-s:light-dark(#FFF1D9,#3B2A10);
 --bad:light-dark(#B42318,#F48C82);--bad-s:light-dark(#FDE6E3,#3E1713);--h3:light-dark(#F7C47A,#7A5414)}
 :root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
 *{box-sizing:border-box;min-width:0}
@@ -34,13 +34,13 @@ svg.i{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-widt
 .side{background:var(--nav);color:var(--nav-ink);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto}
 .brand{display:flex;gap:12px;align-items:center;padding:20px 18px 18px;border-bottom:1px solid rgba(255,255,255,.12)}
 .brand b{display:block;font-size:15px}.brand span{font-size:13px;color:var(--nav-mute)}
-.logo{width:40px;height:40px;border-radius:10px;background:#fff;display:grid;place-items:center;flex:none}
+.logo{width:42px;height:42px;border-radius:11px;background:#fff;display:grid;place-items:center;flex:none;overflow:hidden}.logo img{width:36px;height:36px;display:block}
 .side nav{padding:12px 10px;display:grid;gap:2px}
 .nv{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:none;border:0;color:var(--nav-ink);padding:10px 12px;border-radius:8px;cursor:pointer;min-height:44px;font-size:15px}
-.nv:hover{background:rgba(255,255,255,.08)}.nv.on{background:var(--nav-act);font-weight:600}
+.nv:hover{background:rgba(255,255,255,.08)}.nv.on{background:var(--nav-act);font-weight:600;box-shadow:inset 3px 0 0 var(--acc)}
 .subs{display:grid;gap:1px;margin:2px 0 8px 22px;padding-left:12px;border-left:1px solid rgba(255,255,255,.18)}
 .sb{background:none;border:0;text-align:left;color:var(--nav-mute);padding:8px 10px;border-radius:6px;cursor:pointer;font-size:14px;min-height:38px}
-.sb:hover{color:#fff;background:rgba(255,255,255,.06)}.sb.on{color:#fff;background:rgba(255,255,255,.12);font-weight:600}
+.sb:hover{color:#fff;background:rgba(255,255,255,.06)}.sb.on{color:#fff;background:rgba(255,255,255,.12);font-weight:600;box-shadow:inset 3px 0 0 var(--acc)}
 .side-foot{margin-top:auto;padding:16px 18px;font-size:13px;color:var(--nav-mute);border-top:1px solid rgba(255,255,255,.12)}
 .main{display:flex;flex-direction:column;min-height:100%}
 .top{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--card) 92%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;padding:10px clamp(16px,3vw,32px);min-height:64px}
@@ -94,8 +94,8 @@ textarea{min-height:88px;resize:vertical}
 .mod:hover{border-color:var(--pri);transform:translateY(-2px)}
 .mod .ic{width:46px;height:46px;border-radius:12px;background:var(--pri-soft);color:var(--pri);display:grid;place-items:center}.mod .ic svg{width:24px;height:24px}
 .mod p{color:var(--mute);font-size:15px}.mod small{color:var(--pri);font-weight:600;font-size:14px;margin-top:auto}
-.hello{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center;background:var(--nav);color:#fff;border-radius:16px;padding:clamp(20px,3vw,30px);border:0}
-.hello p{color:var(--nav-mute);margin-top:6px}
+.hello{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center;color:#fff;border-radius:16px;padding:clamp(20px,3vw,30px);border:0;background:radial-gradient(70% 140% at 100% 100%,rgba(91,191,60,.45),rgba(91,191,60,0) 60%),linear-gradient(120deg,#0C0C90 0%,#1438B8 100%)}
+.hello p{color:#D5DAFA;margin-top:6px}
 /* lists */
 .list{display:grid;gap:10px}.li{display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:14px 16px;border:1px solid var(--line);border-radius:12px;background:var(--card)}
 .li h3{font-size:15px}.li .meta{font-size:14px;color:var(--mute)}
@@ -160,10 +160,21 @@ textarea{min-height:88px;resize:vertical}
 .wopt{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;align-items:center}
 .cargos{display:flex;flex-wrap:wrap;gap:8px 18px}
 /* login */
-.login{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);min-height:100vh}
-.login-art{background:var(--nav);color:#fff;padding:clamp(28px,5vw,64px);display:flex;flex-direction:column;gap:22px;justify-content:center}
-.login-art h1{font-size:clamp(30px,3.6vw,46px);max-width:15ch}.login-art p{color:var(--nav-mute);max-width:46ch;font-size:17px}
-.login-art svg.art{width:100%;max-width:560px;height:auto;align-self:center}
+.login{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);min-height:100vh;background:var(--bg)}
+.login-art{position:relative;overflow:hidden;color:#fff;padding:clamp(28px,4.5vw,64px);display:grid;grid-template-columns:minmax(0,1fr) auto;gap:clamp(24px,3vw,48px);align-items:center;background:radial-gradient(90% 70% at 100% 100%,rgba(91,191,60,.42) 0%,rgba(91,191,60,0) 60%),linear-gradient(155deg,#08086E 0%,#0C0C90 45%,#1747B8 100%)}
+.login-copy{display:grid;gap:20px;align-content:center;position:relative;z-index:1}
+.logo-card{background:#fff;border-radius:18px;padding:14px 20px;width:min(300px,100%);box-shadow:0 14px 34px rgba(5,8,60,.35)}
+.logo-card img{display:block;width:100%;height:auto}
+.login-art h1{font-size:clamp(30px,3.2vw,44px);max-width:14ch}
+.login-art p{color:#D5DAFA;max-width:42ch;font-size:17px}
+.login-points{list-style:none;margin:0;padding:0;display:grid;gap:8px;color:#E6E9FD;font-size:15px}
+.login-points li{display:flex;gap:10px;align-items:center}.login-points svg{color:#7CD957}
+.photo{position:relative;width:clamp(220px,21vw,320px);margin:0;z-index:1}
+.photo::before{content:"";position:absolute;top:-20px;right:-20px;width:72%;height:58%;border-radius:0 44px 0 140px;background:linear-gradient(160deg,#8AD95F,#3FA62E);z-index:-1}
+.photo img{display:block;width:100%;height:auto;aspect-ratio:382/523;object-fit:cover;border-radius:20px;border:6px solid #fff;box-shadow:0 22px 50px rgba(3,6,50,.45)}
+.photo figcaption{font-size:13px;color:#C9CFF7;margin-top:12px;text-align:center}
+.login-side .brandmini{display:flex;gap:10px;align-items:center;color:var(--mute);font-size:14px}
+@media(max-width:1100px){.login-art{grid-template-columns:minmax(0,1fr);justify-items:start}.photo{width:240px}}
 .login-side{padding:clamp(24px,5vw,64px);display:flex;flex-direction:column;justify-content:center;gap:16px;max-width:520px;width:100%;margin:0 auto}
 .login-side form{display:grid;gap:14px}.err{color:var(--bad);font-size:14px;font-weight:500}
 .demo-u{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-top:1px solid var(--line);font-size:14px;flex-wrap:wrap}
@@ -173,7 +184,7 @@ textarea{min-height:88px;resize:vertical}
 .side{position:fixed;left:0;top:0;bottom:0;width:min(300px,86vw);z-index:50;transform:translateX(-105%);transition:transform .2s}
 .side.open{transform:none}.scrim.on{display:block;position:fixed;inset:0;background:rgba(8,20,36,.45);z-index:45}
 .iconbtn.only-m{display:grid}.who-t{display:none}.layout{background:none}
-.login{grid-template-columns:minmax(0,1fr)}.login-art{padding-bottom:20px}.login-art svg.art{max-width:380px}
+.login{grid-template-columns:minmax(0,1fr)}.login-art{padding-bottom:28px}.photo,.login-points{display:none}.logo-card{width:min(240px,72%)}
 }
 @media(max-width:600px){
 .hide-s{display:none}.fgrid{grid-template-columns:minmax(0,1fr)}.bar{grid-template-columns:minmax(0,1fr) 4.5em}.bar .lb{grid-column:1/-1}
@@ -220,7 +231,7 @@ file:'<path d="M6 3h8l5 5v13H6z"/><path d="M14 3v5h5M9 13h7M9 17h5"/>',link:'<pa
 video:'<rect x="3" y="6" width="13" height="12" rx="2"/><path d="m16 10 5-3v10l-5-3"/>',back:'<path d="M15 5l-7 7 7 7"/>',copy:'<rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V4H4v12h4"/>',
 alert:'<path d="M12 3 2 20h20z"/><path d="M12 10v4M12 17h.01"/>',clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>'};
 const ico=n=>`<svg class="i" viewBox="0 0 24 24" aria-hidden="true">${IC[n]||''}</svg>`;
-const logo=()=>`<span class="logo"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M9 3h6v6h6v6h-6v6H9v-6H3V9h6z" fill="#0B5CAD"/></svg></span>`;
+const logo=()=>`<span class="logo"><img src="img/simbolo.png" alt="" width="36" height="36"></span>`;
 
 const MODS=[
 {id:'calidad',nom:'Calidad',d:'Documentos controlados, planes de mejora, PAMEC, indicadores y habilitación.',secs:[['listado','Listado Maestro de Documentos'],['planes','Planes de Mejora'],['pamec','PAMEC'],['indicadores','Indicadores de Gestión'],['habilitacion','Habilitación (Res. 3100)']]},
@@ -625,8 +636,10 @@ function art(){let w='';for(let r=0;r<4;r++)for(let c=0;c<3;c++){if(r===3&&c===1
  <text x="334" y="166" font-family="Inter,sans-serif" font-size="13" font-weight="700" fill="#0B5CAD">CAL-PR-001 · V4</text>
  ${ln(334,198,118)}${ln(334,214,96)}${ln(334,230,110)}${ln(334,246,70)}${ln(334,270,104)}${ln(334,286,84)}
  <circle cx="440" cy="306" r="24" fill="#E2F4EA" stroke="#157F4A" stroke-width="2.5"/><path d="m429 306 7 7 14-15" fill="none" stroke="#157F4A" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>`}
-function artSide(){return `<section class="login-art"><div class="brand" style="border:0;padding:0">${logo()}<div><b>Clínica IPS Cabecera S.A.S.</b><span>Intranet institucional</span></div></div>
- <h1>Gestión documental y capacitación</h1><p>Documentos vigentes, indicadores, seguridad del paciente y formación del personal en un solo lugar.</p>${art()}</section>`}
+function artSide(){return `<section class="login-art"><div class="login-copy"><div class="logo-card"><img src="img/logo.png" alt="Clínica IPS Cabecera" width="466" height="268"></div>
+ <h1>Intranet institucional</h1><p>Gestión documental, indicadores, seguridad del paciente y capacitación del personal en un solo lugar.</p>
+ <ul class="login-points">${['Documentos vigentes y controlados','Capacitaciones con evaluación','Reporte de eventos adversos'].map(t=>`<li>${ico('check')}${t}</li>`).join('')}</ul></div>
+ <figure class="photo"><img src="img/clinica.jpg" alt="Fachada de la sede de la Clínica IPS Cabecera" width="382" height="523"><figcaption>Nuestra sede · Clínica IPS Cabecera S.A.S.</figcaption></figure></section>`}
 function vLogin(){return `<div class="login">${artSide()}<section class="login-side"><form id="login" class="card" novalidate><h2>Iniciar sesión</h2><p class="muted small">Ingrese con el correo y la contraseña que le entregó el área de Calidad.</p>
  <label class="fld"><span>Correo electrónico</span><input type="email" name="email" id="lg-email" autocomplete="username" required></label>
  <label class="fld"><span>Contraseña</span><input type="password" name="pass" id="lg-pass" autocomplete="current-password" required></label>
