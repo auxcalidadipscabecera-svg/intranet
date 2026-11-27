@@ -73,6 +73,15 @@ svg.i{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-widt
 .iconbtn{width:44px;height:44px;display:grid;place-items:center;border-radius:10px;border:1px solid var(--line);background:var(--card);cursor:pointer}
 .badge{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:99px;font-size:13px;font-weight:600;background:var(--pri-soft);color:var(--pri);white-space:nowrap}
 .badge.ok{background:var(--ok-s);color:var(--ok)}.badge.warn{background:var(--warn-s);color:var(--warn)}.badge.bad{background:var(--bad-s);color:var(--bad)}.badge.neu{background:color-mix(in srgb,var(--mute) 14%,transparent);color:var(--mute)}
+.hmsec{display:grid;gap:8px;border-top:1px solid var(--line);padding-top:14px}.hmsec h3{font-size:16px}
+.hmsec-h{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.hmrow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 14px;align-items:center;padding:8px 0;border-bottom:1px dashed var(--line);font-size:14px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.seg label{position:relative;cursor:pointer}.seg input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer}
+.seg span{display:block;padding:6px 11px;font-size:13px;font-weight:600;color:var(--mute);border-left:1px solid var(--line);white-space:nowrap}
+.seg label:first-child span{border-left:0}.seg input:checked+span{background:var(--pri);color:var(--on-pri)}
+.seg input:focus-visible+span{outline:2px solid var(--pri);outline-offset:-2px}
+@media(max-width:640px){.hmrow{grid-template-columns:minmax(0,1fr)}}
 .tchip{display:inline-block;vertical-align:2px;font-size:11.5px;font-weight:600;color:var(--pri);background:var(--pri-soft);border-radius:6px;padding:1px 7px;margin-left:8px;white-space:nowrap}
 .chip{font-size:12px;font-weight:600;color:var(--bad);background:var(--bad-s);border-radius:6px;padding:1px 7px;margin-left:6px;white-space:nowrap}
 .muted{color:var(--mute)}.small{font-size:14px}.ra{text-align:right;white-space:nowrap}.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
@@ -270,7 +279,7 @@ const MODS=[
 {id:'indicadores',nom:'Indicadores de Gestión',d:'Indicadores de calidad, ambiental, seguridad del paciente, IAAS, SST y talento humano.',secs:[['resumen','Resumen de cumplimiento'],['calidad','Indicadores de Calidad'],['ambiental','Indicadores de Gestión Ambiental'],['seguridad','Indicadores de Seguridad del Paciente'],['iaas','Indicadores IAAS'],['sst','Indicadores SST'],['th','Indicadores de Talento Humano']]},
 {id:'seguridad',nom:'Seguridad del Paciente',d:'Programa, paquetes instruccionales, rondas, matriz de riesgos y reporte de eventos.',secs:[['programa','Programa de Seguridad del Paciente'],['paquetes','Paquetes Instruccionales'],['rondas','Rondas de Seguridad'],['riesgos','Matriz de Riesgos'],['eventos','Reporte de Eventos Adversos']]},
 {id:'ambiental',nom:'Ambiental',d:'PGIRHS, registro mensual RH1 y seguimiento de limpieza y desinfección.',secs:[['pgirhs','PGIRHS'],['rh1','Formulario RH1'],['limpieza','Limpieza y Desinfección de Áreas']]},
-{id:'iaas',nom:'IAAS y PROA',d:'Programas IAAS y PROA, protocolos de bioseguridad y adherencia.',secs:[['programa','Plan / Programa IAAS y PROA'],['protocolos','Protocolos de Bioseguridad'],['seguimiento','Seguimiento de Adherencia']]},
+{id:'iaas',nom:'IAAS y PROA',d:'Programas IAAS y PROA, protocolos de bioseguridad y adherencia.',secs:[['programa','Plan / Programa IAAS y PROA'],['protocolos','Protocolos de Bioseguridad'],['higiene','Lista de chequeo Higiene de Manos'],['seguimiento','Seguimiento de Adherencia']]},
 {id:'sst',nom:'SST',d:'Matriz de peligros, emergencias, comités y accidentes de trabajo.',secs:[['peligros','Matriz de Peligros'],['emergencias','Planes de Emergencia'],['comites','COPASST y Comités'],['accidentes','Reporte de Accidentes de Trabajo']]},
 {id:'capacitaciones',nom:'Capacitaciones',d:'Material educativo, evaluaciones de conocimiento y registro de asistencia.',secs:[['actividades','Actividades educativas']]}];
 const modBy=id=>MODS.find(m=>m.id===id);
@@ -282,7 +291,7 @@ const RCAT=[['apr','Aprovechables','np'],['noa','No aprovechables','np'],['org',
 const RCOL={apr:'#8DB4DE',noa:'#5B87B8',org:'#2E5F94',bio:'#D9534A',cor:'#B42318',ana:'#E8875A',qui:'#F2B65E'};
 const PAQ=[['Detectar, prevenir y reducir infecciones asociadas a la atención en salud','Higiene de manos, aislamientos y prevención de infecciones asociadas a dispositivos.'],['Mejorar la seguridad en la utilización de medicamentos','Prescripción, dispensación y administración segura; medicamentos de alto riesgo y LASA.'],['Procesos para la prevención y reducción de la frecuencia de caídas','Valoración del riesgo, medidas de prevención y seguimiento.'],['Prevenir úlceras por presión','Valoración con escala de riesgo, cambios de posición y cuidado de la piel.'],['Asegurar la correcta identificación del paciente en los procesos asistenciales','Manilla con dos identificadores y verificación en cada procedimiento.'],['Evaluación de la frecuencia con la cual ocurren los eventos adversos','Reporte, análisis y gestión de incidentes y eventos adversos.']];
 
-const T={users:'perfiles',docs:'documentos',planes:'planes',pamec:'pamec',hab:'habilitacion',ind:'indicadores',vals:'indicador_valores',rondas:'rondas',riesgos:'riesgos',eventos:'eventos',rh1:'rh1',limpieza:'limpieza',obs:'observaciones',peligros:'peligros',brigada:'brigada',comites:'comites',miembros:'comite_miembros',reuniones:'comite_reuniones',trainings:'capacitaciones',claves:'capacitacion_claves',att:'intentos',asis:'asistencias',evid:'plan_evidencias',acc:'accidentes',procs:'procesos',tdoc:'tipos_doc',nov:'novedades'};
+const T={users:'perfiles',docs:'documentos',planes:'planes',pamec:'pamec',hab:'habilitacion',ind:'indicadores',vals:'indicador_valores',rondas:'rondas',riesgos:'riesgos',eventos:'eventos',rh1:'rh1',limpieza:'limpieza',obs:'observaciones',peligros:'peligros',brigada:'brigada',comites:'comites',miembros:'comite_miembros',reuniones:'comite_reuniones',trainings:'capacitaciones',claves:'capacitacion_claves',att:'intentos',asis:'asistencias',evid:'plan_evidencias',acc:'accidentes',procs:'procesos',tdoc:'tipos_doc',nov:'novedades',hm:'higiene_manos'};
 let DB=Object.fromEntries(Object.keys(T).map(k=>[k,[]]));
 const S={year:new Date().getFullYear(),side:(()=>{try{return localStorage.getItem('ipsc-side')!=='0'}catch(e){return true}})(),novOpen:false,novPrev:null,user:null,phase:'boot',msg:'',mod:'inicio',sec:null,sub:null,nav:false,tab:'copasst',ctab:'pend',fclas:'',fres:'',repo:null,draft:null,wstep:1,last:null,recovery:false};
 
@@ -294,7 +303,7 @@ const ACCESS={aux:['calidad/listado','seguridad/eventos','sst/accidentes','capac
 const isAdmin=()=>S.user?.rol==='admin';
 const isSST=()=>S.user?.rol==='sst';
 const isJefe=()=>S.user?.rol==='jefe';
-const accessList=()=>{const b=[...(ACCESS[S.user?.rol]||[])];if(isJefe()){const cats=[...new Set(DB.ind.map(i=>i.mod||'calidad'))];let at=b.indexOf('calidad/planes')+1;cats.forEach(c=>b.splice(at++,0,'indicadores/'+c))}return b};
+const accessList=()=>{const b=[...(ACCESS[S.user?.rol]||[])];if(isJefe()){const cats=[...new Set(DB.ind.map(i=>i.mod||'calidad'))];let at=b.indexOf('calidad/planes')+1;cats.forEach(c=>b.splice(at++,0,'indicadores/'+c));if(DB.ind.some(i=>/^hm_/.test(i.fuente||'')&&(i.resp_ids||[]).includes(S.user.id)))b.push('iaas/higiene')}return b};
 const allowed=(m,s)=>isAdmin()||accessList().includes(m+'/'+s);
 const can=a=>{if(!S.user)return false;if(isAdmin())return a!=='train';
  if(a==='report'||a==='train')return true;
@@ -601,6 +610,19 @@ const canReg=i=>isAdmin()||(isSST()&&i.mod==='sst')||(isJefe()&&(i.resp_ids||[])
 const canMan=i=>isAdmin()||(isSST()&&i.mod==='sst');
 const indYears=()=>{const ys=new Set([curYear()]);DB.vals.forEach(v=>{const y=Number(String(v.periodo).slice(0,4));if(y)ys.add(y)});return [...ys].sort((a,b)=>b-a)};
 const ITIPOS=['Estructura','Proceso','Resultado','Impacto'];
+const FUENTES=[['manual','Registro manual del numerador y denominador'],['hm_oport','Lista de chequeo de higiene de manos · oportunidades (5 momentos)'],['hm_tec','Lista de chequeo de higiene de manos · técnica correcta'],['hm_total','Lista de chequeo de higiene de manos · adherencia total al protocolo']];
+const HM_FORM={hm_oport:'Oportunidades en que se realizó higiene de manos (lavado o fricción) / Total de oportunidades observadas × 100',hm_tec:'Observaciones con técnica correcta (todos los pasos cumplidos) / Observaciones con técnica evaluada × 100',hm_total:'Observaciones que cumplen todos los momentos y toda la técnica / Total de observaciones × 100'};
+const isHM=i=>/^hm_/.test(i?.fuente||'');
+const HM_MOM=['Antes del contacto con el paciente','Antes de realizar una tarea limpia o aséptica','Después del riesgo de exposición a líquidos corporales','Después del contacto con el paciente','Después del contacto con el entorno del paciente'];
+const HM_MOP=[['No aplica','N/A'],['Lavado','Lavado'],['Fricción','Fricción'],['No realizó','No realizó']];
+const HM_TEC=['Uñas cortas, limpias, sin esmalte ni uñas artificiales','Sin anillos, pulseras ni reloj','Aplica suficiente jabón o solución alcohólica para cubrir toda la superficie de las manos','Frota las palmas de las manos entre sí','Frota la palma de una mano contra el dorso de la otra entrelazando los dedos, y viceversa','Frota las palmas entre sí con los dedos entrelazados','Frota el dorso de los dedos de una mano contra la palma de la otra, agarrándose los dedos','Frota con movimiento de rotación el pulgar de cada mano, atrapándolo con la palma de la otra','Frota la punta de los dedos de cada mano contra la palma de la otra con movimiento de rotación','Duración adecuada (lavado de 40 a 60 segundos; fricción de 20 a 30 segundos)','Enjuaga, seca con toalla desechable y cierra el grifo con la toalla (solo lavado)'];
+const HM_CARGOS=['Médico(a) general','Médico(a) especialista','Enfermero(a) profesional','Auxiliar de enfermería','Terapeuta','Bacteriólogo(a)','Auxiliar de laboratorio','Odontólogo(a)','Técnico(a) de imágenes','Camillero(a)','Servicios generales','Estudiante','Otro'];
+const hmO=h=>{const m=h.momentos||[],t=Object.values(h.tecnica||{}),op=m.filter(x=>x==='Lavado'||x==='Fricción'||x==='No realizó').length,ok=m.filter(x=>x==='Lavado'||x==='Fricción').length,tn=t.filter(x=>x==='Si'||x==='No').length,ts=t.filter(x=>x==='Si').length,te=tn>0,ev=op>0||te;
+ return {op,ok,tn,ts,te,tok:te&&!t.includes('No'),ev,all:ev&&!m.includes('No realizó')&&!t.includes('No')}};
+const perEnd=(i,k)=>{const f=frec(i),y=Number(k.slice(0,4)),m=Number(k.slice(5,7));if(f==='Semanal')return addD(k,7);if(f==='Anual')return `${y+1}-01-01`;const mm=m+(f==='Trimestral'?3:1);return mm>12?`${y+1}-${pad(mm-12)}-01`:`${y}-${pad(mm)}-01`};
+function hmCalc(i,k){k=String(k).slice(0,10);const e=perEnd(i,k),L=DB.hm.filter(h=>String(h.fecha)>=k&&String(h.fecha)<e).map(hmO);let n=0,d=0;
+ if(i.fuente==='hm_oport')L.forEach(o=>{n+=o.ok;d+=o.op});else if(i.fuente==='hm_tec')L.filter(o=>o.te).forEach(o=>{d++;if(o.tok)n++});else L.filter(o=>o.ev).forEach(o=>{d++;if(o.all)n++});
+ return {n,d,c:L.length}}
 const tipoChip=i=>i.tipo?`<span class="tchip">${esc(i.tipo)}</span>`:'';
 const yearSel=(extra='')=>`<div class="filters"><label class="fld" style="flex:0 0 150px"><span>Año</span><select data-year>${indYears().map(y=>`<option${y===S.year?' selected':''}>${y}</option>`).join('')}</select></label>${extra}</div>`;
 function vIndResumen(){const cats=Object.keys(IND_T);let tM=0,tO=0,tN=0,tLO=0,tL=0,tP=0;const inc=[];
@@ -638,8 +660,9 @@ function vIndFicha(id){const i=DB.ind.find(x=>x.id===id);if(!i){S.sub=null;retur
  const PK=periods(i,S.year,true),yv=PK.map(k=>valOf(i,k)),reg=canReg(i),man=canMan(i),nowP=curPer(i);
  const resp=(i.resp_ids||[]).map(u=>userBy(u)?.nombre).filter(Boolean);
  const rows=yv.map((v,k)=>{const p=PK[k],fut=p>nowP;if(fut&&frec(i)==='Semanal')return '';const pl=v&&v.plan_id?DB.planes.find(x=>x.id===v.plan_id):null;
+  const hc=isHM(i)&&!fut?hmCalc(i,p):null,stale=hc&&v&&v.valor!=null&&(Number(v.num)!==hc.n||Number(v.den)!==hc.d);
   const est=!v?(fut?'':'Sin datos'):v.valor==null?'Incompleto':(indOk(i,v.valor)?'Cumple':'No cumple');
-  return `<tr><td><b>${esc(perLabel(i,p))}</b></td><td class="num">${v&&v.num!=null?esc(nfmt(v.num)):'—'}</td><td class="num">${v&&v.den!=null?esc(nfmt(v.den)):'—'}</td><td class="num"><b>${v&&v.valor!=null?esc(indF(i,v.valor)):'—'}</b></td><td>${est?badge(est):''}</td><td>${esc(v?.obs||'')}</td><td>${v&&(v.soportes||[]).length?`<button class="btn sm ghost" data-act="sop" data-id="${esc(v.id)}">${ico('file')}${(v.soportes||[]).length}</button>`:''}</td><td>${pl?`<button class="linkbtn" style="font-size:14px;text-align:left" data-act="evid" data-id="${pl.id}">${esc(String(pl.accion||pl.hallazgo||'Plan').slice(0,60))}</button> ${badge(estPlan(pl))}`:v&&v.plan_id?'Registrado':''}</td><td class="ra">${reg&&!fut?`<button class="btn sm ghost" data-act="ind-val" data-id="${i.id}" data-p="${p}">${ico(v?'edit':'plus')}${v?'Editar':'Registrar'}</button>`:''}</td></tr>`}).filter(Boolean);if(frec(i)==='Semanal')rows.reverse();
+  return `<tr><td><b>${esc(perLabel(i,p))}</b></td><td class="num">${v&&v.num!=null?esc(nfmt(v.num)):'—'}</td><td class="num">${v&&v.den!=null?esc(nfmt(v.den)):'—'}</td><td class="num"><b>${v&&v.valor!=null?esc(indF(i,v.valor)):'—'}</b></td><td>${est?badge(est):''}${stale?'<div class="small" style="color:var(--warn);margin-top:4px">La lista de chequeo cambió: use Editar para actualizar</div>':''}${hc&&!v&&hc.c?`<div class="small muted" style="margin-top:4px">${hc.c} observaci${hc.c===1?'ón':'ones'} en la lista</div>`:''}</td><td>${esc(v?.obs||'')}</td><td>${v&&(v.soportes||[]).length?`<button class="btn sm ghost" data-act="sop" data-id="${esc(v.id)}">${ico('file')}${(v.soportes||[]).length}</button>`:''}</td><td>${pl?`<button class="linkbtn" style="font-size:14px;text-align:left" data-act="evid" data-id="${pl.id}">${esc(String(pl.accion||pl.hallazgo||'Plan').slice(0,60))}</button> ${badge(estPlan(pl))}`:v&&v.plan_id?'Registrado':''}</td><td class="ra">${reg&&!fut?`<button class="btn sm ghost" data-act="ind-val" data-id="${i.id}" data-p="${p}">${ico(v?'edit':'plus')}${v?'Editar':'Registrar'}</button>`:''}</td></tr>`}).filter(Boolean);if(frec(i)==='Semanal')rows.reverse();
  const me=measured(yv),ok=me.filter(v=>indOk(i,v.valor)).length;
  return `<div><button class="btn ghost sm" data-act="ind-back">${ico('back')}Volver a ${esc(IND_T[i.mod]||'indicadores')}</button></div>`+
  pageHead(i.nom,IND_T[i.mod]||'',man?`<button class="btn" data-act="ind-edit" data-id="${i.id}">${ico('edit')}Editar ficha</button><button class="btn ghost" data-act="ind-del" data-id="${i.id}">${ico('archive')}Eliminar</button>`:'')+
@@ -650,7 +673,8 @@ function vIndFicha(id){const i=DB.ind.find(x=>x.id===id);if(!i){S.sub=null;retur
   <div><dt>Periodicidad de medición</dt><dd>${esc(frec(i))}</dd></div>
   <div><dt>Unidad</dt><dd>${esc((UNITS.find(x=>x[0]===i.u)||[])[1]||'—')}</dd></div>
   <div><dt>Cumple cuando el resultado es</dt><dd>${i.sen==='mayor'?'Mayor o igual a la meta':'Menor o igual a la meta'}</dd></div>
-  <div><dt>Registro del numerador</dt><dd>${resp.length?esc(resp.join(', '))+' y Calidad':'Solo Calidad'}</dd></div>
+  <div><dt>Fuente de datos</dt><dd>${isHM(i)?`${esc((FUENTES.find(x=>x[0]===i.fuente)||[])[1]||'')}${allowed('iaas','higiene')?` · <button class="linkbtn" data-act="nav" data-m="iaas" data-s="higiene">Abrir lista de chequeo</button>`:''}`:'Registro manual'}</dd></div>
+  <div><dt>${isHM(i)?'Registro del resultado':'Registro del numerador'}</dt><dd>${isHM(i)?'Se calcula solo con la lista de chequeo. Lo confirman: ':''}${resp.length?esc(resp.join(', '))+' y Calidad':'Solo Calidad'}</dd></div>
   <div><dt>Observaciones</dt><dd>${esc(i.obs||'—')}</dd></div></dl></section>`+
  yearSel()+
  `<div class="tiles"><div class="tile ${me.length?pcls(pc(ok,me.length)):''}"><div class="v">${me.length?pc(ok,me.length)+'%':'—'}</div><div class="l">${esc(fwC(i))} que cumplen${frec(i)==='Anual'?' (últimos 5 años)':' en '+S.year} (${ok} de ${me.length})</div></div><div class="tile ${me.length-ok?'bad':'ok'}"><div class="v">${me.length-ok}</div><div class="l">${esc(fwC(i))} en incumplimiento</div></div></div>`+
@@ -678,28 +702,31 @@ function drawInd(fig){const i=DB.ind.find(x=>x.id===fig.dataset.ind);const svg=f
  const stp=N>26?(nar?8:4):nar&&N>=12?2:1;g+=PK.map((p,k)=>k%stp?'':`<text class="tk" x="${x(k)}" y="${H-5}" text-anchor="${N<2?'middle':k===0?'start':k===N-1?'end':'middle'}">${esc(perLabel(i,p,true))}</text>`).join('');
  svg.innerHTML=g;}
 function indFicha(id,cat){const i=id?DB.ind.find(x=>x.id===id):null;const jefes=DB.users.filter(u=>u.rol==='jefe'&&u.estado==='Activo');
- const fields=[...(isAdmin()?[['mod','Carpeta','select',Object.entries(IND_T)]]:[]),['nom','Nombre del indicador','text'],['tipo','Tipo de indicador','select',[['','Seleccione…'],...ITIPOS.map(t=>[t,t])]],['frec','Periodicidad de medición','select',FRECS.map(t=>[t,t])],
+ const fields=[...(isAdmin()?[['mod','Carpeta','select',Object.entries(IND_T)]]:[]),['nom','Nombre del indicador','text'],['tipo','Tipo de indicador','select',[['','Seleccione…'],...ITIPOS.map(t=>[t,t])]],['frec','Periodicidad de medición','select',FRECS.map(t=>[t,t])],['fuente','Fuente de datos','select',FUENTES],
   ['html','<p class="muted small" style="margin-top:-4px"><b>Estructura:</b> recursos con que se cuenta (talento humano, infraestructura, dotación). <b>Proceso:</b> cómo se hacen las actividades (adherencia, oportunidad). <b>Resultado:</b> efecto inmediato en el paciente o el servicio. <b>Impacto:</b> efecto a largo plazo en la salud de la población o la institución.</p>','html'],['formula','Fórmula (numerador / denominador)','textarea'],['meta','Meta','number'],
   ['sen','La meta se cumple cuando el resultado es','select',[['mayor','Mayor o igual a la meta'],['menor','Menor o igual a la meta']]],['u','Unidad','select',UNITS.map(x=>[x[0],x[1]])],
   jefes.length?['resp_ids','Jefes de área que pueden registrar el numerador','checks',jefes.map(u=>[u.id,u.nombre+(u.area?' · '+u.area:'')])]:['info','Para dar permiso de registro a un jefe de área, primero asígnele el rol "Jefe o coordinador" en Usuarios.','info'],
   ['obs','Observaciones de la ficha','textarea',null,OPT],['orden','Orden en la carpeta','number',null,OPT]];
- openForm(i?'Editar ficha del indicador':'Nuevo indicador',fields,i?Object.assign({frec:'Mensual'},i):{mod:cat,sen:'mayor',u:'%',frec:'Mensual',resp_ids:[]},async v=>{
+ openForm(i?'Editar ficha del indicador':'Nuevo indicador',fields,i?Object.assign({frec:'Mensual',fuente:'manual'},i):{mod:cat,sen:'mayor',u:'%',frec:'Mensual',fuente:'manual',resp_ids:[]},async v=>{
   if(!v.tipo){toast('Seleccione el tipo de indicador: Estructura, Proceso, Resultado o Impacto.','bad');return false}
   if(i&&frec(i)!==v.frec&&DB.vals.some(x=>x.ind_id===i.id)){toast(`No se puede cambiar la periodicidad: este indicador ya tiene resultados registrados como ${frec(i).toLowerCase()}.`,'bad');return false}
   const un=UNITS.find(x=>x[0]===v.u);v.factor=un?un[2]:1;if(!isAdmin())v.mod=i?i.mod:cat;if(!v.resp_ids)v.resp_ids=i?.resp_ids||[];if(v.orden==null)delete v.orden;
-  const ok=await dbSave('ind',v,i?.id);if(ok){await reload('vals');toast(i?'Ficha actualizada.':'Indicador creado.');render()}return ok},'Guardar')}
+  const ok=await dbSave('ind',v,i?.id);if(ok){await reload('vals','hm');toast(i?'Ficha actualizada.':'Indicador creado.');render()}return ok},'Guardar');
+ const f=document.getElementById('mform');f.elements.fuente.addEventListener('change',()=>{const fu=f.elements.fuente.value,fo=f.elements.formula;
+  if(HM_FORM[fu]&&(!fo.value.trim()||Object.values(HM_FORM).includes(fo.value.trim()))){fo.value=HM_FORM[fu];f.elements.u.value='%'}})}
 function valForm(id,p){const i=DB.ind.find(x=>x.id===id);if(!i)return;p=p?perOf(i,p):([prevPer(i),curPer(i)].find(k=>!valOf(i,k))||curPer(i));
  const ex=valOf(i,p),jefe=isJefe(),cy=curYear(),cp=curPer(i);
  const popts=[...new Set([...periods(i,cy),...periods(i,cy-1),...periods(i,Number(p.slice(0,4))),p])].filter(k=>k<=cp).sort().reverse().map(k=>[k,perLabel(i,k)+(valOf(i,k)?' (ya registrado)':'')]);
  const planOpts=[['','Seleccione…'],['nuevo','Crear un plan de mejora nuevo'],...DB.planes.filter(x=>x.estado!=='Cerrado').map(x=>[x.id,`${x.origen||'Plan'}: ${String(x.hallazgo||'').slice(0,70)}`])];
  const fields=[['info',`${i.nom} · Meta ${indMeta(i)}`,'info'],...(i.formula?[['html',`<p class="muted small">Fórmula: ${esc(i.formula)}</p>`,'html']]:[]),...(ex?[['periodo','Periodo','select',[[p,perLabel(i,p)]]]]:[['periodo',`Periodo (${frec(i).toLowerCase()})`,'select',popts]]),
-  ['num','Numerador','number',null,OPT],...(jefe?[['html',`<p class="small">Denominador: <b>${ex&&ex.den!=null?esc(nfmt(ex.den)):'pendiente (lo registra Calidad)'}</b></p>`,'html']]:[['den','Denominador','number',null,OPT]]),
+  ...(isHM(i)?[['html','<p id="hm-calc" class="note full" style="margin:0"></p>','html']]:[['num','Numerador','number',null,OPT],...(jefe?[['html',`<p class="small">Denominador: <b>${ex&&ex.den!=null?esc(nfmt(ex.den)):'pendiente (lo registra Calidad)'}</b></p>`,'html']]:[['den','Denominador','number',null,OPT]])]),
   ['html','<div id="val-prev" class="codebox"></div>','html'],['obs','Observaciones / análisis del resultado','textarea',null,OPT],
   ...(ex&&(ex.soportes||[]).length?[['html',`<p class="small">Soportes ya cargados: <b>${(ex.soportes||[]).length}</b> (puede agregar más)</p>`,'html']]:[]),['sop_files','Soportes o evidencias (Excel, PDF, fotos)','files'],['sop_url','O enlace al soporte (Drive, OneDrive…)','url'],
   ['plan_sel','Plan de mejora (obligatorio cuando no se cumple la meta)','select',planOpts],['plan_accion','Acción de mejora','textarea',null,OPT],['plan_resp','Responsable del plan','text',null,OPT],['plan_limite','Fecha límite del plan','date',null,OPT]];
  openForm(ex?'Editar resultado':'Registrar resultado',fields,{periodo:p,num:ex?.num??'',den:ex?.den??'',obs:ex?.obs||'',plan_sel:ex?.plan_id||''},async v=>{
   const per=v.periodo;if(!ex&&valOf(i,per)){toast(`Ya existe un resultado para ${perLabel(i,per).toLowerCase()}. Ábralo desde la ficha con «Editar».`,'bad');return false}
-  const n=v.num,d=jefe?(ex&&ex.den!=null?Number(ex.den):null):v.den;
+  const hc=isHM(i)?hmCalc(i,per):null;if(hc&&!hc.d){toast('No hay observaciones de la lista de chequeo en este periodo. Regístrelas primero en IAAS y PROA › Lista de chequeo Higiene de Manos.','bad');return false}
+  const n=hc?hc.n:v.num,d=hc?hc.d:jefe?(ex&&ex.den!=null?Number(ex.den):null):v.den;
   if(n==null&&(jefe||d==null)){toast(jefe?'Registre el numerador.':'Registre el numerador o el denominador.','bad');return false}
   if(d===0){toast('El denominador no puede ser cero.','bad');return false}
   let plan_id=v.plan_sel&&v.plan_sel!=='nuevo'?v.plan_sel:null;
@@ -715,14 +742,17 @@ function valForm(id,p){const i=DB.ind.find(x=>x.id===id);if(!i)return;p=p?perOf(
    const {error:ue}=await sb.storage.from('soportes').upload(path,fl,{upsert:false});if(ue){toast(`No se pudo subir "${fl.name}": ${errMsg(ue)}`,'bad');return false}
    sops.push({n:fl.name,p:path,f:today(),u:S.user.id})}
   if(v.sop_url)sops.push({n:'Enlace al soporte',url:v.sop_url,f:today(),u:S.user.id});
-  const row={ind_id:i.id,periodo:per,num:n,obs:v.obs||null,plan_id,soportes:sops};if(!jefe)row.den=d;
+  const row={ind_id:i.id,periodo:per,num:n,obs:v.obs||null,plan_id,soportes:sops};if(!jefe||hc)row.den=d;
   const {error}=await sb.from('indicador_valores').upsert(row,{onConflict:'ind_id,periodo'});
   if(error){toast(errMsg(error),'bad');return false}
   await reload('vals');toast('Resultado guardado.');render();return true},'Guardar');
  const f=document.getElementById('mform'),box=document.getElementById('val-prev'),fld=nm=>f.elements[nm]?.closest('.fld');
- const upd=()=>{const nv=f.elements.num.value,dv=jefe?(ex&&ex.den!=null?String(ex.den):''):f.elements.den.value;let fail=false;
+ const upd=()=>{let nv,dv,fail=false;
+  if(isHM(i)){const c=hmCalc(i,f.elements.periodo.value),hb=document.getElementById('hm-calc');nv=c.d?String(c.n):'';dv=c.d?String(c.d):'';
+   if(hb)hb.innerHTML=c.d?`Calculado automáticamente con <b>${c.c}</b> observaci${c.c===1?'ón':'ones'} de la lista de chequeo: <b>${c.n}</b> de <b>${c.d}</b> ${i.fuente==='hm_oport'?'oportunidades cumplidas':'observaciones cumplen'}.`:'No hay observaciones de la lista de chequeo en este periodo. Regístrelas primero en IAAS y PROA › Lista de chequeo Higiene de Manos.'}
+  else{nv=f.elements.num.value;dv=jefe?(ex&&ex.den!=null?String(ex.den):''):f.elements.den.value}
   if(nv!==''&&dv!==''&&Number(dv)!==0){const r=Number(nv)/Number(dv)*Number(i.factor||1),ok=indOk(i,r);fail=!ok;box.innerHTML=`<span class="muted small">Resultado</span><div class="codebig ${ok?'':'bad'}">${esc(indF(i,Math.round(r*100)/100))}</div><span class="small" style="color:var(--${ok?'ok':'bad'})">${ok?'Cumple la meta':'No cumple la meta: registre un plan de mejora'} (${esc(indMeta(i))})</span>`}
-  else box.innerHTML=Number(dv)===0&&dv!==''?'<span class="err">El denominador no puede ser cero.</span>':'<span class="muted small">Ingrese el numerador y el denominador para calcular el resultado.</span>';
+  else box.innerHTML=isHM(i)?'':Number(dv)===0&&dv!==''?'<span class="err">El denominador no puede ser cero.</span>':'<span class="muted small">Ingrese el numerador y el denominador para calcular el resultado.</span>';
   const showPlan=fail||!!f.elements.plan_sel.value;fld('plan_sel').style.display=showPlan?'':'none';
   const nuevo=showPlan&&f.elements.plan_sel.value==='nuevo';['plan_accion','plan_resp','plan_limite'].forEach(k=>{fld(k).style.display=nuevo?'':'none'})};
  f.addEventListener('input',upd);f.addEventListener('change',upd);upd()}
@@ -778,8 +808,51 @@ function vLimpieza(){const areas=[...new Set(DB.limpieza.map(l=>l.area))];
 function vSeguimiento(){const TP=['Higiene de manos','Uso de EPP'];
  const agg=(t,s)=>{const it=DB.obs.filter(o=>o.tipo===t&&(!s||o.serv===s));return {v:pc(it.reduce((a,o)=>a+Number(o.cumpl||0),0),it.reduce((a,o)=>a+Number(o.oport||0),0)),n:it.length}};
  return pageHead('Seguimiento de Adherencia','Observación directa de higiene de manos y uso de elementos de protección personal.',newBtn('obs','Nueva observación'))+
- `<div class="tiles">${TP.map(t=>{const a=agg(t);return `<div class="tile ${a.n?pcls(a.v):''}"><div class="v">${a.n?a.v+'%':'—'}</div><div class="l">Adherencia global · ${esc(t)}</div></div>`}).join('')}</div>
+ `<p class="note">La higiene de manos se mide ahora con la <button class="linkbtn" data-act="nav" data-m="iaas" data-s="higiene">Lista de chequeo Higiene de Manos</button> (5 momentos y técnica). Aquí puede seguir registrando la observación del uso de EPP.</p><div class="tiles">${TP.map(t=>{const a=agg(t);return `<div class="tile ${a.n?pcls(a.v):''}"><div class="v">${a.n?a.v+'%':'—'}</div><div class="l">Adherencia global · ${esc(t)}</div></div>`}).join('')}</div>
  <div class="grid w">${TP.map(t=>{const sv=[...new Set(DB.obs.filter(o=>o.tipo===t).map(o=>o.serv))];return sv.length?`<section class="card" style="display:grid;gap:14px"><h2>${esc(t)} por servicio</h2><div class="bars">${sv.map(s=>{const v=agg(t,s).v;return `<div class="bar"><span class="lb">${esc(s)}</span><span class="tr"><b style="width:${v}%;background:var(--${pcls(v)})"></b></span><span class="num"><b>${v}%</b></span></div>`}).join('')}</div></section>`:''}).join('')}</div>`+entTable('obs',[...DB.obs].sort(byDate('fecha')))}
+
+/* Lista de chequeo higiene de manos */
+const canHMEdit=h=>isAdmin()||(h&&h.creado_por===S.user?.id);
+function vHigiene(){const yr=String(S.year);
+ const L=DB.hm.filter(h=>String(h.fecha).startsWith(yr+'-')&&(!S.hmMes||Number(String(h.fecha).slice(5,7))===S.hmMes)&&(!S.hmServ||h.serv===S.hmServ)).sort(byDate('fecha'));
+ const O=L.map(h=>({h,o:hmO(h)}));let op=0,ok=0,te=0,tok=0,ev=0,all=0;O.forEach(({o})=>{op+=o.op;ok+=o.ok;if(o.te){te++;if(o.tok)tok++}if(o.ev){ev++;if(o.all)all++}});
+ const tile=(n,d,l)=>{const v=pc(n,d);return `<div class="tile ${d?pcls(v):''}"><div class="v">${d?v+'%':'—'}</div><div class="l">${l} <span class="small">(${n} de ${d})</span></div></div>`};
+ const bar=(lb,n,d)=>{const v=pc(n,d);return `<div class="bar"><span class="lb">${esc(lb)} <small class="muted">(${n}/${d})</small></span><span class="tr"><b style="width:${d?v:0}%;background:var(--${pcls(v)})"></b></span><span class="num"><b>${d?v+'%':'—'}</b></span></div>`};
+ const mom=HM_MOM.map((t,k)=>{let n=0,d=0;L.forEach(h=>{const x=(h.momentos||[])[k];if(x==='Lavado'||x==='Fricción'){n++;d++}else if(x==='No realizó')d++});return bar(`${k+1}. ${t}`,n,d)}).join('');
+ const tec=HM_TEC.map((t,k)=>{let n=0,d=0;L.forEach(h=>{const x=(h.tecnica||{})[k+1];if(x==='Si'){n++;d++}else if(x==='No')d++});return d?bar(`${k+1}. ${t}`,n,d):''}).join('');
+ const grp=key=>{const g={};O.forEach(({h,o})=>{const a=g[h[key]]||(g[h[key]]={n:0,d:0});a.n+=o.ok;a.d+=o.op});return Object.entries(g).filter(([,a])=>a.d).sort((a,b)=>b[1].d-a[1].d).map(([k,a])=>bar(k,a.n,a.d)).join('')};
+ const linked=DB.ind.filter(isHM),mes=S.hmMes?ML[S.hmMes-1].toLowerCase()+' de '+yr:yr;
+ const filt=`<label class="fld" style="flex:0 0 170px"><span>Mes</span><select data-hmmes><option value="">Todo el año</option>${ML.map((m,k)=>`<option value="${k+1}"${S.hmMes===k+1?' selected':''}>${m}</option>`).join('')}</select></label><label class="fld" style="flex:0 1 240px"><span>Servicio</span><select data-hmserv><option value="">Todos</option>${SERV.map(x=>`<option${S.hmServ===x?' selected':''}>${esc(x)}</option>`).join('')}</select></label>`;
+ const ys=[...new Set([curYear(),...DB.hm.map(h=>Number(String(h.fecha).slice(0,4))).filter(Boolean)])].sort((a,b)=>b-a);
+ const rows=O.map(({h,o})=>`<tr><td>${fd(h.fecha)}</td><td>${esc(h.serv)}</td><td>${esc(h.cargo)}</td><td class="num">${o.op?`${o.ok} de ${o.op}`:'—'}</td><td class="num">${o.te?`${o.ts} de ${o.tn}`:'No evaluada'}</td><td>${o.ev?badge(o.all?'Cumple':'No cumple'):''}</td><td class="ra" style="white-space:nowrap"><button class="btn sm ghost" data-act="hm-ver" data-id="${h.id}">${ico('eye')}Ver</button>${canHMEdit(h)?`<button class="btn sm ghost" data-act="hm-edit" data-id="${h.id}" aria-label="Editar observación" title="Editar">${ico('edit')}</button><button class="btn sm ghost" data-act="hm-del" data-id="${h.id}" aria-label="Eliminar observación" title="Eliminar">${ico('x')}</button>`:''}</td></tr>`);
+ return pageHead('Lista de chequeo · Higiene de Manos','Observación directa de los 5 momentos de la OMS y de la técnica de higiene de manos. Registre solo el cargo de la persona observada, sin nombres de colaboradores ni de pacientes.',`<button class="btn pri" data-act="hm-new">${ico('plus')}Nueva observación</button>`)+
+ `<div class="filters"><label class="fld" style="flex:0 0 130px"><span>Año</span><select data-year>${ys.map(y=>`<option${y===S.year?' selected':''}>${y}</option>`).join('')}</select></label>${filt}</div>`+
+ (linked.length?`<p class="note">Indicador${linked.length===1?'':'es'} que se calcula${linked.length===1?'':'n'} con esta lista: ${linked.map(i=>`<button class="linkbtn" data-act="ind-ficha" data-id="${i.id}">${esc(i.nom)}</button>`).join(', ')}.</p>`:isAdmin()?`<p class="note">Para que un indicador se calcule con esta lista, abra su ficha en Indicadores de Gestión, haga clic en «Editar ficha» y en «Fuente de datos» elija la lista de chequeo de higiene de manos.</p>`:'')+
+ `<div class="tiles"><div class="tile pri"><div class="v">${L.length}</div><div class="l">Observaciones en ${esc(mes)}</div></div>${tile(ok,op,'Adherencia por oportunidades (5 momentos)')}${tile(tok,te,'Técnica correcta')}${tile(all,ev,'Adherencia total al protocolo')}</div>`+
+ (L.length?`<div class="grid w" style="align-items:start"><section class="card" style="display:grid;gap:14px"><h2>Adherencia por momento</h2><div class="bars">${mom}</div></section><section class="card" style="display:grid;gap:14px"><h2>Adherencia por cargo</h2><div class="bars">${grp('cargo')||'<p class="muted">Sin oportunidades observadas.</p>'}</div></section><section class="card" style="display:grid;gap:14px"><h2>Adherencia por servicio</h2><div class="bars">${grp('serv')||'<p class="muted">Sin oportunidades observadas.</p>'}</div></section>${tec?`<section class="card" style="display:grid;gap:14px"><h2>Cumplimiento de cada paso de la técnica</h2><div class="bars">${tec}</div></section>`:''}</div>`:'')+
+ `<div class="sec-h"><h2>Observaciones registradas</h2></div>`+tbl(['Fecha','Servicio','Cargo','#Oportunidades cumplidas','#Pasos de técnica cumplidos','Resultado','Acciones'],rows,'stack','No hay observaciones en este periodo. Use «Nueva observación» para registrar la primera.')}
+function hmForm(id){const h=id?DB.hm.find(x=>x.id===id):null;
+ const mom=HM_MOM.map((t,k)=>{const cur=(h?.momentos||[])[k]||'No aplica';return `<div class="hmrow"><span>${k+1}. ${esc(t)}</span><div class="seg" role="radiogroup" aria-label="${esc(t)}">${HM_MOP.map(([v,l])=>`<label><input type="radio" name="m${k}" value="${esc(v)}"${cur===v?' checked':''}><span>${esc(l)}</span></label>`).join('')}</div></div>`}).join('');
+ const tec=HM_TEC.map((t,k)=>{const cur=(h?.tecnica||{})[k+1]||'';return `<div class="hmrow"><span>${k+1}. ${esc(t)}</span><div class="seg" role="radiogroup" aria-label="${esc(t)}">${[['Si','Sí'],['No','No'],['NA','N/A']].map(([v,l])=>`<label><input type="radio" name="t${k}" value="${v}"${cur===v?' checked':''}><span>${l}</span></label>`).join('')}</div></div>`}).join('');
+ const sinTec=!!h&&!Object.keys(h.tecnica||{}).length;
+ const fields=[['fecha','Fecha de la observación','date'],['serv','Servicio','select',SERV],['cargo','Cargo de la persona observada','select',HM_CARGOS],['observador','Observador','text'],
+  ['html',`<div class="hmsec full"><h3>Cinco momentos de la OMS</h3><p class="muted small">Marque qué hizo la persona en cada momento que se presentó. Deje N/A si el momento no se presentó durante la observación.</p>${mom}</div>`,'html'],
+  ['html',`<div class="hmsec full"><div class="hmsec-h"><h3>Técnica de higiene de manos</h3><button type="button" class="btn sm ghost" data-act="hm-allsi">${ico('check')}Marcar todo Sí</button></div><label class="chk"><input type="checkbox" name="hm_sintec"${sinTec?' checked':''}><span>No se observó la técnica en esta observación</span></label><div id="hm-tec">${tec}</div></div>`,'html'],
+  ['obs','Observaciones','textarea',null,OPT]];
+ openForm(h?'Editar observación':'Nueva observación · Higiene de manos',fields,h?Object.assign({},h):{fecha:today(),serv:SERV[0],cargo:'Auxiliar de enfermería',observador:S.user?.nombre||''},async v=>{
+  const f=document.getElementById('mform'),momentos=HM_MOM.map((_,k)=>f.querySelector(`input[name=m${k}]:checked`)?.value||'No aplica'),sin=f.querySelector('input[name=hm_sintec]').checked,tecnica={};
+  if(!sin)for(let k=0;k<HM_TEC.length;k++){const x=f.querySelector(`input[name=t${k}]:checked`);if(!x){toast(`Responda el paso ${k+1} de la técnica, o marque «No se observó la técnica».`,'bad');return false}tecnica[k+1]=x.value}
+  if(!momentos.some(m=>m!=='No aplica')&&!Object.values(tecnica).some(x=>x!=='NA')){toast('Registre al menos un momento observado o la técnica.','bad');return false}
+  if(v.fecha>today()){toast('La fecha de la observación no puede ser futura.','bad');return false}
+  const row={fecha:v.fecha,serv:v.serv,cargo:v.cargo,observador:v.observador,momentos,tecnica,obs:v.obs||null};
+  const {error}=h?await sb.from('higiene_manos').update(row).eq('id',h.id):await sb.from('higiene_manos').insert(Object.assign(row,{creado_por:S.user.id}));
+  if(error){toast(errMsg(error),'bad');return false}await reload('hm');toast(h?'Observación actualizada.':'Observación registrada.');render();return true},'Guardar');
+ const f=document.getElementById('mform'),cb=f.querySelector('input[name=hm_sintec]'),tb=document.getElementById('hm-tec'),sync=()=>{tb.style.display=cb.checked?'none':''};cb.addEventListener('change',sync);sync()}
+function hmVer(id){const h=DB.hm.find(x=>x.id===id);if(!h)return;const o=hmO(h);
+ const mom=HM_MOM.map((t,k)=>{const x=(h.momentos||[])[k]||'No aplica';return `<div class="hmrow"><span>${k+1}. ${esc(t)}</span><b style="color:var(--${x==='No realizó'?'bad':x==='No aplica'?'mute':'ok'})">${esc(x)}</b></div>`}).join('');
+ const tec=Object.keys(h.tecnica||{}).length?HM_TEC.map((t,k)=>{const x=(h.tecnica||{})[k+1];return `<div class="hmrow"><span>${k+1}. ${esc(t)}</span><b style="color:var(--${x==='No'?'bad':x==='Si'?'ok':'mute'})">${x==='Si'?'Sí':x==='NA'?'N/A':esc(x||'—')}</b></div>`}).join(''):'<p class="muted">No se observó la técnica.</p>';
+ openForm('Observación de higiene de manos',[['html',`<div class="full" style="display:grid;gap:12px"><p><b>${fd(h.fecha)}</b> · ${esc(h.serv)} · ${esc(h.cargo)}${h.observador?` · Observó: ${esc(h.observador)}`:''}</p>${o.ev?`<p>${badge(o.all?'Cumple':'No cumple')} ${o.op?`· ${o.ok} de ${o.op} oportunidades cumplidas`:''}${o.te?` · ${o.ts} de ${o.tn} pasos de técnica cumplidos`:''}</p>`:''}<div class="hmsec"><h3>Cinco momentos de la OMS</h3>${mom}</div><div class="hmsec"><h3>Técnica</h3>${tec}</div>${h.obs?`<div class="hmsec"><h3>Observaciones</h3><p>${esc(h.obs)}</p></div>`:''}</div>`,'html']],{},async()=>true,'Cerrar')}
+async function hmDel(id){const {error}=await sb.from('higiene_manos').delete().eq('id',id);if(error){toast(errMsg(error),'bad');return}await reload('hm');toast('Observación eliminada.');render()}
 
 /* SST */
 function vPeligros(){const C=['Biológico','Biomecánico','Psicosocial','Químico','Físico','Condiciones de seguridad','Fenómenos naturales'];const r=DB.peligros.filter(p=>!S.fclas||p.clas===S.fclas);
@@ -956,7 +1029,7 @@ const VIEWS={'indicadores/resumen':vIndResumen,...Object.fromEntries(Object.keys
 'ambiental/rh1':vRH1,'ambiental/limpieza':vLimpieza,
 'iaas/programa':()=>pageHead('Plan / Programa IAAS y PROA','Programas de prevención de infecciones y de uso racional de antimicrobianos.')+docRepo(d=>d.mod==='iaas'&&d.sec==='programa',{def:'iaas|programa',title:'Documentos de los programas'}),
 'iaas/protocolos':()=>pageHead('Protocolos de Bioseguridad','Manual y protocolos de bioseguridad vigentes.')+docRepo(d=>d.sec==='protocolos',{def:'iaas|protocolos',title:'Protocolos'}),
-'iaas/seguimiento':vSeguimiento,'sst/peligros':vPeligros,'sst/emergencias':vEmergencias,'sst/comites':vComites,'sst/accidentes':vAccidentes,'capacitaciones/actividades':vCap};
+'iaas/higiene':vHigiene,'iaas/seguimiento':vSeguimiento,'sst/peligros':vPeligros,'sst/emergencias':vEmergencias,'sst/comites':vComites,'sst/accidentes':vAccidentes,'capacitaciones/actividades':vCap};
 function view(){S.repo=null;
  if(S.mod==='inicio')return vInicio();
  if(S.mod==='usuarios')return isAdmin()?vUsuarios():vNoAuth();
@@ -1058,6 +1131,11 @@ document.addEventListener('click',async e=>{if(S.novOpen&&!e.target.closest('.no
  case 'sop':sopModal(id);break;
  case 'sop-open':openSop(id,Number(b.dataset.k));break;
  case 'sop-del':openConfirm('Quitar soporte','El archivo se eliminará de forma permanente.',()=>delSop(id,b.dataset.k),'Quitar');break;
+ case 'hm-new':hmForm();break;
+ case 'hm-edit':hmForm(id);break;
+ case 'hm-ver':hmVer(id);break;
+ case 'hm-del':openConfirm('Eliminar observación','La observación se eliminará y dejará de contar en los indicadores.',()=>hmDel(id),'Eliminar');break;
+ case 'hm-allsi':document.querySelectorAll('#hm-tec input[value=Si]').forEach(x=>{x.checked=true});break;
  case 'ind-back':S.sub=null;render();window.scrollTo(0,0);break;
  case 'ind-new':indFicha(null,id);break;
  case 'ind-edit':indFicha(id);break;
@@ -1098,7 +1176,9 @@ document.addEventListener('change',async e=>{const t=e.target;
  else if(t.dataset.fclas!==undefined){S.fclas=t.value;render()}
  else if(t.dataset.fres!==undefined){S.fres=t.value;render()}
  else if(t.dataset.year!==undefined){S.year=Number(t.value);render()}
- else if(t.dataset.ftipo!==undefined){S.ftipo=t.value;render()}});
+ else if(t.dataset.ftipo!==undefined){S.ftipo=t.value;render()}
+ else if(t.dataset.hmmes!==undefined){S.hmMes=Number(t.value)||0;render()}
+ else if(t.dataset.hmserv!==undefined){S.hmServ=t.value;render()}});
 document.addEventListener('submit',async e=>{e.preventDefault();const f=e.target;
  if(f.id==='login'){const err=document.getElementById('lg-err'),btn=f.querySelector('button[type=submit]');const em=f.email.value.trim(),pw=f.pass.value;
   if(!em||!pw){err.textContent='Escriba su correo y contraseña.';err.hidden=false;return}
